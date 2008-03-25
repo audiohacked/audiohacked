@@ -84,6 +84,6 @@ src_install() {
 	fowners -R apache /var/www/dotmac
 	
 	insinto /etc/apache2/vhosts.d
-	newins ${MY_S}/Configuration/Apache/dotmac.conf 05_dotmac.conf
-	fowners -R apache /etc/apache2/vhosts.d/05_dotmac.conf
+	newins ${MY_S}/Configuration/Apache/dotmac.conf 11_dotmac.conf
+	fowners -R apache /etc/apache2/vhosts.d/11_dotmac.conf
 }
