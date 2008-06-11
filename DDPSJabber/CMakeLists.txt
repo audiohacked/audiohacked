@@ -7,7 +7,7 @@ SET(SRCS
 	ChatConnection.cpp
 	ChatMessage.cpp
 	ChatRoster.cpp
-	ChatGroup.cpp
+	#ChatGroup.cpp
 	ChatWindow.cpp
 )
 SET(HDRS
@@ -16,7 +16,7 @@ SET(HDRS
 	ChatConnection.h
 	ChatMessage.h
 	ChatRoster.h
-	ChatGroup.h
+	#ChatGroup.h
 	ChatWindow.h
 )
 ### End Source Files

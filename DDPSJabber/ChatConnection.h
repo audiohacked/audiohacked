@@ -11,7 +11,7 @@
 	#include <gloox/client.h>
 	
 	#include <gloox/presencehandler.h>
-	#include <gloox/presence.h>
+	//#include <gloox/presence.h>
 	
 	#include <gloox/connectionlistener.h>
 	#include <gloox/connectiontcpclient.h>
@@ -26,9 +26,9 @@
 			virtual void onConnect();
 			virtual void onDisconnect( ConnectionError e );
 			virtual bool onTLSConnect( const CertInfo& info );
-			virtual void handlePresence( const Presence& presence )
+			virtual void handlePresence( Stanza *stanza )
 			{
-				conn->setPresence( Presence::Available, 1 );
+				//conn->setPresence( Presence::Available, 1 );
 			}
 			
 			Client *FetchConnection(){ return conn; }

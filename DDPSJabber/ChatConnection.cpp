@@ -18,12 +18,6 @@ void *ChatConnThread::Entry()
 ChatConn::ChatConn()
 {
 	JID jid( "ddps@localhost/DDPSChat" );
-	//jid.setServer("192.168.1.204");
-
-	//wxLogMessage( wxT("server -- ") + wxString(jid.server().c_str(), wxConvUTF8) );
-	//wxLogMessage( wxT("RAWserver -- ") + wxString(jid.serverRaw().c_str(), wxConvUTF8) );
-	//wxLogMessage( wxT("username -- ") + wxString(jid.username().c_str(), wxConvUTF8) );
-	//wxLogMessage( wxT("resource -- ") + wxString(jid.resource().c_str(), wxConvUTF8) );
 
 	conn = new Client(jid, "letmein");
 
@@ -36,7 +30,7 @@ ChatConn::ChatConn()
 	conn->disco()->setIdentity( "client", "bot" );
 	conn->disco()->addFeature( XMLNS_CHAT_STATES );
 	
-	conn->setPresence( Presence::Available, 1 );
+	conn->setPresence( PresenceAvailable, 1 );
 	
 }
 

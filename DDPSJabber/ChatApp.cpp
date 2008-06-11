@@ -1,8 +1,4 @@
 #include "ChatApp.h"
-#include "ChatMessage.h"
-#include "ChatRoster.h"
-
-#include <stdlib.h>
 
 IMPLEMENT_APP(ChatApp)
 
@@ -21,9 +17,7 @@ bool ChatApp::OnInit()
 
 void ChatApp::InitChat()
 {
-	ChatMsgSess *cMsg = new ChatMsgSess( thread->server->FetchConnection() );
-
-	ChatRoster *rosterListener = new ChatRoster( thread->server->FetchConnection() );
-
-	//ChatAccount *cAccount = new ChatAccount( thread->server->FetchConnection() );
+	rosterListener = new ChatRoster( thread->server->FetchConnection() );
+	cMsg = new ChatMsgSess( thread->server->FetchConnection() );
+	//cAccount = new ChatAccount( thread->server->FetchConnection() );
 }

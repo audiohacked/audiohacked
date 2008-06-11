@@ -1,7 +1,7 @@
-#include "ChatCommon.h"
+//#include "ChatCommon.h"
 #include "ChatAccount.h"
 
-void ChatAccount::handlePresence( const Presence& presence )
+void ChatAccount::handlePresence( Stanza *stanza )
 {
-	this.setPresence( Presence::Available );
+	//this.setPresence( Presence::Available );
 }

@@ -10,38 +10,15 @@
 	#include <gloox/gloox.h>
 	using namespace gloox;
 
-	#include "ChatCommon.h"
-
-	class ChatWindowRosterPanel : public wxPanel
-	{
-		public:
-			ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Client *conn);
-			void AddContact(wxString contact, wxString jid);
-			void NewChatWindow(wxTreeEvent &event);
-		private:
-			wxTreeCtrl *list;
-			wxTreeItemId listRoot;
-			Client *j;
-		DECLARE_EVENT_TABLE()
-	};
-	
-	class ChatWindowRoster : public wxFrame
-	{
-		public:
-			ChatWindowRoster(Client *conn);
-			virtual ~ChatWindowRoster(){ j->disconnect(); delete j; }
-			ChatWindowRosterPanel *panel;
-		private:
-			Client *j;
-	};
+	#include "ChatRosterData.h"
 	
 	class ChatWindowChatPanel : public wxPanel
 	{
 		public:
 			ChatWindowChatPanel(wxWindow *parent, wxWindowID id, ChatContactItemData *data, wxTreeItemId itemId);
 			void SendMsg(wxCommandEvent &event);
-			ChatMsgSess *MsgSes;
-			//MessageSession *MsgSes;
+			ChatMsgSess *chatSes;
+			MessageSession *MsgSes;
 		private:
 			wxTextCtrl *chatText;
 			wxTextCtrl *sendText;

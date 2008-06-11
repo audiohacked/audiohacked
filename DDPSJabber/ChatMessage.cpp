@@ -1,49 +1,31 @@
-#include "ChatCommon.h"
 #include "ChatMessage.h"
 /**
 new incoming chat:
 	loop through wxTreeCtrl to see if one exsits
-
 new outgoing chat:
 	loop through wxTreeCtrl to see if one exsits
-	
 on app close:
 	loop through wxTreeCtrl and close windows and sessions; clean up
 
-
-		// user is typing a message
-		m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
-
-		// acknowledge receiving of a message
-		m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
-
-		// user is not actively paying attention to the chat
-		m_chatStateFilter->setChatState( ChatStateInactive );
-
-		// user has closed the chat window
-		m_chatStateFilter->setChatState( ChatStateGone );
-
+// user is typing a message
+m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
+// acknowledge receiving of a message
+m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
+// user is not actively paying attention to the chat
+m_chatStateFilter->setChatState( ChatStateInactive );
+// user has closed the chat window
+m_chatStateFilter->setChatState( ChatStateGone );
 */
 
-ChatMsgSess::ChatMsgSess(Client *conn) /*: MessageSession( client, )*/ {
+ChatMsgSess::ChatMsgSess(Client *conn) {
 	m_client = conn;
 	conn->registerMessageSessionHandler( this, 0 );
 }
 
-MessageSession* ChatMsgSess::newSession( const JID& to )
-{
-	MessageSession* session = new MessageSession( m_client, to );
-	session->registerMessageHandler( this );
-	return session;
-}
-
 void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 {
-	/*
-		check for new chat: loop thru list
-		if new chat: create new window and session
-		 
-	*/
+	/*	check for new chat: loop thru list
+		if new chat: create new window and session	*/
 
 	/*
 	  printf( "got new session\n");
@@ -58,22 +40,21 @@ void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
     */
 }
 
-void ChatMsgSess::handleMessage( const Message &msg, MessageSession *msgSes )
+void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 {
-	wxLogMessage(
-		wxT("msg from: ") +
-		gloox2wxString(msg.from().full()) +
-		wxT(" body: ") +
-		gloox2wxString(msg.body())
-	);
+	/*	
+	std::string who = gloox2wxString(msg.from().full());
+	std::string text = gloox2wxString(msg.body());
+	wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
+	*/
 }
 
 void ChatMsgSess::handleMessageEvent(const JID &jid, MessageEventType MsgEvent)
 {
-	// display contact's Message Event
+	/*display contact's Message Event*/
 }
 
 void ChatMsgSess::handleChatState( const JID &jid, ChatStateType ChatState)
 {
-	// display contact's Chat State
+	/*display contact's Chat State*/
 }

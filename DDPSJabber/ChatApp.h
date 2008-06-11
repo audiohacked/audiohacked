@@ -7,7 +7,8 @@
 	#endif
 
 	#include "ChatConnection.h"
-	#include "ChatWindow.h"
+	#include "ChatRoster.h"
+	#include "ChatMessage.h"
 
 	class ChatApp : public wxApp
 	{
@@ -17,6 +18,9 @@
 			ChatConnThread *thread;
 			ChatConn *server;
 			ChatWindowRoster *win;
+			ChatRoster *rosterListener;
+			ChatMsgSess *cMsg;
+			//ChatAccount *cAccount;
 	};
 
 	DECLARE_APP(ChatApp)
