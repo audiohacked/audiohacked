@@ -5,21 +5,21 @@
 	#ifndef WX_PRECOMP
 		#include <wx/wx.h>
 	#endif
+	
+	#include <wx/treectrl.h>
 		
 	#include <gloox/client.h>
 	#include <gloox/gloox.h>
 	using namespace gloox;
-
-	#include "ChatRosterData.h"
-	
+		
 	class ChatWindowChatPanel : public wxPanel
 	{
 		public:
-			ChatWindowChatPanel(wxWindow *parent, wxWindowID id, ChatContactItemData *data, wxTreeItemId itemId);
+			ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTreeCtrl *list, wxTreeItemId itemId);
 			void SendMsg(wxCommandEvent &event);
-			ChatMsgSess *chatSes;
-			MessageSession *MsgSes;
 		private:
+			wxTreeCtrl *contact_list;
+			wxTreeItemId contact_id;
 			wxTextCtrl *chatText;
 			wxTextCtrl *sendText;
 			wxButton *sendButton;
@@ -29,13 +29,12 @@
 	class ChatWindowChat : public wxFrame
 	{
 		public:
-			ChatWindowChat(wxTreeCtrl *list, ChatContactItemData *data, wxTreeItemId id);
+			ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id);
 			virtual ~ChatWindowChat();
 			ChatWindowChatPanel *panel;
 		private:
 			wxTreeItemId itemId;
 			wxTreeCtrl *rosterList;
-			wxString chat_contact_jid, chat_contact_name;
 	};
 	
 /*	

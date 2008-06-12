@@ -4,6 +4,10 @@ IMPLEMENT_APP(ChatApp)
 
 bool ChatApp::OnInit()
 {
+	FILE *myLogFile = fopen("log.txt", "a+");
+	wxLogStderr *LogFile = new wxLogStderr(myLogFile);
+	wxLog::SetActiveTarget(LogFile);
+	
 	thread = new ChatConnThread();
 	InitChat();
 	thread->Run();

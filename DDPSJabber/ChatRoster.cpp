@@ -1,42 +1,47 @@
 #include "ChatCommon.h"
 #include "ChatApp.h"
+#include "ChatMessage.h"
+#include "ChatWindow.h"
 #include "ChatRosterData.h"
 #include "ChatRoster.h"
-#include "ChatWindow.h"
+
+BEGIN_EVENT_TABLE( ChatWindowRosterPanel, wxPanel )
+	EVT_TREE_ITEM_ACTIVATED(WINDOW_RosterList, ChatWindowRosterPanel::NewChatWindow)
+END_EVENT_TABLE()
 
 void ChatRoster::onResourceBindError( ResourceBindError error )
 {
-//	printf( "onResourceBindError: %d\n", error );
+	printf( "onResourceBindError: %d\n", error );
 }
 
 void ChatRoster::onSessionCreateError( SessionCreateError error )
 {
-//	printf( "onSessionCreateError: %d\n", error );
+	printf( "onSessionCreateError: %d\n", error );
 }
 
 void ChatRoster::handleItemSubscribed( const JID& jid )
 {
-//	printf( "subscribed %s\n", jid.bare().c_str() );
+	printf( "subscribed %s\n", jid.bare().c_str() );
 }
 
 void ChatRoster::handleItemAdded( const JID& jid )
 {
-//	printf( "added %s\n", jid.bare().c_str() );
+	printf( "added %s\n", jid.bare().c_str() );
 }
 
 void ChatRoster::handleItemUnsubscribed( const JID& jid )
 {
-//	printf( "unsubscribed %s\n", jid.bare().c_str() );
+	printf( "unsubscribed %s\n", jid.bare().c_str() );
 }
 
 void ChatRoster::handleItemRemoved( const JID& jid )
 {
-//	printf( "removed %s\n", jid.bare().c_str() );
+	printf( "removed %s\n", jid.bare().c_str() );
 }
 
 void ChatRoster::handleItemUpdated( const JID& jid )
 {
-//	printf( "updated %s\n", jid.bare().c_str() );
+	printf( "updated %s\n", jid.bare().c_str() );
 }
 
 void ChatRoster::handleRoster( const Roster& roster )
@@ -45,33 +50,34 @@ void ChatRoster::handleRoster( const Roster& roster )
 	for( ; it != roster.end(); ++it )
 	{	
 		ChatApp &myApp = ::wxGetApp();
-		wxString contact((*it).second->jid().c_str(), wxConvUTF8);
 		wxString name((*it).second->name().c_str(), wxConvUTF8);
 		
-		myApp.win->panel->AddContact( name, contact );
+		myApp.win->panel->AddContact( name, (*it).second->jid() );
+		StringList groups;
+		j->rosterManager()->subscribe( (*it).second->jid(), "", groups, "" );
 	}
 }
 
 void ChatRoster::handleRosterError( Stanza *stanza )
 {
-	//printf( "a roster-related error occured\n" );
+	printf( "a roster-related error occured\n" );
 }
 
 void ChatRoster::handleRosterPresence( const RosterItem& item, const std::string& resource,
                           Presence presence, const std::string& /*msg*/ )
 {
-	//printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
+	printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
 }
 
 void ChatRoster::handleSelfPresence( const RosterItem& item, const std::string& resource,
                           Presence presence, const std::string& /*msg*/ )
 {
-	//printf( "self presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
+	printf( "self presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
 }
 
 bool ChatRoster::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
 {
-	//printf( "subscription: %s\n", jid.bare().c_str() );
+	wxLogMessage(wxT("subscription: ") + gloox2wxString(jid.bare()));
 	StringList groups;
 	JID id( jid );
 	j->rosterManager()->subscribe( id, "", groups, "" );
@@ -80,31 +86,16 @@ bool ChatRoster::handleSubscriptionRequest( const JID& jid, const std::string& /
 
 bool ChatRoster::handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
 {
-	//printf( "unsubscription: %s\n", jid.bare().c_str() );
+	wxLogMessage(wxT("unsubscription: ") + gloox2wxString(jid.bare()));
 	return true;
 }
 
 void ChatRoster::handleNonrosterPresence( Stanza *stanza )
 {
-	//printf( "received presence from entity not in the roster: %s\n", presence.from().full().c_str() );
+	printf( "received presence from entity not in the roster: %s\n", stanza->from().full().c_str() );
+	//StringList groups;
+	//j->rosterManager()->subscribe( stanza->from(), "", groups, "" );
 }
-
-void ChatRoster::handleLog( LogLevel level, LogArea area, const std::string& message )
-{
-	//printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-}
-
-
-ChatContactItemData::ChatContactItemData(wxString contact, wxString jid)
-{
-	contact_jid = jid;
-	contact_name = contact;
-	hasWin = false;
-}
-
-BEGIN_EVENT_TABLE( ChatWindowRosterPanel, wxPanel )
-	EVT_TREE_ITEM_ACTIVATED(WINDOW_RosterList, ChatWindowRosterPanel::NewChatWindow)
-END_EVENT_TABLE()
 
 ChatWindowRoster::ChatWindowRoster(Client *conn) :
 wxFrame(NULL, -1, wxT("ChatRoster"), wxDefaultPosition, wxDefaultSize)
@@ -135,10 +126,11 @@ ChatWindowRosterPanel::ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Cl
 	listRoot = list->AddRoot(_T("Roster"));
 }
 
-void ChatWindowRosterPanel::AddContact(wxString contact, wxString jid)
+void ChatWindowRosterPanel::AddContact(wxString contact, JID jid)
 {	
 	if (contact == wxT("")) {
-		contact = jid;
+		wxString str(jid.full().c_str(), wxConvUTF8);
+		contact = str;
 	}
 	ChatContactItemData *newContact = new ChatContactItemData(contact, jid);
 	list->AppendItem(listRoot, contact, -1, -1, newContact);
@@ -147,14 +139,13 @@ void ChatWindowRosterPanel::AddContact(wxString contact, wxString jid)
 void ChatWindowRosterPanel::NewChatWindow(wxTreeEvent &event)
 {
 	wxTreeItemId itemId = event.GetItem();
-	ChatContactItemData *item = (ChatContactItemData *)list->GetItemData(itemId);
-	JID jid( wx2glooxString(item->GetJID()) );
-	if (!item->HasWin()) {
+	ChatContactItemData *item = (ChatContactItemData *) list->GetItemData(itemId);
+	if (!item->hasWin) {
 		item->conn = j;
-		//item->sess = new ChatMsgSess(j);
-		//item->sess->m_session = item->sess->newSession( jid );
-		ChatWindowChat *chat = new ChatWindowChat(list, item, itemId);
-		chat->Show();
-		item->SetHasWin(true);
+		item->chatSess = new ChatMsgSess(j);
+		item->MsgSess = item->chatSess->newSession( item->jid );
+		item->win = new ChatWindowChat(list, itemId);
+		item->win->Show();
+		item->hasWin = true;
 	}
 }

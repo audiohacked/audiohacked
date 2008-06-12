@@ -46,7 +46,6 @@
 		virtual bool handleSubscriptionRequest( const JID& jid, const std::string& msg );
 		virtual bool handleUnsubscriptionRequest( const JID& jid, const std::string& msg );
 		virtual void handleNonrosterPresence( Stanza *stanza );
-		virtual void handleLog( LogLevel level, LogArea area, const std::string& message );
 
 	  private:
 	    Client *j;
@@ -56,7 +55,7 @@
 	{
 		public:
 			ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Client *conn);
-			void AddContact(wxString contact, wxString jid);
+			void AddContact(wxString contact, JID jid);
 			void NewChatWindow(wxTreeEvent &event);
 		private:
 			wxTreeCtrl *list;

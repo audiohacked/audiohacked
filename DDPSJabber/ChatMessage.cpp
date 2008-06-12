@@ -1,3 +1,4 @@
+#include "ChatCommon.h"
 #include "ChatMessage.h"
 /**
 new incoming chat:
@@ -24,29 +25,29 @@ ChatMsgSess::ChatMsgSess(Client *conn) {
 
 void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 {
-	/*	check for new chat: loop thru list
-		if new chat: create new window and session	*/
+/*
+	check for new chat: loop thru list
+	if new chat: create new window and session
+*/
 
-	/*
-	  printf( "got new session\n");
-      // this example can handle only one session. so we get rid of the old session
-      j->disposeMessageSession( m_session );
-      m_session = session;
-      m_session->registerMessageHandler( this );
-      m_messageEventFilter = new MessageEventFilter( m_session );
-      m_messageEventFilter->registerMessageEventHandler( this );
-      m_chatStateFilter = new ChatStateFilter( m_session );
-      m_chatStateFilter->registerChatStateHandler( this );
-    */
+/*
+	printf( "got new session\n");
+	// this example can handle only one session. so we get rid of the old session
+*/
+	m_client->disposeMessageSession( m_session );
+	m_session = msgSes;
+	m_session->registerMessageHandler( this );
+	m_messageEventFilter = new MessageEventFilter( m_session );
+	m_messageEventFilter->registerMessageEventHandler( this );
+	m_chatStateFilter = new ChatStateFilter( m_session );
+	m_chatStateFilter->registerChatStateHandler( this );
 }
 
 void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 {
-	/*	
-	std::string who = gloox2wxString(msg.from().full());
-	std::string text = gloox2wxString(msg.body());
-	wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
-	*/
+	wxString who = gloox2wxString(stanza->from().full());
+	wxString text = gloox2wxString(stanza->body());
+//	wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
 }
 
 void ChatMsgSess::handleMessageEvent(const JID &jid, MessageEventType MsgEvent)

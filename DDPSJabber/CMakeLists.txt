@@ -1,4 +1,4 @@
-PROJECT(DDPSChat)
+PROJECT(ChatApp)
 
 ### Begin Source Files
 SET(SRCS
@@ -9,6 +9,7 @@ SET(SRCS
 	ChatRoster.cpp
 	#ChatGroup.cpp
 	ChatWindow.cpp
+	ChatRosterData.cpp
 )
 SET(HDRS
 	ChatCommon.h
@@ -18,6 +19,7 @@ SET(HDRS
 	ChatRoster.h
 	#ChatGroup.h
 	ChatWindow.h
+	ChatRosterData.h
 )
 ### End Source Files
 

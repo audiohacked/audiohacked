@@ -11,8 +11,6 @@
 	#include <gloox/gloox.h>
 	using namespace gloox;
 
-	#include "ChatCommon.h"
-
 	class ChatMsgSess : public MessageSessionHandler, MessageEventHandler,
 	 							ChatStateHandler, MessageHandler
 	{
@@ -27,12 +25,12 @@
 			ChatStateFilter *m_chatStateFilter;
 			Client *m_client;
 
-			/*MessageSession* ChatMsgSess::newSession( const JID& to )
+			MessageSession* ChatMsgSess::newSession( const JID& to )
 			{
 				MessageSession* session = new MessageSession( m_client, to );
 				session->registerMessageHandler( this );
 				return session;
-			}*/
+			}
 		
 	};
 

@@ -1,19 +1,20 @@
 #include "ChatCommon.h"
 #include "ChatWindow.h"
+#include "ChatRosterData.h"
+
 
 BEGIN_EVENT_TABLE( ChatWindowChatPanel, wxPanel )
 	EVT_BUTTON(BUTTON_SendMsg, ChatWindowChatPanel::SendMsg)
 END_EVENT_TABLE()
 
-ChatWindowChat::ChatWindowChat(wxTreeCtrl *list, ChatContactItemData *data, wxTreeItemId id) :
-wxFrame(NULL, -1, data->GetName(), wxDefaultPosition, wxDefaultSize)
+ChatWindowChat::ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id) :
+wxFrame(NULL, -1, ((ChatContactItemData *)list->GetItemData(id))->name, wxDefaultPosition, wxDefaultSize)
 {
-	chat_contact_jid = data->GetJID();
-	chat_contact_name = data->GetName();
+	ChatContactItemData *data = (ChatContactItemData *)list->GetItemData(id);
 	itemId = id;
 	rosterList = list;
 		
-	panel = new ChatWindowChatPanel(this, -1, data, id);
+	panel = new ChatWindowChatPanel(this, -1, list, id);
 	panel->SetFocus();
 	
 	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -24,13 +25,15 @@ wxFrame(NULL, -1, data->GetName(), wxDefaultPosition, wxDefaultSize)
 ChatWindowChat::~ChatWindowChat()
 {
 	ChatContactItemData *item = (ChatContactItemData *)rosterList->GetItemData(itemId);
-	item->SetHasWin(false);
+	item->hasWin = false;
 }
 
-ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, ChatContactItemData *data, wxTreeItemId treeId)
+ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTreeCtrl *list, wxTreeItemId treeId)
 	: wxPanel(parent, id, wxDefaultPosition, wxDefaultSize)
 {
-	chatSes = data->chatSess;
+	contact_list = list;
+	contact_id = treeId;
+	
 	chatText = new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
 	sendText = new wxTextCtrl(this, TEXT_MsgText, wxT(""), wxDefaultPosition, wxSize(200, 20));
 	sendButton = new wxButton(this, BUTTON_SendMsg, wxT("Send"), wxDefaultPosition, wxDefaultSize);
@@ -45,31 +48,24 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, ChatCo
 	sizer->Add(sendChat_sizer, 0, wxALL|wxALIGN_RIGHT, 15);
 
 	SetSizer(sizer);
-	//sizer->SetSizeHints(this);
 }
 
 void ChatWindowChatPanel::SendMsg(wxCommandEvent &event)
 {
-	/*     
-	sleep( 2 );
-	m_session->send( re, sub );
-	sleep( 2 );
-	m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
-	m_chatStateFilter->setChatState( ChatStateActive );
-	*/
-	wxTextCtrl* MsgText = (wxTextCtrl*) FindWindow(TEXT_MsgText);
-	if (MsgText->GetValue() != wxT(""))
+	ChatContactItemData *data = (ChatContactItemData *)contact_list->GetItemData(contact_id);
+	//wxTextCtrl* MsgText = (wxTextCtrl*) FindWindow(TEXT_MsgText);
+	if (sendText->GetValue() != wxT(""))
 	{
 		//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
 		//chatSes->m_chatStateFilter->setChatState( ChatStateComposing );
-		
-		//chatSes->m_session->send(wx2glooxString(MsgText->GetValue()), "No Subject");
-		wxLogMessage(MsgText->GetValue());
+
+		wxLogMessage(sendText->GetValue());
+		data->MsgSess->send(wx2glooxString(sendText->GetValue()), "No Subject");
 		
 		//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
 		//chatSes->m_chatStateFilter->setChatState( ChatStateActive );
 		
-		MsgText->SetValue(wxT(""));
+		sendText->SetValue(wxT(""));
 	}
 	//event.Skip();
 }

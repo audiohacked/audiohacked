@@ -36,16 +36,16 @@ ChatConn::ChatConn()
 
 void ChatConn::onConnect()
 {
-	//wxLogMessage(wxT("connection"));
+	wxLogMessage(wxT("connection"));
 }
 
 void ChatConn::onDisconnect(ConnectionError e)
 {
-	//wxLogMessage(wxT("disconnection"));    
+	wxLogMessage(wxT("disconnection"));    
 }
 
 bool ChatConn::onTLSConnect(const CertInfo& info)
 {
-	//wxLogMessage(wxT("TLS Connection"));
+	wxLogMessage(wxT("TLS Connection"));
     return true;
 }

@@ -7,20 +7,18 @@
 	#endif
 
 	#include "ChatMessage.h"
+	#include "ChatWindow.h"
 
 	class ChatContactItemData : public wxTreeItemData
 	{
 		public:
-			ChatContactItemData(wxString contact, wxString contact_jid);
-			const wxString GetName() const { return contact_name; }
-		    const wxString GetJID() const { return contact_jid; }
-			const bool HasWin() const { return hasWin; }
-			void SetHasWin(bool has) { hasWin = has; }
+			ChatContactItemData(wxString contact, JID contact_jid);
+			Client *conn;
 			ChatMsgSess *chatSess;
 			MessageSession *MsgSess;
-			Client *conn;
-			wxString contact_jid;
-			wxString contact_name;
+			JID jid;
+			wxString name;
+			ChatWindowChat *win;
 			bool hasWin;
 	};
 
