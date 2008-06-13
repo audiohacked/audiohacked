@@ -1,5 +1,7 @@
+#include "ChatApp.h"
 #include "ChatCommon.h"
 #include "ChatMessage.h"
+#include "ChatRosterData.h"
 /**
 new incoming chat:
 	loop through wxTreeCtrl to see if one exsits
@@ -44,9 +46,20 @@ void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 
 void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 {
-//	wxString who = gloox2wxString(stanza->from().full());
-//	wxString text = gloox2wxString(stanza->body());
-//	wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
+	wxTreeItemId itemId;
+	wxString who = gloox2wxString(stanza->from().full());
+	wxString text = gloox2wxString(stanza->body());
+	ChatApp &myApp = ::wxGetApp();
+	//wxTreeItemId itemId = findTreeItem(myApp.win->panel->list, myApp.win->panel->listRoot, who);
+	if (itemId.IsOk())
+	{
+		ChatContactItemData *item = (ChatContactItemData *) myApp.win->panel->list->GetItemData(itemId);
+		item->win->panel->chatText->AppendText(who + wxT(": ") + text);
+	}
+	else
+	{
+		//wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
+	}
 }
 
 void ChatMsgSess::handleMessageEvent(const JID &jid, MessageEventType MsgEvent)

@@ -32,10 +32,12 @@
 	{
 		public:
 			ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id);
-			virtual ~ChatWindowChat();
+			//virtual ~ChatWindowChat();
+			void OnCloseWindow(wxCloseEvent& event);
 			ChatWindowChatPanel *panel;
 			wxTreeItemId itemId;
 			wxTreeCtrl *rosterList;
+		DECLARE_EVENT_TABLE()
 	};
 	
 /*	

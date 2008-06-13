@@ -2,6 +2,10 @@
 #include "ChatRosterData.h"
 #include "ChatWindow.h"
 
+BEGIN_EVENT_TABLE( ChatWindowChat, wxFrame )
+	EVT_CLOSE(ChatWindowChat::OnCloseWindow)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE( ChatWindowChatPanel, wxPanel )
 	EVT_BUTTON(BUTTON_SendMsg, ChatWindowChatPanel::SendMsg)
 END_EVENT_TABLE()
@@ -21,11 +25,17 @@ wxFrame(NULL, -1, ((ChatContactItemData *)list->GetItemData(id))->name, wxDefaul
 	sizer->SetSizeHints(this);
 }
 
-ChatWindowChat::~ChatWindowChat()
+void ChatWindowChat::OnCloseWindow(wxCloseEvent& event)
 {
-	ChatContactItemData *item = (ChatContactItemData *)rosterList->GetItemData(itemId);
-	item->hasWin = false;
+	if (!event.CanVeto()) { // Test if we can veto this deletion
+		this->Close();
+		this->Destroy();// If not, destroy the window anyway.
+	} else {
+		event.Veto();// Notify the calling code that we didn't delete the frame.
+		this->Hide();
+	}
 }
+
 
 ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTreeCtrl *list, wxTreeItemId treeId)
 	: wxPanel(parent, id, wxDefaultPosition, wxDefaultSize)
@@ -36,7 +46,7 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTree
 	ChatContactItemData *data = (ChatContactItemData *)list->GetItemData(treeId);
 	chatSes = data->chatSess;
 	
-	chatText = new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
+	chatText = new wxTextCtrl(this, TEXT_ChatText, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
 	sendText = new wxTextCtrl(this, TEXT_MsgText, wxT(""), wxDefaultPosition, wxSize(200, 20));
 	sendButton = new wxButton(this, BUTTON_SendMsg, wxT("Send"), wxDefaultPosition, wxDefaultSize);
 
@@ -55,19 +65,12 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTree
 void ChatWindowChatPanel::SendMsg(wxCommandEvent &event)
 {
 	wxTextCtrl* MsgText = (wxTextCtrl*) FindWindow(TEXT_MsgText);
+	wxTextCtrl* ChatText = (wxTextCtrl*) FindWindow(TEXT_ChatText);
 	if (MsgText->GetValue() != wxT(""))
 	{
 		wxLogMessage(MsgText->GetValue());
-		chatSes->m_session->send(wx2glooxString(MsgText->GetValue()), "No Subject");		
+		chatSes->m_session->send(wx2glooxString(MsgText->GetValue()), "No Subject");
+		ChatText->AppendText(wxT("me: ") + MsgText->GetValue() + wxT("\n"));
 		MsgText->SetValue(wxT(""));
 	}
-
-	/*ChatContactItemData *data = (ChatContactItemData *)contact_list->GetItemData(contact_id);
-	if (sendText->GetValue() != wxT(""))
-	{
-		wxLogMessage(sendText->GetValue());
-		data->chatSess->m_session->send(wx2glooxString(sendText->GetValue()), "No Subject");
-		sendText->SetValue(wxT(""));
-	}*/
-	//event.Skip();
 }

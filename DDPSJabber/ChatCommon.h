@@ -21,10 +21,12 @@
 	{
 		WINDOW_RosterList,
 		TEXT_MsgText,
+		TEXT_ChatText,
 		BUTTON_SendMsg
 	};
 
 	std::string wx2glooxString( wxString str);
 	wxString gloox2wxString( std::string str);
 
+	wxTreeItemId findTreeItem(wxTreeCtrl* pTreeCtrl, const wxTreeItemId& root, const wxString& text);
 #endif
