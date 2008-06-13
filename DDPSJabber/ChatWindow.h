@@ -11,18 +11,20 @@
 	#include <gloox/client.h>
 	#include <gloox/gloox.h>
 	using namespace gloox;
+	
+	#include "ChatMessage.h"
 		
 	class ChatWindowChatPanel : public wxPanel
 	{
 		public:
 			ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTreeCtrl *list, wxTreeItemId itemId);
 			void SendMsg(wxCommandEvent &event);
-		private:
 			wxTreeCtrl *contact_list;
 			wxTreeItemId contact_id;
 			wxTextCtrl *chatText;
 			wxTextCtrl *sendText;
 			wxButton *sendButton;
+			ChatMsgSess *chatSes;
 		DECLARE_EVENT_TABLE()
 	};
 	
@@ -32,7 +34,6 @@
 			ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id);
 			virtual ~ChatWindowChat();
 			ChatWindowChatPanel *panel;
-		private:
 			wxTreeItemId itemId;
 			wxTreeCtrl *rosterList;
 	};

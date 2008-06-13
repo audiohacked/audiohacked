@@ -50,11 +50,25 @@ void ChatRoster::handleRoster( const Roster& roster )
 	for( ; it != roster.end(); ++it )
 	{	
 		ChatApp &myApp = ::wxGetApp();
-		wxString name((*it).second->name().c_str(), wxConvUTF8);
+		wxString contact = gloox2wxString((*it).second->name());
 		
-		myApp.win->panel->AddContact( name, (*it).second->jid() );
-		StringList groups;
-		j->rosterManager()->subscribe( (*it).second->jid(), "", groups, "" );
+		wxLogMessage( wxT("add contact jid: ") + gloox2wxString((*it).second->jid()) );
+		//myApp.win->panel->AddContact( name, (*it).second->jid() );
+		if (contact == wxT("")) {
+			contact = gloox2wxString((*it).second->jid());
+		}
+		
+		ChatContactItemData *newContact = new ChatContactItemData(contact, (*it).second->jid());
+		newContact->conn = myApp.thread->server->FetchConnection();
+		
+		wxTreeItemId id = myApp.win->panel->list->AppendItem(myApp.win->panel->listRoot, contact, -1, -1, newContact);
+		newContact->itemId = id;
+
+		newContact->chatSess = new ChatMsgSess(myApp.thread->server->FetchConnection());
+		newContact->chatSess->m_session = newContact->chatSess->newSession( (*it).second->jid() );
+
+		newContact->win = new ChatWindowChat(myApp.win->panel->list, id);
+		newContact->hasWin = true;
 	}
 }
 
@@ -105,6 +119,13 @@ wxFrame(NULL, -1, wxT("ChatRoster"), wxDefaultPosition, wxDefaultSize)
 	panel->SetFocus();
 }
 
+ChatWindowRoster::~ChatWindowRoster()
+{
+	j->disconnect();
+	delete j;
+	panel->list->DeleteAllItems();
+}
+
 ChatWindowRosterPanel::ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Client *conn)
 	: wxPanel(parent, id, wxDefaultPosition, wxDefaultSize)
 {
@@ -140,12 +161,13 @@ void ChatWindowRosterPanel::NewChatWindow(wxTreeEvent &event)
 {
 	wxTreeItemId itemId = event.GetItem();
 	ChatContactItemData *item = (ChatContactItemData *) list->GetItemData(itemId);
-	if (!item->hasWin) {
-		item->conn = j;
-		item->chatSess = new ChatMsgSess(j);
-		item->MsgSess = item->chatSess->newSession( item->jid );
-		item->win = new ChatWindowChat(list, itemId);
+	//if (!item->hasWin) {
+		//item->conn = j;
+		//item->chatSess = new ChatMsgSess(j);
+		//item->chatSess->m_session = item->chatSess->newSession( item->jid );
+		//item->chatSess->m_session = item->chatSess->newSession( item->jid );
+		//item->win = new ChatWindowChat(list, itemId);
 		item->win->Show();
-		item->hasWin = true;
-	}
+		//item->hasWin = true;
+	//}
 }

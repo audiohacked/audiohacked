@@ -1,7 +1,6 @@
 #include "ChatCommon.h"
-#include "ChatWindow.h"
 #include "ChatRosterData.h"
-
+#include "ChatWindow.h"
 
 BEGIN_EVENT_TABLE( ChatWindowChatPanel, wxPanel )
 	EVT_BUTTON(BUTTON_SendMsg, ChatWindowChatPanel::SendMsg)
@@ -34,6 +33,9 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTree
 	contact_list = list;
 	contact_id = treeId;
 	
+	ChatContactItemData *data = (ChatContactItemData *)list->GetItemData(treeId);
+	chatSes = data->chatSess;
+	
 	chatText = new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
 	sendText = new wxTextCtrl(this, TEXT_MsgText, wxT(""), wxDefaultPosition, wxSize(200, 20));
 	sendButton = new wxButton(this, BUTTON_SendMsg, wxT("Send"), wxDefaultPosition, wxDefaultSize);
@@ -52,20 +54,20 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTree
 
 void ChatWindowChatPanel::SendMsg(wxCommandEvent &event)
 {
-	ChatContactItemData *data = (ChatContactItemData *)contact_list->GetItemData(contact_id);
-	//wxTextCtrl* MsgText = (wxTextCtrl*) FindWindow(TEXT_MsgText);
+	wxTextCtrl* MsgText = (wxTextCtrl*) FindWindow(TEXT_MsgText);
+	if (MsgText->GetValue() != wxT(""))
+	{
+		wxLogMessage(MsgText->GetValue());
+		chatSes->m_session->send(wx2glooxString(MsgText->GetValue()), "No Subject");		
+		MsgText->SetValue(wxT(""));
+	}
+
+	/*ChatContactItemData *data = (ChatContactItemData *)contact_list->GetItemData(contact_id);
 	if (sendText->GetValue() != wxT(""))
 	{
-		//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
-		//chatSes->m_chatStateFilter->setChatState( ChatStateComposing );
-
 		wxLogMessage(sendText->GetValue());
-		data->MsgSess->send(wx2glooxString(sendText->GetValue()), "No Subject");
-		
-		//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
-		//chatSes->m_chatStateFilter->setChatState( ChatStateActive );
-		
+		data->chatSess->m_session->send(wx2glooxString(sendText->GetValue()), "No Subject");
 		sendText->SetValue(wxT(""));
-	}
+	}*/
 	//event.Skip();
 }

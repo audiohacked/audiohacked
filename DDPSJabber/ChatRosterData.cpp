@@ -6,7 +6,26 @@ ChatContactItemData::ChatContactItemData(wxString contact, JID jid)
 	name = contact;
 	hasWin = false;
 	conn = NULL;
-	chatSess = NULL;
-	MsgSess = NULL;
 	win = NULL;
+	
+/*
+//	item->conn = j;
+	item->win = new ChatWindowChat(list, itemId);
+	item->win->Show();
+	item->hasWin = true;
+*/	
+}
+
+ChatContactItemData::~ChatContactItemData()
+{
+	//delete win;
+	hasWin = false;
+
+	//delete jid;
+	//delete name;
+
+	//delete chatSess;
+	//delete MsgSess;
+
+	//delete conn;
 }

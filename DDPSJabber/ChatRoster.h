@@ -57,7 +57,6 @@
 			ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Client *conn);
 			void AddContact(wxString contact, JID jid);
 			void NewChatWindow(wxTreeEvent &event);
-		private:
 			wxTreeCtrl *list;
 			wxTreeItemId listRoot;
 			Client *j;
@@ -68,7 +67,7 @@
 	{
 		public:
 			ChatWindowRoster(Client *conn);
-			virtual ~ChatWindowRoster(){ j->disconnect(); delete j; }
+			virtual ~ChatWindowRoster();
 			ChatWindowRosterPanel *panel;
 		private:
 			Client *j;

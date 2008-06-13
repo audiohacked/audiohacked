@@ -25,13 +25,7 @@
 			ChatStateFilter *m_chatStateFilter;
 			Client *m_client;
 
-			MessageSession* ChatMsgSess::newSession( const JID& to )
-			{
-				MessageSession* session = new MessageSession( m_client, to );
-				session->registerMessageHandler( this );
-				return session;
-			}
-		
+			MessageSession* ChatMsgSess::newSession( const JID& to );
 	};
 
 #endif

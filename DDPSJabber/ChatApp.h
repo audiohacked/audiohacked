@@ -14,6 +14,7 @@
 	{
 		public:
 			virtual bool OnInit();
+			//virtual int OnExit();
 			void InitChat();
 			ChatConnThread *thread;
 			ChatConn *server;

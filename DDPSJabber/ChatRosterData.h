@@ -5,6 +5,8 @@
 	#ifndef WX_PRECOMP
 		#include <wx/wx.h>
 	#endif
+	
+	#include <wx/treectrl.h>
 
 	#include "ChatMessage.h"
 	#include "ChatWindow.h"
@@ -13,13 +15,18 @@
 	{
 		public:
 			ChatContactItemData(wxString contact, JID contact_jid);
+			virtual ~ChatContactItemData();
+
+			bool hasWin;
+			wxTreeItemId itemId;
+
 			Client *conn;
 			ChatMsgSess *chatSess;
-			MessageSession *MsgSess;
+
 			JID jid;
 			wxString name;
+
 			ChatWindowChat *win;
-			bool hasWin;
 	};
 
 #endif
