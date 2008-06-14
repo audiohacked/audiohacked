@@ -8,6 +8,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE( ChatWindowChatPanel, wxPanel )
 	EVT_BUTTON(BUTTON_SendMsg, ChatWindowChatPanel::SendMsg)
+	EVT_TEXT_ENTER(TEXT_MsgText, ChatWindowChatPanel::SendMsg)
+	EVT_TEXT(TEXT_MsgText, ChatWindowChatPanel::TextChanged)
 END_EVENT_TABLE()
 
 ChatWindowChat::ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id) :
@@ -25,6 +27,11 @@ wxFrame(NULL, -1, ((ChatContactItemData *)list->GetItemData(id))->name, wxDefaul
 	sizer->SetSizeHints(this);
 }
 
+ChatWindowChat::~ChatWindowChat()
+{
+	
+}
+
 void ChatWindowChat::OnCloseWindow(wxCloseEvent& event)
 {
 	if (!event.CanVeto()) { // Test if we can veto this deletion
@@ -32,6 +39,8 @@ void ChatWindowChat::OnCloseWindow(wxCloseEvent& event)
 		this->Destroy();// If not, destroy the window anyway.
 	} else {
 		event.Veto();// Notify the calling code that we didn't delete the frame.
+		// user has closed the chat window
+		//this->panel->chatSes->m_chatStateFilter->setChatState( ChatStateGone );
 		this->Hide();
 	}
 }
@@ -47,7 +56,7 @@ ChatWindowChatPanel::ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTree
 	chatSes = data->chatSess;
 	
 	chatText = new wxTextCtrl(this, TEXT_ChatText, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
-	sendText = new wxTextCtrl(this, TEXT_MsgText, wxT(""), wxDefaultPosition, wxSize(200, 20));
+	sendText = new wxTextCtrl(this, TEXT_MsgText, wxT(""), wxDefaultPosition, wxSize(200, 20), wxTE_PROCESS_ENTER);
 	sendButton = new wxButton(this, BUTTON_SendMsg, wxT("Send"), wxDefaultPosition, wxDefaultSize);
 
 	wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -73,4 +82,12 @@ void ChatWindowChatPanel::SendMsg(wxCommandEvent &event)
 		ChatText->AppendText(wxT("me: ") + MsgText->GetValue() + wxT("\n"));
 		MsgText->SetValue(wxT(""));
 	}
+	// acknowledge receiving of a message
+	chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
+}
+
+void ChatWindowChatPanel::TextChanged(wxCommandEvent &event)
+{
+	// user is typing a message
+	chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
 }

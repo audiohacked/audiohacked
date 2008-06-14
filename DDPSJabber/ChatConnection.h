@@ -42,7 +42,7 @@
 		public:
 			ChatConnThread();
 			virtual void *Entry();
-			//virtual void OnExit();
+			virtual void OnExit();
 			ChatConn *server;
 						
 		private:

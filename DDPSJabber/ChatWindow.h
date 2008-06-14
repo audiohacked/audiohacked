@@ -19,6 +19,7 @@
 		public:
 			ChatWindowChatPanel(wxWindow *parent, wxWindowID id, wxTreeCtrl *list, wxTreeItemId itemId);
 			void SendMsg(wxCommandEvent &event);
+			void TextChanged(wxCommandEvent &event);
 			wxTreeCtrl *contact_list;
 			wxTreeItemId contact_id;
 			wxTextCtrl *chatText;
@@ -32,7 +33,7 @@
 	{
 		public:
 			ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id);
-			//virtual ~ChatWindowChat();
+			virtual ~ChatWindowChat();
 			void OnCloseWindow(wxCloseEvent& event);
 			ChatWindowChatPanel *panel;
 			wxTreeItemId itemId;

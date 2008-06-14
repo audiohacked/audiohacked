@@ -19,26 +19,31 @@ bool ChatApp::OnInit()
 	return TRUE;
 }
 
-/*int ChatApp::OnExit()
+int ChatApp::OnExit()
 {
-	server->FetchConnection()->disconnect();
+/*
+	if (win->IsShown())
+	{
+		win->Destroy();
+	}
+*/
 
-	delete win;
-
-	server->FetchConnection()->rosterManager()->removeRosterListener();
+	thread->server->FetchConnection()->rosterManager()->removeRosterListener();
 	delete rosterListener;
 
-	server->FetchConnection()->disposeMessageSession(cMsg->m_session);
-	//delete cMsg
+	//thread->server->FetchConnection()->disposeMessageSession(cMsg->m_session);
+	//delete cMsg;
 
-	server->FetchConnection()->disconnect();
-	delete server;
+	//thread->server->FetchConnection()->disconnect();
 
-	thread->Delete();
-	delete thread;
+	//delete thread->server;
+	//delete server;
+
+	//thread->Delete();
+	//delete thread;
 
 	wxApp::CleanUp();	
-}*/
+}
 
 void ChatApp::InitChat()
 {

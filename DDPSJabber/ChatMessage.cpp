@@ -31,7 +31,7 @@ void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 	check for new chat: loop thru list
 	if new chat: create new window and session
 */
-/*
+
 	wxLogMessage(wxT( "got new session\n"));
 	// this example can handle only one session. so we get rid of the old session
 	m_client->disposeMessageSession( m_session );
@@ -41,7 +41,7 @@ void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 	m_messageEventFilter->registerMessageEventHandler( this );
 	m_chatStateFilter = new ChatStateFilter( m_session );
 	m_chatStateFilter->registerChatStateHandler( this );
-*/
+
 }
 
 void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
@@ -58,7 +58,7 @@ void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 	}
 	else
 	{
-		//wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
+		wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
 	}
 }
 
