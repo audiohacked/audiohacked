@@ -1,8 +1,9 @@
 #include "ChatRosterData.h"
 
-ChatContactItemData::ChatContactItemData(wxString contact, JID jid)
+ChatContactItemData::ChatContactItemData(wxString contact, JID contact_jid)
 {
-	jid = jid;
+	jid = contact_jid;
+	wx_jid = wxString(contact_jid.full().c_str(), wxConvUTF8);
 	name = contact;
 	hasWin = false;
 	conn = NULL;

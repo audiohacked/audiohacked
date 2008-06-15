@@ -2,6 +2,7 @@
 #include "ChatCommon.h"
 #include "ChatMessage.h"
 #include "ChatRosterData.h"
+
 /**
 new incoming chat:
 	loop through wxTreeCtrl to see if one exsits
@@ -46,20 +47,32 @@ void ChatMsgSess::handleMessageSession( MessageSession *msgSes )
 
 void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 {
-	wxTreeItemId itemId;
-	wxString who = gloox2wxString(stanza->from().full());
-	wxString text = gloox2wxString(stanza->body());
 	ChatApp &myApp = ::wxGetApp();
-	//wxTreeItemId itemId = findTreeItem(myApp.win->panel->list, myApp.win->panel->listRoot, who);
-	if (itemId.IsOk())
-	{
-		ChatContactItemData *item = (ChatContactItemData *) myApp.win->panel->list->GetItemData(itemId);
+	wxTreeItemId root=myApp.win->panel->listRoot;
+	wxTreeCtrl *list = myApp.win->panel->list;
+	wxTreeItemId itemId;
+	
+	wxString who = gloox2wxString(stanza->from().bare());
+	wxString text = gloox2wxString(stanza->body());
+
+	wxTreeItemIdValue cookie;
+	itemId = findTreeItem(list,
+		list->GetFirstChild(root, cookie),
+		who);
+
+	ChatContactItemData *item = (ChatContactItemData *)list->GetItemData(itemId);
+/*	if (itemId.IsOk())
+	{*/
 		item->win->panel->chatText->AppendText(who + wxT(": ") + text);
-	}
+		if (!item->win->IsShown())
+		{
+			item->win->Show(TRUE);			
+		}
+/*	}
 	else
 	{
 		wxLogMessage(  wxT("msg from: ")+who+wxT(" body: ")+text  );
-	}
+	}*/
 }
 
 void ChatMsgSess::handleMessageEvent(const JID &jid, MessageEventType MsgEvent)

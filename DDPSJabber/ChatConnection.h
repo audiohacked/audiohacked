@@ -37,16 +37,4 @@
 			Client *conn;
 	};
 
-	class ChatConnThread : public wxThread
-	{
-		public:
-			ChatConnThread();
-			virtual void *Entry();
-			virtual void OnExit();
-			ChatConn *server;
-						
-		private:
-			Client *threadConn;
-	};
-
 #endif

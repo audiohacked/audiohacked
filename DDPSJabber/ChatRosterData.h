@@ -25,6 +25,7 @@
 
 			JID jid;
 			wxString name;
+			wxString wx_jid;
 
 			ChatWindowChat *win;
 	};

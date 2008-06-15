@@ -17,6 +17,7 @@
 			virtual int OnExit();
 			void InitChat();
 			ChatConnThread *thread;
+			ChatConn *server;
 			ChatWindowRoster *win;
 			ChatRoster *rosterListener;
 			ChatMsgSess *cMsg;

@@ -83,11 +83,11 @@ void ChatWindowChatPanel::SendMsg(wxCommandEvent &event)
 		MsgText->SetValue(wxT(""));
 	}
 	// acknowledge receiving of a message
-	chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
+	//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
 }
 
 void ChatWindowChatPanel::TextChanged(wxCommandEvent &event)
 {
 	// user is typing a message
-	chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
+	//chatSes->m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
 }

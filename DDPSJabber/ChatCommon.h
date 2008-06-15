@@ -12,14 +12,13 @@
 	#include <gloox/client.h>
 	#include <gloox/gloox.h>
 	using namespace gloox;
-	//#include "ChatMessage.h"
 
 	//wxString LoginUsername = wxT("audiohacked");
 	//wxString LoginPassword = wxT("deathball");
 
 	enum
 	{
-		WINDOW_RosterList,
+		WINDOW_RosterList = wxID_HIGHEST + 1,
 		TEXT_MsgText,
 		TEXT_ChatText,
 		BUTTON_SendMsg

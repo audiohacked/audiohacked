@@ -13,22 +13,15 @@ wxString gloox2wxString( std::string str )
 
 wxTreeItemId findTreeItem(wxTreeCtrl* pTreeCtrl, const wxTreeItemId& root, const wxString& text)
 {
-	wxTreeItemId item=root, child;
-	wxTreeItemIdValue cookie;
-	ChatContactItemData *itemdata;
-	wxString findtext(text), itemtext;
-	bool bFound;
+	wxTreeItemId item=root;
+	wxString findtext(text);
 
-	wxLogMessage(wxT("findTreeItem: ") + text);
-
-	while(item.IsOk())
-	{
-		itemdata = (ChatContactItemData *)pTreeCtrl->GetItemData(item);
-		itemtext = gloox2wxString(itemdata->jid.full());
-		wxLogMessage(wxT("findTreeItem: ") + itemtext);
-		if(itemtext == findtext) return item;
-		item = pTreeCtrl->GetNextSibling(item);
-	} // while(item.IsOk())
-
+	wxLogMessage(wxT("findTreeItem: ") + findtext);
+	ChatContactItemData *itemdata = (ChatContactItemData *)pTreeCtrl->GetItemData(item);
+	wxLogMessage(itemdata->wx_jid);
+	wxString itemtext = wxString(itemdata->wx_jid);
+	//if (itemtext.Contains(findtext)) return item;
+	if (itemtext == findtext) return item;
+	else return findTreeItem(pTreeCtrl, pTreeCtrl->GetNextSibling(item), text);
 	return item;
 }
