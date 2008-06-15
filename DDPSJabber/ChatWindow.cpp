@@ -41,7 +41,8 @@ void ChatWindowChat::OnCloseWindow(wxCloseEvent& event)
 		event.Veto();// Notify the calling code that we didn't delete the frame.
 		// user has closed the chat window
 		//this->panel->chatSes->m_chatStateFilter->setChatState( ChatStateGone );
-		this->Hide();
+		//this->Hide();
+		this->Show(FALSE);
 	}
 }
 

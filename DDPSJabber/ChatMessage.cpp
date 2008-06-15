@@ -71,8 +71,13 @@ void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 		else
 			item->win->panel->chatText->AppendText(item->name + wxT(": ") + text + wxT("\n"));
 
-		if (!item->win->IsShown())
+		if (item->win->IsShown())
 		{
+			wxLogMessage(wxT("incomming message; window is showing"));
+		}
+		else
+		{
+			wxLogMessage(wxT("imcomming message; window is not showing"));
 			item->win->Show(TRUE);			
 		}
 
