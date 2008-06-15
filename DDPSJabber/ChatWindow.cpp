@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE( ChatWindowChatPanel, wxPanel )
 END_EVENT_TABLE()
 
 ChatWindowChat::ChatWindowChat(wxTreeCtrl *list, wxTreeItemId id) :
-wxFrame(NULL, -1, ((ChatContactItemData *)list->GetItemData(id))->name, wxDefaultPosition, wxDefaultSize)
+wxFrame(NULL, -1, ((ChatContactItemData *)list->GetItemData(id))->wx_jid, wxDefaultPosition, wxDefaultSize)
 {
 	ChatContactItemData *data = (ChatContactItemData *)list->GetItemData(id);
 	itemId = id;

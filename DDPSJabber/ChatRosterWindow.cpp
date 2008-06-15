@@ -47,10 +47,6 @@ ChatWindowRosterPanel::ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Cl
 
 void ChatWindowRosterPanel::AddContact(wxString contact, JID jid)
 {	
-	if (contact == wxT("")) {
-		wxString str(jid.full().c_str(), wxConvUTF8);
-		contact = str;
-	}
 	ChatContactItemData *newContact = new ChatContactItemData(contact, jid);
 	list->AppendItem(listRoot, contact, -1, -1, newContact);
 }

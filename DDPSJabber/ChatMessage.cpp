@@ -53,6 +53,7 @@ void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 	wxTreeItemId itemId;
 	
 	wxString who = gloox2wxString(stanza->from().bare());
+	wxString username = gloox2wxString(stanza->from().username());
 	wxString text = gloox2wxString(stanza->body());
 
 	wxTreeItemIdValue cookie;
@@ -63,11 +64,19 @@ void ChatMsgSess::handleMessage( Stanza *stanza, MessageSession *msgSes )
 	ChatContactItemData *item = (ChatContactItemData *)list->GetItemData(itemId);
 /*	if (itemId.IsOk())
 	{*/
-		item->win->panel->chatText->AppendText(who + wxT(": ") + text);
+		wxMutexGuiEnter();
+
+		if (item->name == wxT(""))
+			item->win->panel->chatText->AppendText(username + wxT(": ") + text + wxT("\n"));
+		else
+			item->win->panel->chatText->AppendText(item->name + wxT(": ") + text + wxT("\n"));
+
 		if (!item->win->IsShown())
 		{
 			item->win->Show(TRUE);			
 		}
+
+		wxMutexGuiLeave();
 /*	}
 	else
 	{

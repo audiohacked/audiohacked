@@ -5,6 +5,7 @@ SET(SRCS
 	ChatCommon.cpp
 	ChatApp.cpp
 	ChatConnection.cpp
+	ChatConnectionThread.cpp
 	ChatMessage.cpp
 	ChatRoster.cpp
 	#ChatGroup.cpp
@@ -15,6 +16,7 @@ SET(HDRS
 	ChatCommon.h
 	ChatApp.h
 	ChatConnection.h
+	ChatConnectionThread.h
 	ChatMessage.h
 	ChatRoster.h
 	#ChatGroup.h

@@ -5,6 +5,8 @@
 	#ifndef WX_PRECOMP
 		#include <wx/wx.h>
 	#endif
+	
+	#include "ChatConnection.h"
 
 	class ChatConnThread : public wxThread
 	{

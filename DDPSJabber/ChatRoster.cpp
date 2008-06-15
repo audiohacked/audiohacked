@@ -51,20 +51,27 @@ void ChatRoster::handleRoster( const Roster& roster )
 	for( ; it != roster.end(); ++it )
 	{	
 		wxString contact = gloox2wxString((*it).second->name());
-		
-		wxLogMessage( wxT("add contact jid: ") + gloox2wxString((*it).second->jid()) );
-		//myApp.win->panel->AddContact( name, (*it).second->jid() );
-		if (contact == wxT("")) {
-			contact = gloox2wxString((*it).second->jid());
+		wxString itemName;
+		wxLogMessage (contact);
+		if (contact == wxT(""))
+		{
+			JID roster_jid((*it).second->jid());
+			itemName = gloox2wxString(roster_jid.username());
+		}
+		else
+		{
+			itemName = contact;
 		}
 		
+		wxLogMessage( wxT("add contact jid: ") + gloox2wxString((*it).second->jid()) );
+				
 		ChatContactItemData *newContact = new ChatContactItemData(contact, (*it).second->jid());
-		newContact->conn = myApp.server->FetchConnection();
+		newContact->conn = myApp.thread->server->FetchConnection();
 		
-		wxTreeItemId id = myApp.win->panel->list->AppendItem(myApp.win->panel->listRoot, contact, -1, -1, newContact);
+		wxTreeItemId id = myApp.win->panel->list->AppendItem(myApp.win->panel->listRoot, itemName, -1, -1, newContact);
 		newContact->itemId = id;
 
-		newContact->chatSess = new ChatMsgSess(myApp.server->FetchConnection());
+		newContact->chatSess = new ChatMsgSess(myApp.thread->server->FetchConnection());
 		newContact->chatSess->m_session = newContact->chatSess->newSession( (*it).second->jid() );
 
 		newContact->win = new ChatWindowChat(myApp.win->panel->list, id);
@@ -149,10 +156,6 @@ ChatWindowRosterPanel::ChatWindowRosterPanel(wxWindow *parent, wxWindowID id, Cl
 
 void ChatWindowRosterPanel::AddContact(wxString contact, JID jid)
 {	
-	if (contact == wxT("")) {
-		wxString str(jid.full().c_str(), wxConvUTF8);
-		contact = str;
-	}
 	ChatContactItemData *newContact = new ChatContactItemData(contact, jid);
 	list->AppendItem(listRoot, contact, -1, -1, newContact);
 }

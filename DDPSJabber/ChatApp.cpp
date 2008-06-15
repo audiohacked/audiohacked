@@ -8,16 +8,17 @@ bool ChatApp::OnInit()
 	wxLogStderr *LogFile = new wxLogStderr(myLogFile);
 	wxLog::SetActiveTarget(LogFile);
 	
-	//thread = new ChatConnThread();
-	server = new ChatConn();
+	thread = new ChatConnThread();
+	//server = new ChatConn();
 	InitChat();
-	//thread->Run();
+	thread->Run();
 	
-	win = new ChatWindowRoster(server->FetchConnection());
+	win = new ChatWindowRoster(thread->server->FetchConnection());
 	win->Show(TRUE);
 	SetTopWindow(win);
 
-	server->FetchConnection()->connect(true);
+	//server->FetchConnection()->connect(true);
+	//thread->Run();
 	return TRUE;
 }
 
@@ -30,7 +31,7 @@ int ChatApp::OnExit()
 	}
 */
 
-	server->FetchConnection()->rosterManager()->removeRosterListener();
+	thread->server->FetchConnection()->rosterManager()->removeRosterListener();
 	delete rosterListener;
 
 	//thread->server->FetchConnection()->disposeMessageSession(cMsg->m_session);
@@ -49,7 +50,7 @@ int ChatApp::OnExit()
 
 void ChatApp::InitChat()
 {
-	rosterListener = new ChatRoster( server->FetchConnection() );
-	cMsg = new ChatMsgSess( server->FetchConnection() );
+	rosterListener = new ChatRoster( thread->server->FetchConnection() );
+	cMsg = new ChatMsgSess( thread->server->FetchConnection() );
 	//cAccount = new ChatAccount( thread->server->FetchConnection() );
 }

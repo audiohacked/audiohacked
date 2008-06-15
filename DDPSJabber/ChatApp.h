@@ -6,7 +6,7 @@
 		#include <wx/wx.h>
 	#endif
 
-	#include "ChatConnection.h"
+	#include "ChatConnectionThread.h"
 	#include "ChatRoster.h"
 	#include "ChatMessage.h"
 
@@ -17,7 +17,7 @@
 			virtual int OnExit();
 			void InitChat();
 			ChatConnThread *thread;
-			ChatConn *server;
+			//ChatConn *server;
 			ChatWindowRoster *win;
 			ChatRoster *rosterListener;
 			ChatMsgSess *cMsg;
