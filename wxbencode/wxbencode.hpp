@@ -19,7 +19,7 @@
 	using namespace libtorrent;
 
 	int wx_bdecode(wxFileInputStream &file, wxDataInputStream &data, entry &ret, int depth);
-	void wx_bencode(wxTextOutputStream &out, entry e);
+	void wx_bencode(wxDataOutputStream &out_data, wxTextOutputStream &out_text, entry e);
 	void wx_entry_print(entry e, int depth);
 
 	class wxbencode_test : public wxAppConsole

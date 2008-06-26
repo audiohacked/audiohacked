@@ -10,7 +10,7 @@ void wx_entry_print(entry e, int depth)
 			break;
 
 		case entry::string_t:
-			wxLogMessage(wxT("print:")+padding.Pad(depth, '\t')+_T("str: ")+wxString(e.string().c_str(), wxConvUTF8));
+			wxLogMessage(wxT("print:")+padding.Pad(depth, '\t')+wxString::Format(wxT("str-len: %u "), e.string().length())+wxT("str: ")+wxString(e.string().c_str(), wxConvUTF8));
 			break;
 
 		case entry::list_t:

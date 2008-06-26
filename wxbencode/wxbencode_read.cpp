@@ -95,10 +95,13 @@ std::string read_until(wxFileInputStream &file, wxDataInputStream &data, char st
 
 void read_string(wxFileInputStream &file, wxDataInputStream &data, int len, std::string &ret)
 {
+	wxString str = wxT("");
 	for (int i = 0; i < len; ++i)
 	{
 		if (file.Eof()) return;
+		//str.Append(wxString::FromAscii(file.Peek()));
 		ret += file.Peek();
 		data.Read8();
 	}
+	//ret = str.ToAscii();
 }

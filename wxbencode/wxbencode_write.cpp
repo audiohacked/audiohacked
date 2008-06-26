@@ -1,41 +1,46 @@
 #include "wxbencode.hpp"
 
-void wx_bencode(wxTextOutputStream &out, entry e)
+void wx_bencode(wxDataOutputStream &out_data, wxTextOutputStream &out_text, entry e)
 {
 	switch(e.type())
 	{
 		case entry::int_t:
-			out.WriteString(wxT("i"));
-			out.WriteString(wxString::Format(_T("%u"), e.integer()));
-			out.WriteString(wxT("e"));
+			out_data.Write8('i');
+			out_text.WriteString( wxString::Format(wxT("%u"), e.integer()) );
+			out_data.Write8('e');
 			break;
 
 		case entry::string_t:
-			out.WriteString(wxString::Format(_T("%u"), e.string().length()));
-			out.WriteString(wxT(":"));
-			out.WriteString(wxString(e.string().c_str(), wxConvUTF8));
+			out_text.WriteString( wxString::Format(wxT("%u"), e.string().length()) );
+			out_data.Write8(':');
+			for (int i=0; i<e.string().length(); ++i)
+			{
+				out_data.Write8( e.string().at(i) );
+			}
 			break;
 
 		case entry::list_t:
-			out.WriteString(wxT("l"));
+			out_data.Write8('l');
 			for (entry::list_type::const_iterator i = e.list().begin(); i != e.list().end(); ++i)
 			{
-				wx_bencode(out, *i);
+				wx_bencode(out_data, out_text, *i);
 			}
-			out.WriteString(wxT("e"));
+			out_data.Write8('e');
 			break;
 
 		case entry::dictionary_t:
-			out.WriteString(wxT("d"));
+			out_data.Write8('d');
 			for (entry::dictionary_type::const_iterator i = e.dict().begin(); i != e.dict().end(); ++i)
 			{
-				out.WriteString(wxString::Format(_T("%u"), i->first.length()));
-				out.WriteString(wxT(":"));
-				out.WriteString(wxString(i->first.c_str(), wxConvUTF8));
-				
-				wx_bencode(out, i->second);
+				out_text.WriteString( wxString::Format(wxT("%u"), i->first.length()) );
+				out_data.Write8(':');
+				for (int j=0; j < i->first.length(); ++j)
+				{
+					out_data.Write8( i->first.at(j) );
+				}
+				wx_bencode(out_data, out_text, i->second);
 			}
-			out.WriteString(wxT("e"));
+			out_data.Write8('e');
 			break;
 
 		default:
