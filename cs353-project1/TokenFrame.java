@@ -2,14 +2,15 @@ import java.io.*;
 
 public class TokenFrame
 {
-	private String this_node_name;
-	private Integer access_control;
-	private Integer data_size;
-	private Integer dest;
-	private Integer src;
-	private String data;
-	private Integer frame_status;
+	private String this_node_name; /* name of Node for logging */
+	private Integer access_control; /* AC: 0=token, 1=data */
+	private Integer data_size; /* data size in multiples of 50 */
+	private Integer dest; /* destination node for frame */
+	private Integer src; /* source node of frame */
+	private String data; /* data string of frame */
+	private Integer frame_status; /* frame status: */
 
+	/* access methods */
 	public Integer access_control() {return this.access_control;}
 	public Integer data_size(){return this.data_size;}
 	public Integer dest(){return this.dest;}
@@ -17,6 +18,7 @@ public class TokenFrame
 	public String data(){return this.data;}
 	public Integer frame_status(){return this.frame_status;}
 
+	/* access methods for setting variables */
 	public void set_access_control(int ac) {this.access_control= new Integer(ac);}
 	public void set_dest(int da){this.dest=new Integer(da);}
 	public void set_src(int sa){this.src=new Integer(sa);}
@@ -30,7 +32,6 @@ public class TokenFrame
 				this.data_size = new Integer(ret);
 		}
 	}
-
 	private int multiple_of_fifty(int num, int check)
 	{
 		if (num < check)
@@ -40,6 +41,7 @@ public class TokenFrame
 		else return 0;
 	}
 
+	/* method for populating data from input string */
 	public void from_input(String input)
 	{
 		System.out.println(this.this_node_name+": Populating TokenFrame from input");
@@ -61,6 +63,7 @@ public class TokenFrame
 		}
 	}
 
+	/* method for populating data from a received frame */
 	public void from_existing(String input)
 	{
 		System.out.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
@@ -82,6 +85,7 @@ public class TokenFrame
 		}
 	}
 	
+	/* method for logging each frame received to a file */
 	void log_frame(String node_name, String frame)
 	{
 		try
@@ -97,7 +101,7 @@ public class TokenFrame
 		}
 	}
 	
-
+	/* method for creating a string from the object data */
 	public String print()
 	{
 		return this.access_control.toString()+","
@@ -107,11 +111,13 @@ public class TokenFrame
 			+this.data;
 	}
 
+	/* method for printing that includes a newline */
 	public String println()
 	{
 		return print()+"\n";
 	}
 
+	/* object constructor for a Token Frame */
 	TokenFrame(String node_name)
 	{
 		this.this_node_name = node_name;
