@@ -220,8 +220,8 @@ public class ClientNode extends Thread
 			System.err.println(node_name+": transmit: infile_read, IO Error, Unknown");
 		}
 
-		//if (this.flag) transmit_state(node_name);
-		//else listen_state(node_name);
+		if (this.flag) transmit_state(node_name);
+		else listen_state(node_name);
 	}
 	
     void send_frame(String node_name, TokenFrame frame)

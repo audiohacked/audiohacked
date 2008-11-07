@@ -10,15 +10,11 @@ public class tokenring
 		ServerSocket s4 = new ServerSocket(GlobalDataStore.netport_base+4);
 		ServerSocket s5 = new ServerSocket(GlobalDataStore.netport_base+5);
 
-		boolean flag = false; // initial token holder
-
-		new ClientNode(s2, GlobalDataStore.netport_base+3, flag);
-		new ClientNode(s3, GlobalDataStore.netport_base+4, flag);
-		new ClientNode(s4, GlobalDataStore.netport_base+5, flag);
-		new ClientNode(s5, GlobalDataStore.netport_base+1, flag);
-
-		flag = true; // node1 should be the initial token holder
-		ClientNode node1 = new ClientNode(s1, GlobalDataStore.netport_base+2, flag);
+		new ClientNode(s2, GlobalDataStore.netport_base+3, false);
+		new ClientNode(s3, GlobalDataStore.netport_base+4, false);
+		new ClientNode(s4, GlobalDataStore.netport_base+5, false);
+		new ClientNode(s5, GlobalDataStore.netport_base+1, false);
+		ClientNode node1 = new ClientNode(s1, GlobalDataStore.netport_base+2, true);
 
 		while(node1.isAlive()){}
 	}
