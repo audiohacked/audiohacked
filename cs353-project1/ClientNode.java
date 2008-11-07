@@ -265,46 +265,39 @@ public class ClientNode extends Thread
 		{
 			if (this.infile_read.ready()) /* check if we can read from file */
 			{
+				/* read next frame from the file */
 				frame.from_input(this.infile_read.readLine());
+				
+				/* calculate frame THT size */
 				tht = tht + frame.data_size();
-				if (tht > GlobalDataStore.tht_byte_count)
+				
+				/* check if we are over the frame size limit */
+				if (tht > GlobalDataStore.tht_byte_count) /* Yes */
 				{
+					/* Release the Token to right neighbor and go to listen state. */
 					pass_token(node_name, frame);
 					listen_state(node_name);
 				}
-				else 
+				else /* No */ 
 				{
+					/* send current frame */
 					send_frame(node_name, frame);
+					
+					/* and continue transmitting */
+					transmit_state(node_name);
 				}
 			}
 			else
-			/* if we are unable to read or EOF, then we can stop/close the
-			 * Node. If we hold the token, we can exit from the thread
-			 */
 			{
-				if (this.flag)
-				{
-					/* we hold the token, we can stop */
-					this.exit();
-					return;
-				}
-				else
-				{
-					/* we don't have the token, we can only continue 
-					 * passing frames
-					 */
-					pass_token(node_name, frame);
-					return;
-				}
+				/* Release the Token to right neighbor and go to listen state. */
+				pass_token(node_name, frame);
+				listen_state(node_name);
 			}
 		}
 		catch (IOException io)
 		{
 			System.err.println(node_name+": transmit: infile_read, IO Error, Unknown");
 		}
-
-		if (this.flag) transmit_state(node_name);
-		else listen_state(node_name);
 	}
 	
     void send_frame(String node_name, TokenFrame frame)
