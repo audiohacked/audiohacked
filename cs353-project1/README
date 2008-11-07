@@ -1,0 +1,28 @@
+Developed by: Sean Nelson <snelson@nmt.edu>
+Date: November 7th, 2008
+
+Files:
+	- ClientNode.java: holds the code/object for a Node in a Token Ring
+	- GlobaDataStore.java: hold variables needed globally in the project
+	- TokenFrame.java: contains the code for a Token Ring Frame object
+	- tokenring.java is the main simulator code, execute this in java
+
+If running this project:
+ 	- Under Linux or Mac:
+		'make distclean':
+			Will delete all {in,out}put-file-{1..5} and log files.
+
+		'make clean':
+			Will delete the token ring compiled byte code files.
+		
+		'make prepare':
+			Will create input-file-{1..5} so that the application could generate frames.
+
+		'make build':
+			Will delete and re-compile the token ring project.
+
+		'make run':
+			Will run 'make build' and then execute the token ring project.
+		
+Under Windows:
+	- Whatever method you know how compile/run the four project files.

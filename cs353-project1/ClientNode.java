@@ -60,17 +60,17 @@ public class ClientNode extends Thread
 			System.err.println(node_name+": client node: IO error, client Socket.");
 		}
 
-		///*
+		/*
 		try
 		{
-			generate_frames("STR", 3); /* generate frames if we need to 
-										* during Debugging */
+			// generate frames if we need to during Debugging
+			generate_frames("STR", 3); 
 		}
-		catch (IOException io) /* since we do file io; catch Exception */
+		catch (IOException io) // since we do file io; catch Exception
 		{
 			System.err.println(node_name+": client node: generate_frames");
 		}
-		//*/
+		*/
 
 		try
 		{

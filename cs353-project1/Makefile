@@ -16,20 +16,22 @@ SRCS := ClientNode.java \
 
 default: all
 
-all: clean prepare build
+all: run
 
 clean:
+	@$(RM) *.class
+
+distclean: clean
 	@$(RM) input-file-*
 	@$(RM) output-file-*
 	@$(RM) log-file-*
 	@$(RM) build.log
-	@$(RM) *.class
 
 prepare:
 	@$(TOUCH) input-file-{1..5}
 
-build:
+build: clean
 	@$(JCC) *.java
 
-run: default
+run: build
 	@$(JAVA) $(PROGRAM)	
