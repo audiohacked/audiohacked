@@ -9,11 +9,6 @@ JCC = javac
 RM = rm -f
 TOUCH = touch
 
-SRCS := ClientNode.java \
-	TokenFrame.java \
-	GlobalDataStore.java \
-	tokenring.java 
-
 default: all
 
 all: run
@@ -24,11 +19,13 @@ clean:
 distclean: clean
 	@$(RM) input-file-*
 	@$(RM) output-file-*
+	@$(RM) bridge-{input,output}-file
 	@$(RM) log-file-*
 	@$(RM) build.log
 
 prepare:
-	@$(TOUCH) input-file-{1..5}
+	@$(TOUCH) input-file-{0..9}
+	@$(TOUCH) bridge-input-file
 
 build: clean
 	@$(JCC) *.java

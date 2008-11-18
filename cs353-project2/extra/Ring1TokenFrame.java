@@ -1,7 +1,6 @@
-
 import java.io.*;
 
-public class TokenFrame
+public class Ring1TokenFrame
 {
 	private String this_node_name; /* name of Node for logging */
 	private Integer access_control; /* AC: 0=token, 1=data */
@@ -119,7 +118,7 @@ public class TokenFrame
 	}
 
 	/* object constructor for a Token Frame */
-	TokenFrame(String node_name)
+	Ring1TokenFrame(String node_name)
 	{
 		this.this_node_name = node_name;
 		this.access_control = new Integer(0);

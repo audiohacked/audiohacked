@@ -24,10 +24,11 @@ public class ClientNode extends Thread
 										* and close it when we are finished
 										* at end of program or when we exit */
 	/* this is the constructor used to make a Node in a tokenring */
+	
 	ClientNode(ServerSocket s_temp, int p_temp, boolean flag)
 	{
 		// initialize client stuff
-		this.this_node_num = new Integer(s_temp.getLocalPort()-GlobalDataStore.netport_base);
+		this.this_node_num = new Integer(s_temp.getLocalPort()-GlobalDataStore.netport_base-1);
 		this.node_name = new String("Node-");
 		this.node_name += this.this_node_num.toString();
 		setName(this.node_name); /* we set the name to make debugging Threads
@@ -44,6 +45,8 @@ public class ClientNode extends Thread
 		f_input = GlobalDataStore.infile_name + this.this_node_num.toString();
 		f_output = GlobalDataStore.outfile_name + this.this_node_num.toString();
 
+		System.out.println(this.node_name+": FILENAME: "+f_input);
+		
 		try /* try to build the transmit socket for a token ring node */
 		{
 			System.out.println(this.node_name+": client node: creating client socket.");
@@ -60,7 +63,7 @@ public class ClientNode extends Thread
 			System.err.println(node_name+": client node: IO error, client Socket.");
 		}
 
-		/*
+		///*
 		try
 		{
 			// generate frames if we need to during Debugging
@@ -70,7 +73,7 @@ public class ClientNode extends Thread
 		{
 			System.err.println(node_name+": client node: generate_frames");
 		}
-		*/
+		//*/
 
 		try
 		{
@@ -88,6 +91,11 @@ public class ClientNode extends Thread
 		* the thread */
 		if (flag) run();
 		else start();
+	}
+	
+	ClientNode(ServerSocket s_temp, int p_temp)
+	{
+		this(s_temp, p_temp, false);
 	}
 	
 	public void run()
@@ -407,7 +415,7 @@ public class ClientNode extends Thread
 		Random rand = new Random();
 		
 		/* generate a random node to send the frame */
-		Integer dest = rand.nextInt(5)+1;
+		Integer dest = rand.nextInt(10);
 
 		/* set the data String to someting */
 		frame.set_data(
