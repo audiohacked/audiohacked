@@ -9,8 +9,5 @@ public class GlobalDataStore
 	
 	/* store the basename of the output file */
 	public static String outfile_name = new String("output-file-");
-	
-	/* store the maximum THT byte count of a frame */
-	public static Integer tht_byte_count = new Integer(400);
 }
 

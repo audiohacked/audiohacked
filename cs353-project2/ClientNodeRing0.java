@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.Random;
 
 /* declare a new class that extends Thread for our Token Ring Node */
-public class ClientNode extends Thread 
+public class ClientNodeRing0 extends Thread 
 {
 	private ServerSocket recv_socket; /* declare a listening socket */
 	private Socket send_socket; /* declare our socket for sending frames */
@@ -25,10 +25,10 @@ public class ClientNode extends Thread
 										* at end of program or when we exit */
 	/* this is the constructor used to make a Node in a tokenring */
 	
-	ClientNode(ServerSocket s_temp, int p_temp, boolean flag)
+	ClientNodeRing0(ServerSocket s_temp, int p_temp, boolean flag)
 	{
 		// initialize client stuff
-		this.this_node_num = new Integer(s_temp.getLocalPort()-GlobalDataStore.netport_base-1);
+		this.this_node_num = new Integer(s_temp.getLocalPort()-Ring0DataStore.netport_base-1);
 		this.node_name = new String("Node-");
 		this.node_name += this.this_node_num.toString();
 		setName(this.node_name); /* we set the name to make debugging Threads
@@ -42,8 +42,8 @@ public class ClientNode extends Thread
 							* the token or not, for the purpose of transmit */
 		
 		/* here we build the filename strings for output and input files */
-		f_input = GlobalDataStore.infile_name + this.this_node_num.toString();
-		f_output = GlobalDataStore.outfile_name + this.this_node_num.toString();
+		f_input = Ring0DataStore.infile_name + this.this_node_num.toString();
+		f_output = Ring0DataStore.outfile_name + this.this_node_num.toString();
 
 		System.out.println(this.node_name+": FILENAME: "+f_input);
 		
@@ -93,7 +93,7 @@ public class ClientNode extends Thread
 		else start();
 	}
 	
-	ClientNode(ServerSocket s_temp, int p_temp)
+	ClientNodeRing0(ServerSocket s_temp, int p_temp)
 	{
 		this(s_temp, p_temp, false);
 	}
@@ -161,7 +161,7 @@ public class ClientNode extends Thread
 		Socket conn = null;
 		String data = null;
 		Random rand = new Random();
-		TokenFrame frame = new TokenFrame(node_name);
+		Ring0TokenFrame frame = new Ring0TokenFrame(node_name);
 		
 		try
 		{
@@ -266,7 +266,7 @@ public class ClientNode extends Thread
 		}
 		
 		/* create Token Frame object */
-		TokenFrame frame = new TokenFrame(node_name);
+		Ring0TokenFrame frame = new Ring0TokenFrame(node_name);
 		Integer tht = new Integer(0);
 		System.out.println(node_name+": transmit");
 		try
@@ -280,7 +280,7 @@ public class ClientNode extends Thread
 				tht = tht + frame.data_size();
 				
 				/* check if we are over the frame size limit */
-				if (tht > GlobalDataStore.tht_byte_count) /* Yes */
+				if (tht > Ring0DataStore.tht_byte_count) /* Yes */
 				{
 					/* Release the Token to right neighbor and go to listen state. */
 					pass_token(node_name, frame);
@@ -308,7 +308,7 @@ public class ClientNode extends Thread
 		}
 	}
 	
-    void send_frame(String node_name, TokenFrame frame)
+    void send_frame(String node_name, Ring0TokenFrame frame)
 	{
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
@@ -329,7 +329,7 @@ public class ClientNode extends Thread
 		System.out.println(node_name+": send: frame sent");
 	}
 	
-	void pass_token(String node_name, TokenFrame frame)
+	void pass_token(String node_name, Ring0TokenFrame frame)
 	{
 		/* we're passing the token to the neightbor, so insure the AC is 0 */
 		frame.set_access_control(0);
@@ -344,7 +344,7 @@ public class ClientNode extends Thread
 		send_frame(node_name, frame);
 	}
 	
-	void save_frame_to_output(String node_name, TokenFrame frame)
+	void save_frame_to_output(String node_name, Ring0TokenFrame frame)
 	{
 		System.out.println(node_name+": saving frame to output");
 		try
@@ -370,7 +370,7 @@ public class ClientNode extends Thread
 		String current_line; /* storage for line read from a file */
 		
 		/* create a new Token Frame object */
-		TokenFrame frame = new TokenFrame(node_name);
+		Ring0TokenFrame frame = new Ring0TokenFrame(node_name);
 
 		try
 		{
@@ -409,7 +409,7 @@ public class ClientNode extends Thread
 		if (count >= 0) generate_frames(str, count-1);
 		
 		/* create a Frame object */
-		TokenFrame frame = new TokenFrame(node_name);
+		Ring0TokenFrame frame = new Ring0TokenFrame(node_name);
 		
 		/* initialize a random generator */
 		Random rand = new Random();

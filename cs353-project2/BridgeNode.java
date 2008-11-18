@@ -82,7 +82,9 @@ public class BridgeNode extends Thread
 	{
 		Socket conn = null;
 		String data = null;
-		TokenFrame frame = new TokenFrame(this.node_name);
+		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name);
+		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name);
+		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name);
 		while(true)
 		{
 			try
@@ -96,13 +98,16 @@ public class BridgeNode extends Thread
 			if (data != null)
 			{
 				frame.from_existing(data);
+				r0frame = frame.convert_to_ring0();
+				r1frame = frame.convert_to_ring1();
+
 				if(routing.is_ring0(frame.dest()))
 				{
-					pass_to_ring0(this.node_name, frame);
+					pass_to_ring0(this.node_name, r0frame);
 				}
 				else if (routing.is_ring1(frame.dest()))
 				{
-					pass_to_ring1(this.node_name, frame);
+					pass_to_ring1(this.node_name, r1frame);
 				}
 			}
 			
@@ -135,7 +140,7 @@ public class BridgeNode extends Thread
 		}
 	}
 
-    void pass_to_ring0(String node_name, TokenFrame frame)
+    void pass_to_ring0(String node_name, Ring0TokenFrame frame)
 	{
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
@@ -154,7 +159,7 @@ public class BridgeNode extends Thread
 		System.out.println(node_name+": send: frame sent");
 	}
 	
-    void pass_to_ring1(String node_name, TokenFrame frame)
+    void pass_to_ring1(String node_name, Ring1TokenFrame frame)
 	{
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))

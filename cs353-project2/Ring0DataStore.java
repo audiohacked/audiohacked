@@ -1,6 +1,6 @@
-//import java.util.*;
 
-public class Ring1DataStore
+
+public class Ring0DataStore
 {
 	/* store the Network base port number for the nodes */
 	public static int netport_base = 9130;

@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Ring0TokenFrame
+public class BridgeTokenFrame
 {
 	private String this_node_name; /* name of Node for logging */
 	private Integer access_control; /* AC: 0=token, 1=data */
@@ -85,6 +85,39 @@ public class Ring0TokenFrame
 		}
 	}
 	
+	public void convert_from_ring0(Ring0TokenFrame frame)
+	{
+		this.access_control = frame.access_control();
+		this.data_size = frame.data_size();
+		this.dest = frame.dest();
+		this.src = frame.src();
+		this.data = frame.data();
+		this.frame_status = frame.frame_status();
+	}
+	
+	public void convert_from_ring1(Ring1TokenFrame frame)
+	{
+		this.access_control = frame.access_control();
+		this.data_size = frame.data_size();
+		this.dest = frame.dest();
+		this.src = frame.src();
+		this.data = frame.data();
+		this.frame_status = frame.frame_status();
+	}
+	
+	public Ring0TokenFrame convert_to_ring0()
+	{
+		Ring0TokenFrame new_ret = new Ring0TokenFrame(this.this_node_name);
+		from_existing(print());
+		return new_ret;
+	}
+	
+	public Ring1TokenFrame convert_to_ring1()
+	{
+		Ring1TokenFrame new_ret = new Ring1TokenFrame(this.this_node_name);
+		from_existing(print());
+		return new_ret;
+	}
 	/* method for logging each frame received to a file */
 	void log_frame(String node_name, String frame)
 	{
@@ -118,7 +151,7 @@ public class Ring0TokenFrame
 	}
 
 	/* object constructor for a Token Frame */
-	Ring0TokenFrame(String node_name)
+	BridgeTokenFrame(String node_name)
 	{
 		this.this_node_name = node_name;
 		this.access_control = new Integer(0);

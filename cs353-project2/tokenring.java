@@ -26,20 +26,20 @@ public class tokenring
 		/* create Client Nodes for the Token Ring; these wont have the initial 
 		 * token for sending: */
 		/* ring 0 */
-		new ClientNode(s1, s2.getLocalPort());
-		new ClientNode(s2, s3.getLocalPort());
-		new ClientNode(s3, s4.getLocalPort());
-		new ClientNode(s4, b0.getLocalPort());
+		new ClientNodeRing0(s1, s2.getLocalPort());
+		new ClientNodeRing0(s2, s3.getLocalPort());
+		new ClientNodeRing0(s3, s4.getLocalPort());
+		new ClientNodeRing0(s4, b0.getLocalPort());
 		
 		/* ring 1 */
-		new ClientNode(s6, s7.getLocalPort());
-		new ClientNode(s7, s8.getLocalPort());
-		new ClientNode(s8, s9.getLocalPort());
-		new ClientNode(s9, b0.getLocalPort());
+		new ClientNodeRing1(s6, s7.getLocalPort());
+		new ClientNodeRing1(s7, s8.getLocalPort());
+		new ClientNodeRing1(s8, s9.getLocalPort());
+		new ClientNodeRing1(s9, b0.getLocalPort());
 		
 		/* Client Nodes that are the initial holder of the token in their respective rings */
-		new ClientNode(s5, s6.getLocalPort(), true);
-		new ClientNode(s0, s1.getLocalPort(), true);
+		new ClientNodeRing0(s0, s1.getLocalPort(), true);
+		new ClientNodeRing1(s5, s6.getLocalPort(), true);
 
 		/* check if Node One is still alive and continue */
 		while(bridge.isAlive()){}
