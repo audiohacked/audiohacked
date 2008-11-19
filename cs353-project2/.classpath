@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry excluding="Ring0DataStore.java|Ring1DataStore.java|BridgeTokenFrame.java|RoutingTable.java|Ring1TokenFrame.java|Ring0TokenFrame.java|GlobalDataStore.java" kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path=""/>
-</classpath>

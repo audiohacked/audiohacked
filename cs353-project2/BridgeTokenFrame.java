@@ -108,14 +108,14 @@ public class BridgeTokenFrame
 	public Ring0TokenFrame convert_to_ring0()
 	{
 		Ring0TokenFrame new_ret = new Ring0TokenFrame(this.this_node_name);
-		from_existing(print());
+		new_ret.from_existing(this.print());
 		return new_ret;
 	}
 	
 	public Ring1TokenFrame convert_to_ring1()
 	{
 		Ring1TokenFrame new_ret = new Ring1TokenFrame(this.this_node_name);
-		from_existing(print());
+		new_ret.from_existing(this.print());
 		return new_ret;
 	}
 	/* method for logging each frame received to a file */
