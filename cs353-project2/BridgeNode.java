@@ -52,7 +52,7 @@ public class BridgeNode extends Thread
 		try
 		{
 			/* open the bridge-input-file */
-			this.status = new PrintWriter(new FileWriter(this.f_input));
+			this.status = new PrintWriter(new FileWriter(this.f_status));
 		}
 		catch (IOException io) /* file io, so we catch exceptions */
 		{

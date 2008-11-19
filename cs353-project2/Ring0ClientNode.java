@@ -81,7 +81,7 @@ public class Ring0ClientNode extends Thread
 		try
 		{
 			// generate frames if we need to during Debugging
-			generate_frames("STR", 3); 
+			generate_frames("STR", 1); 
 		}
 		catch (IOException io) // since we do file io; catch Exception
 		{

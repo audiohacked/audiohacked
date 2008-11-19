@@ -38,7 +38,7 @@ public class tokenring
 		new Ring1ClientNode(s9, b0.getLocalPort());
 		
 		/* Client Nodes that are the initial holder of the token in their respective rings */
-		new Ring0ClientNode(s0, s1.getLocalPort(), true);
+		new Ring0ClientNode (s0, s1.getLocalPort(), true);
 		new Ring1ClientNode(s5, s6.getLocalPort(), true);
 
 		/* check if Node One is still alive and continue */

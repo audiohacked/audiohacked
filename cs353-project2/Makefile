@@ -24,7 +24,7 @@ distclean: clean
 	@$(RM) log-file-*
 	@$(RM) build.log
 
-prepare:
+prepare: distclean
 	@$(TOUCH) input-file-{0..9}
 	@$(TOUCH) bridge-input-file
 
