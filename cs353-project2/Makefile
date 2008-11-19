@@ -19,7 +19,8 @@ clean:
 distclean: clean
 	@$(RM) input-file-*
 	@$(RM) output-file-*
-	@$(RM) bridge-{input,output}-file
+	@$(RM) status-file-*
+	@$(RM) bridge-{input,output,status}-file
 	@$(RM) log-file-*
 	@$(RM) build.log
 
@@ -31,4 +32,6 @@ build: clean
 	@$(JCC) *.java
 
 run: build
-	@$(JAVA) $(PROGRAM)	
+	@$(JAVA) $(PROGRAM)
+
+test: distclean prepare run

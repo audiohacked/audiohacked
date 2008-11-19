@@ -23,6 +23,10 @@ public class BridgeNode extends Thread
 										 * we declare an always open buffer
 										 * and close it when we are finished
 										 * at end of program or when we exit */
+										
+	private PrintWriter status;
+	private String f_status;
+	
 	/* this is the constructor used to make a Node in a tokenring */
 	BridgeNode(ServerSocket s_temp, int r0_temp, int r1_temp)
 	{
@@ -43,10 +47,21 @@ public class BridgeNode extends Thread
 		/* here we build the filename strings for output and input files */
 		f_input = new String("bridge-input-file");
 		//f_output = new String("bridge-output-file");
+		f_status = new String("bridge-status-file");
+
+		try
+		{
+			/* open the bridge-input-file */
+			this.status = new PrintWriter(new FileWriter(this.f_input));
+		}
+		catch (IOException io) /* file io, so we catch exceptions */
+		{
+			System.err.println(node_name+": client node: infile_read, IO error, Buffered Reads;" + io);
+		}
 
 		try /* try to build the transmit socket for a token ring node */
 		{
-			System.out.println(this.node_name+": client node: creating client socket.");
+			this.status.println(this.node_name+": client node: creating client socket.");
 			this.ring0_socket = new Socket("localhost", r0_temp);
 			this.ring1_socket = new Socket("localhost", r1_temp);
 		}
@@ -145,7 +160,7 @@ public class BridgeNode extends Thread
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		System.out.println(node_name+": send: trying to send frame");
+		this.status.println(node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -156,7 +171,7 @@ public class BridgeNode extends Thread
 		{
 			System.err.println(node_name+": send: IO Error, DataOutputStream");
 		}
-		System.out.println(node_name+": send: frame sent");
+		this.status.println(node_name+": send: frame sent");
 	}
 	
     void pass_to_ring1(String node_name, Ring1TokenFrame frame)
@@ -164,7 +179,7 @@ public class BridgeNode extends Thread
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		System.out.println(node_name+": send: trying to send frame");
+		this.status.println(node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -175,6 +190,6 @@ public class BridgeNode extends Thread
 		{
 			System.err.println(node_name+": send: IO Error, DataOutputStream");
 		}
-		System.out.println(node_name+": send: frame sent");
+		this.status.println(node_name+": send: frame sent");
 	}
 }
