@@ -4,21 +4,22 @@ public class tokenring
 {
 	public static void main(String[] args) throws Exception
 	{
+		int netport_base = 9130;
 		/* create Server Sockets for each node */
 		/* ring 0 */
-		ServerSocket s0 = new ServerSocket(GlobalDataStore.netport_base+1);
-		ServerSocket s1 = new ServerSocket(GlobalDataStore.netport_base+2);
-		ServerSocket s2 = new ServerSocket(GlobalDataStore.netport_base+3);
-		ServerSocket s3 = new ServerSocket(GlobalDataStore.netport_base+4);
-		ServerSocket s4 = new ServerSocket(GlobalDataStore.netport_base+5);
+		ServerSocket s0 = new ServerSocket(netport_base+1);
+		ServerSocket s1 = new ServerSocket(netport_base+2);
+		ServerSocket s2 = new ServerSocket(netport_base+3);
+		ServerSocket s3 = new ServerSocket(netport_base+4);
+		ServerSocket s4 = new ServerSocket(netport_base+5);
 		/* ring 1 */
-		ServerSocket s5 = new ServerSocket(GlobalDataStore.netport_base+6);
-		ServerSocket s6 = new ServerSocket(GlobalDataStore.netport_base+7);
-		ServerSocket s7 = new ServerSocket(GlobalDataStore.netport_base+8);
-		ServerSocket s8 = new ServerSocket(GlobalDataStore.netport_base+9);
-		ServerSocket s9 = new ServerSocket(GlobalDataStore.netport_base+10);
+		ServerSocket s5 = new ServerSocket(netport_base+6);
+		ServerSocket s6 = new ServerSocket(netport_base+7);
+		ServerSocket s7 = new ServerSocket(netport_base+8);
+		ServerSocket s8 = new ServerSocket(netport_base+9);
+		ServerSocket s9 = new ServerSocket(netport_base+10);
 		/* bridge */
-		ServerSocket b0 = new ServerSocket(GlobalDataStore.netport_base);
+		ServerSocket b0 = new ServerSocket(netport_base);
 
 		/* create the Bridge Node for Transparent routing between ring0 and ring1 */
 		BridgeNode bridge = new BridgeNode(b0, s0.getLocalPort(), s5.getLocalPort());

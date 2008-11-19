@@ -8,6 +8,16 @@ JAVA = java
 JCC = javac
 RM = rm -f
 TOUCH = touch
+SRCS = tokenring.java \
+	BridgeNode.java \
+#	BridgeTokenFrame.java \
+	Ring0ClientNode.java \
+#	Ring0DataStore.java \
+#	Ring0TokenFrame.java \
+	Ring1ClientNode.java \
+#	Ring1DataStore.java \
+#	Ring1TokenFrame.java \
+#	RoutingTable.java
 
 default: all
 
@@ -29,7 +39,7 @@ prepare: distclean
 	@$(TOUCH) bridge-input-file
 
 build: clean
-	@$(JCC) *.java
+	@$(JCC) $(SRCS)
 
 run: build
 	@$(JAVA) $(PROGRAM)

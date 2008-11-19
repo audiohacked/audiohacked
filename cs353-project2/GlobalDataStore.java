@@ -11,4 +11,3 @@ public class GlobalDataStore
 	/* store the basename of the output file */
 	public static String outfile_name = new String("output-file-");
 }
-
