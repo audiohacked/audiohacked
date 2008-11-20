@@ -44,21 +44,22 @@ public class Ring1ClientNode extends Thread
 							* the token or not, for the purpose of transmit */
 		
 		/* here we build the filename strings for output and input files */
-		f_input = Ring1DataStore.infile_name + this.this_node_num.toString();
-		f_output = Ring1DataStore.outfile_name + this.this_node_num.toString();
-		f_status = Ring1DataStore.statusfile_name + this.this_node_num.toString();
+		this.f_input = Ring1DataStore.infile_name + this.this_node_num.toString();
+		this.f_output = Ring1DataStore.outfile_name + this.this_node_num.toString();
+		this.f_status = Ring1DataStore.statusfile_name + this.this_node_num.toString();
 
 		try
 		{
 			/* open the status-file-{node_num} */
-			this.status = new PrintWriter(new FileWriter(this.f_status));
+			this.status = new PrintWriter(new FileWriter(this.f_status, true), true);
 		}
 		catch (IOException io) /* file io, so we catch exceptions */
 		{
 			System.err.println(node_name+": client node: status_file, IO error, Buffered Reads;" + io);
+			//this.status = System.out;
 		}
 		
-		this.status.println(this.node_name+": FILENAME: "+f_input);
+		//this.status.println(this.node_name+": FILENAME: "+f_input);
 		
 		try /* try to build the transmit socket for a token ring node */
 		{
@@ -80,7 +81,7 @@ public class Ring1ClientNode extends Thread
 		try
 		{
 			// generate frames if we need to during Debugging
-			generate_frames("STR", 3); 
+			generate_frames("STR", 1); 
 		}
 		catch (IOException io) // since we do file io; catch Exception
 		{
@@ -448,9 +449,16 @@ public class Ring1ClientNode extends Thread
 		/* set the source node */
 		frame.set_src(this.this_node_num);
 
-		/* open the input file for writing and saving each frame */
-		PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
-		infile_write.println(frame.print()); /* print frame to input file */
-		infile_write.close(); /* close buffer */
+		if (frame.dest() == frame.src())
+		{
+			generate_frames(str,count);
+		}
+		else
+		{
+			/* open the input file for writing and saving each frame */
+			PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
+			infile_write.println(frame.print()); /* print frame to input file */
+			infile_write.close(); /* close buffer */
+		}
 	}
 }

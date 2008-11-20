@@ -46,21 +46,22 @@ public class Ring0ClientNode extends Thread
 							* the token or not, for the purpose of transmit */
 		
 		/* here we build the filename strings for output and input files */
-		f_input = Ring0DataStore.infile_name + this.this_node_num.toString();
-		f_output = Ring0DataStore.outfile_name + this.this_node_num.toString();
-		f_status = Ring0DataStore.statusfile_name + this.this_node_num.toString();
+		this.f_input = Ring0DataStore.infile_name + this.this_node_num.toString();
+		this.f_output = Ring0DataStore.outfile_name + this.this_node_num.toString();
+		this.f_status = Ring0DataStore.statusfile_name + this.this_node_num.toString();
 		
 		try
 		{
 			/* open the status-file-{node_num} */
-			this.status = new PrintWriter(new FileWriter(this.f_status));
+			this.status = new PrintWriter(new FileWriter(this.f_status, true), true);
 		}
 		catch (IOException io) /* file io, so we catch exceptions */
 		{
 			System.err.println(node_name+": client node: infile_read, IO error, Buffered Reads;" + io);
+			//this.status = System.out;
 		}
 		
-		this.status.println(this.node_name+": FILENAME: "+f_input);
+		//this.status.println(this.node_name+": FILENAME: "+f_input);
 		
 		try /* try to build the transmit socket for a token ring node */
 		{
@@ -450,9 +451,16 @@ public class Ring0ClientNode extends Thread
 		/* set the source node */
 		frame.set_src(this.this_node_num);
 
-		/* open the input file for writing and saving each frame */
-		PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
-		infile_write.println(frame.print()); /* print frame to input file */
-		infile_write.close(); /* close buffer */
+		if (frame.dest() == frame.src())
+		{
+			generate_frames(str,count);
+		}
+		else
+		{
+			/* open the input file for writing and saving each frame */
+			PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
+			infile_write.println(frame.print()); /* print frame to input file */
+			infile_write.close(); /* close buffer */
+		}
 	}
 }
