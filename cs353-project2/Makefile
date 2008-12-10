@@ -10,14 +10,14 @@ RM = rm -f
 TOUCH = touch
 SRCS = tokenring.java \
 	BridgeNode.java \
-#	BridgeTokenFrame.java \
+	BridgeTokenFrame.java \
 	Ring0ClientNode.java \
-#	Ring0DataStore.java \
-#	Ring0TokenFrame.java \
+	Ring0DataStore.java \
+	Ring0TokenFrame.java \
 	Ring1ClientNode.java \
-#	Ring1DataStore.java \
-#	Ring1TokenFrame.java \
-#	RoutingTable.java
+	Ring1DataStore.java \
+	Ring1TokenFrame.java \
+	RoutingTable.java
 
 default: all
 

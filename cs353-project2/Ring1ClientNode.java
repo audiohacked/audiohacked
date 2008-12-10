@@ -56,7 +56,6 @@ public class Ring1ClientNode extends Thread
 		catch (IOException io) /* file io, so we catch exceptions */
 		{
 			System.err.println(node_name+": client node: status_file, IO error, Buffered Reads;" + io);
-			//this.status = System.out;
 		}
 		
 		//this.status.println(this.node_name+": FILENAME: "+f_input);
@@ -174,7 +173,7 @@ public class Ring1ClientNode extends Thread
 		Socket conn = null;
 		String data = null;
 		Random rand = new Random();
-		Ring1TokenFrame frame = new Ring1TokenFrame(node_name);
+		Ring1TokenFrame frame = new Ring1TokenFrame(node_name, this.status);
 		
 		try
 		{
@@ -214,16 +213,16 @@ public class Ring1ClientNode extends Thread
 					/* if we are the recipient, we process */
 					{
 						/* we determine if the frame is good or bad */
-						frame.set_frame_status(rand.nextInt(2));
+						/*frame.set_frame_status(rand.nextInt(2));
 						
 						/* we have corruption, we pass it? */
-						if (frame.frame_status().equals(0))
+						/*if (frame.frame_status().equals(0))
 							send_frame(node_name, frame);
 						else
 						{
 							/* if we find out the frame is good we save it */
 							save_frame_to_output(node_name, frame);
-						}
+						//}
 					}
 					else
 					{
@@ -232,7 +231,7 @@ public class Ring1ClientNode extends Thread
 						 * otherwise we, we pass it
 						 */
 						this.status.println(node_name+": We are not the recipent");
-						if (frame.src().equals(this.this_node_num))
+						/*if (frame.src().equals(this.this_node_num))
 						{
 							if (frame.frame_status().equals(1))
 								this.status.println(node_name+": listen: draining frame");
@@ -249,7 +248,7 @@ public class Ring1ClientNode extends Thread
 									send_frame(node_name, frame);
 								}
 								*/
-							}
+						/*	}
 						}
 						else /* if the source is not use we just pass it */
 							send_frame(node_name, frame);
@@ -279,7 +278,7 @@ public class Ring1ClientNode extends Thread
 		}
 		
 		/* create Token Frame object */
-		Ring1TokenFrame frame = new Ring1TokenFrame(node_name);
+		Ring1TokenFrame frame = new Ring1TokenFrame(node_name, this.status);
 		Integer tht = new Integer(0);
 		this.status.println(node_name+": transmit");
 		try
@@ -383,7 +382,7 @@ public class Ring1ClientNode extends Thread
 		String current_line; /* storage for line read from a file */
 		
 		/* create a new Token Frame object */
-		Ring1TokenFrame frame = new Ring1TokenFrame(node_name);
+		Ring1TokenFrame frame = new Ring1TokenFrame(node_name, this.status);
 
 		try
 		{
@@ -422,7 +421,7 @@ public class Ring1ClientNode extends Thread
 		if (count > 0) generate_frames(str, count-1);
 		
 		/* create a Frame object */
-		Ring1TokenFrame frame = new Ring1TokenFrame(node_name);
+		Ring1TokenFrame frame = new Ring1TokenFrame(node_name, this.status);
 		
 		/* initialize a random generator */
 		Random rand = new Random();

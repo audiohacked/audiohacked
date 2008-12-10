@@ -118,16 +118,18 @@ public class BridgeNode extends Thread
 
 			if (data != null)
 			{
-				try
+				/*try
 				{
 					PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
 					infile_write.println(data); /* print frame to input file */
-					infile_write.close(); /* close buffer */
-				}
+				/*	infile_write.close(); /* close buffer */
+				/*}
 				catch (IOException io)
 				{
 					System.err.println(node_name+": listen state, PrintWriter error: "+io);
 				}
+				*/
+				transmit_packet(this.node_name, data);
 			}
 			
 		}
@@ -135,9 +137,9 @@ public class BridgeNode extends Thread
 	
 	public void transmit_state()
 	{
-		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name);
-		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name);
-		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name);
+		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
+		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
+		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
 		this.status.println(node_name+": transmit");
 		try
@@ -145,18 +147,8 @@ public class BridgeNode extends Thread
 			if (this.infile_read.ready()) /* check if we can read from file */
 			{
 				/* read next frame from the file */
-				frame.from_input(this.infile_read.readLine());
-
-				if(routing.is_ring0(frame.dest()))
-				{
-					r0frame = frame.convert_to_ring0();
-					pass_to_ring0(this.node_name, r0frame);
-				}
-				else if (routing.is_ring1(frame.dest()))
-				{
-					r1frame = frame.convert_to_ring1();
-					pass_to_ring1(this.node_name, r1frame);
-				}
+				//frame.from_input(this.infile_read.readLine());
+				transmit_packet(this.node_name, this.infile_read.readLine());
 			}
 			else
 			{
@@ -168,6 +160,26 @@ public class BridgeNode extends Thread
 		catch (IOException io)
 		{
 			System.err.println(node_name+": transmit: infile_read, IO Error, Unknown");
+		}
+	}
+
+	public void transmit_packet(String node, String data)
+	{
+		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
+		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
+		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
+
+		this.status.println(node_name+": transmit packet");
+		frame.from_input(data);
+		if(routing.is_ring0(frame.dest()))
+		{
+			r0frame = frame.convert_to_ring0();
+			pass_to_ring0(this.node_name, r0frame);
+		}
+		else if (routing.is_ring1(frame.dest()))
+		{
+			r1frame = frame.convert_to_ring1();
+			pass_to_ring1(this.node_name, r1frame);
 		}
 	}
 		

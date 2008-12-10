@@ -9,6 +9,7 @@ public class BridgeTokenFrame
 	private Integer src; /* source node of frame */
 	private String data; /* data string of frame */
 	private Integer frame_status; /* frame status: */
+	private PrintWriter log; /* reference to the log file for the bridge */
 
 	/* access methods */
 	public Integer access_control() {return this.access_control;}
@@ -44,8 +45,8 @@ public class BridgeTokenFrame
 	/* method for populating data from input string */
 	public void from_input(String input)
 	{
-		System.out.println(this.this_node_name+": Populating TokenFrame from input");
-		System.out.println(this.this_node_name+": FRAME: "+input);
+		this.log.println(this.this_node_name+": Populating TokenFrame from input");
+		this.log.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
@@ -66,8 +67,8 @@ public class BridgeTokenFrame
 	/* method for populating data from a received frame */
 	public void from_existing(String input)
 	{
-		System.out.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
-		System.out.println(this.this_node_name+": FRAME: "+input);
+		this.log.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
+		this.log.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
@@ -107,17 +108,18 @@ public class BridgeTokenFrame
 	
 	public Ring0TokenFrame convert_to_ring0()
 	{
-		Ring0TokenFrame new_ret = new Ring0TokenFrame(this.this_node_name);
+		Ring0TokenFrame new_ret = new Ring0TokenFrame(this.this_node_name, this.log);
 		new_ret.from_existing(this.print());
 		return new_ret;
 	}
 	
 	public Ring1TokenFrame convert_to_ring1()
 	{
-		Ring1TokenFrame new_ret = new Ring1TokenFrame(this.this_node_name);
+		Ring1TokenFrame new_ret = new Ring1TokenFrame(this.this_node_name, this.log);
 		new_ret.from_existing(this.print());
 		return new_ret;
 	}
+
 	/* method for logging each frame received to a file */
 	void log_frame(String node_name, String frame)
 	{
@@ -151,7 +153,7 @@ public class BridgeTokenFrame
 	}
 
 	/* object constructor for a Token Frame */
-	BridgeTokenFrame(String node_name)
+	BridgeTokenFrame(String node_name, PrintWriter logging)
 	{
 		this.this_node_name = node_name;
 		this.access_control = new Integer(0);
@@ -160,6 +162,7 @@ public class BridgeTokenFrame
 		this.src = new Integer(0);
 		this.data = new String("");
 		this.frame_status = new Integer(0);
+		this.log = logging;
 	}
 }
 

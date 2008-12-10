@@ -11,7 +11,8 @@ public class Ring0TokenFrame
 	private Integer src; /* source node of frame */
 	private String data; /* data string of frame */
 	private Integer frame_status; /* frame status: */
-
+	private PrintWriter log; /* logging for the node */
+	
 	/* access methods */
 	public Integer access_control() {return this.access_control;}
 	public Integer data_size(){return this.data_size;}
@@ -46,8 +47,8 @@ public class Ring0TokenFrame
 	/* method for populating data from input string */
 	public void from_input(String input)
 	{
-		System.out.println(this.this_node_name+": Populating TokenFrame from input");
-		System.out.println(this.this_node_name+": FRAME: "+input);
+		this.log.println(this.this_node_name+": Populating TokenFrame from input");
+		this.log.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
@@ -68,8 +69,8 @@ public class Ring0TokenFrame
 	/* method for populating data from a received frame */
 	public void from_existing(String input)
 	{
-		System.out.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
-		System.out.println(this.this_node_name+": FRAME: "+input);
+		this.log.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
+		this.log.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
@@ -120,7 +121,7 @@ public class Ring0TokenFrame
 	}
 
 	/* object constructor for a Token Frame */
-	Ring0TokenFrame(String node_name)
+	Ring0TokenFrame(String node_name, PrintWriter logging)
 	{
 		this.this_node_name = node_name;
 		this.access_control = new Integer(0);
@@ -129,6 +130,7 @@ public class Ring0TokenFrame
 		this.src = new Integer(0);
 		this.data = new String("");
 		this.frame_status = new Integer(0);
+		this.log = logging;
 	}
 }
 
