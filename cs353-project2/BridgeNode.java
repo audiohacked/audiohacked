@@ -107,17 +107,20 @@ public class BridgeNode extends Thread
 			{
 				BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
 				frame.from_input(data);
-				if (frame.access_control() == 0)
+				if (frame.access_control().equals(0))
 				{
-					transmit_state();
+					transmit_state(frame);
 					return_token(frame);
 				}
-				else this.file.Ins(data);
+				else
+				{
+					this.file.Ins(data);
+				}
 			}
 		}
 	}
 	
-	public void transmit_state()
+	public void transmit_state(BridgeTokenFrame token)
 	{
 		String str = null;
 
@@ -127,12 +130,12 @@ public class BridgeNode extends Thread
 		{
 			if ((str = this.file.Del()) != null) /* check if we can read from file */
 			{
-				/*
-				 * Need more code here
-				 */
 				BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
 				frame.from_input(str);
-				transmit_packet(frame);
+				if (this.routing.same_ring(token.src(), frame.dest()))
+				{
+					transmit_packet(token, frame);
+				}
 			}
 			else
 			{
@@ -141,36 +144,36 @@ public class BridgeNode extends Thread
 		}
 	}
 
-	public void return_token(BridgeTokenFrame frame)
+	public void return_token(BridgeTokenFrame token)
 	{
 		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
 		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
 		System.out.println(this.node_name+": return token");
-		if(routing.is_ring0(frame.src()))
+		if(this.routing.is_ring0(token.src()))
 		{
-			r0frame = frame.convert_to_ring0();
+			r0frame = token.convert_to_ring0();
 			pass_to_ring0(r0frame);
 		}
-		else if (routing.is_ring1(frame.src()))
+		else if (this.routing.is_ring1(token.src()))
 		{
-			r1frame = frame.convert_to_ring1();
+			r1frame = token.convert_to_ring1();
 			pass_to_ring1(r1frame);
 		}
 	}
 	
-	public void transmit_packet(BridgeTokenFrame frame)
+	public void transmit_packet(BridgeTokenFrame token, BridgeTokenFrame frame)
 	{
 		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
 		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
 		System.out.println(this.node_name+": transmit packet");
-		if(routing.is_ring0(frame.dest()))
+		if(this.routing.is_ring0(frame.dest()))
 		{
 			r0frame = frame.convert_to_ring0();
 			pass_to_ring0(r0frame);
 		}
-		else if (routing.is_ring1(frame.dest()))
+		else if (this.routing.is_ring1(frame.dest()))
 		{
 			r1frame = frame.convert_to_ring1();
 			pass_to_ring1(r1frame);

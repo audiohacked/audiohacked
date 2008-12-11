@@ -45,4 +45,18 @@ public class RoutingTable
 	{
 		return this.rt.get("ring1").containsKey("n"+dest.toString());
 	}
+	
+	public boolean same_ring(Integer token_src, Integer frame_dest)
+	{
+		for (Object o: this.rt.keySet())
+		{
+			if ( this.rt.get(o).containsKey("n"+token_src.toString()) 
+				&& this.rt.get(o).containsKey("n"+frame_dest.toString()) )
+			{
+				return true;
+			}
+		}
+		return false;
+		//this.rt.get(ring).containsKey("n"+frame_dest.toString());
+	}	
 }
