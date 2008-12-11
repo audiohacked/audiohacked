@@ -44,15 +44,17 @@ public class BridgeNode extends Thread
 		this.f_output = new String("bridge-output-file");
 		this.f_status = new String("bridge-status-file");
 
+		/*
 		try
 		{
-			/* open the bridge-status-file */
+			// open the bridge-status-file
 			this.status = new PrintWriter(new FileWriter(this.f_status));
 		}
-		catch (IOException io) /* file io, so we catch exceptions */
+		catch (IOException io) // file io, so we catch exceptions
 		{
 			System.err.println(node_name+": client node: status, IO error, PrintWriter;" + io);
 		}
+		*/
 
 		try /* try to build the transmit socket for a token ring node */
 		{

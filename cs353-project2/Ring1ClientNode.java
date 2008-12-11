@@ -48,15 +48,17 @@ public class Ring1ClientNode extends Thread
 		this.f_output = Ring1DataStore.outfile_name + this.this_node_num.toString();
 		this.f_status = Ring1DataStore.statusfile_name + this.this_node_num.toString();
 
+		/*
 		try
 		{
-			/* open the status-file-{node_num} */
+			// open the status-file-{node_num}
 			this.status = new PrintWriter(new FileWriter(this.f_status, true), true);
 		}
-		catch (IOException io) /* file io, so we catch exceptions */
+		catch (IOException io) // file io, so we catch exceptions
 		{
 			System.err.println(node_name+": client node: status_file, IO error, Buffered Reads;" + io);
 		}
+		*/
 		
 		//System.out.println(this.node_name+": FILENAME: "+f_input);
 		

@@ -47,7 +47,7 @@ public class BridgeTokenFrame
 	{
 		System.out.println(this.this_node_name+": Populating TokenFrame from input");
 		System.out.println(this.this_node_name+": FRAME: "+input);
-		log_frame(this.this_node_name, input);
+		//log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
 			this.access_control = new Integer(list[0]);
@@ -69,7 +69,7 @@ public class BridgeTokenFrame
 	{
 		System.out.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
 		System.out.println(this.this_node_name+": FRAME: "+input);
-		log_frame(this.this_node_name, input);
+		//log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
 			this.access_control = new Integer(list[0]);
