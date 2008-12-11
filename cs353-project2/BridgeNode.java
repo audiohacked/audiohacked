@@ -81,10 +81,10 @@ public class BridgeNode extends Thread
 	
 	public void run()
 	{
-		listen_state(this.node_name);
+		listen_state();
 	}
 	
-	public void listen_state(String node_name)
+	public void listen_state()
 	{
 		Socket conn = null;
 		String data = null;
@@ -98,86 +98,90 @@ public class BridgeNode extends Thread
 			}
 			catch (IOException io)
 			{
-				System.err.println(node_name+": Socket read error: "+io);
+				System.err.println(this.node_name+": Socket read error: "+io);
 			}
 
 			if (data != null)
 			{
-				this.file.Ins(data);
-				transmit_packet(this.node_name, data);
+				BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
+				frame.from_input(data);
+				if (frame.access_control() == 0)
+				{
+					transmit_state();
+					return_token(frame);
+				}
+				else this.file.Ins(data);
 			}
-			
 		}
 	}
 	
 	public void transmit_state()
 	{
-		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
-		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
-		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 		String str = null;
 
-		System.out.println(node_name+": transmit");
+		System.out.println(this.node_name+": transmit");
 
-		if ((str = this.file.Del()) != null) /* check if we can read from file */
+		while (true)
 		{
-			/* read next frame from the file */
-			//frame.from_input(this.infile_read.readLine());
-			transmit_packet(this.node_name, str);
-		}
-		else
-		{
-			/* Release the Token back to the ring and go to listen state. */
-			return_token(node_name, frame);
-			listen_state(node_name);
+			if ((str = this.file.Del()) != null) /* check if we can read from file */
+			{
+				/*
+				 * Need more code here
+				 */
+				BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
+				frame.from_input(str);
+				transmit_packet(frame);
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 
-	public void return_token(String node_name, BridgeTokenFrame frame)
+	public void return_token(BridgeTokenFrame frame)
 	{
-		Ring0TokenFrame r0frame = new Ring0TokenFrame(node_name, this.status);
-		Ring1TokenFrame r1frame = new Ring1TokenFrame(node_name, this.status);
+		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
+		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
-		System.out.println(node_name+": return token");
+		System.out.println(this.node_name+": return token");
 		if(routing.is_ring0(frame.src()))
 		{
 			r0frame = frame.convert_to_ring0();
-			pass_to_ring0(this.node_name, r0frame);
+			pass_to_ring0(r0frame);
 		}
 		else if (routing.is_ring1(frame.src()))
 		{
 			r1frame = frame.convert_to_ring1();
-			pass_to_ring1(this.node_name, r1frame);
+			pass_to_ring1(r1frame);
 		}
 	}
 	
-	public void transmit_packet(String node_name, String data)
+	public void transmit_packet(BridgeTokenFrame frame)
 	{
-		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
 		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
 		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
-		System.out.println(node_name+": transmit packet");
-		frame.from_input(data);
+		System.out.println(this.node_name+": transmit packet");
 		if(routing.is_ring0(frame.dest()))
 		{
 			r0frame = frame.convert_to_ring0();
-			pass_to_ring0(this.node_name, r0frame);
+			pass_to_ring0(r0frame);
 		}
 		else if (routing.is_ring1(frame.dest()))
 		{
 			r1frame = frame.convert_to_ring1();
-			pass_to_ring1(this.node_name, r1frame);
+			pass_to_ring1(r1frame);
 		}
 	}
 		
 	/* if somehow the thread calls the exit() method we need to clean up */
 	public void exit()
 	{	
-		cleanup_node(this.node_name);
+		cleanup_node();
 	}
 
-	void cleanup_node(String node_name)
+	void cleanup_node()
 	{
 		try
 		{
@@ -193,16 +197,16 @@ public class BridgeNode extends Thread
 		/* for some reason java has problems from just closing sockets it owns
 		 * so we need to catch IO execptions */
 		{
-			System.err.println(node_name+": cleanup_node: IO Error, Unknown");
+			System.err.println(this.node_name+": cleanup_node: IO Error, Unknown");
 		}
 	}
 
-    void pass_to_ring0(String node_name, Ring0TokenFrame frame)
+    void pass_to_ring0(Ring0TokenFrame frame)
 	{
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		System.out.println(node_name+": send: trying to send frame");
+		System.out.println(this.node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -211,17 +215,17 @@ public class BridgeNode extends Thread
 		}
 		catch(IOException io)
 		{
-			System.err.println(node_name+": send: IO Error, DataOutputStream");
+			System.err.println(this.node_name+": send: IO Error, DataOutputStream");
 		}
-		System.out.println(node_name+": send: frame sent");
+		System.out.println(this.node_name+": send: frame sent");
 	}
 	
-    void pass_to_ring1(String node_name, Ring1TokenFrame frame)
+    void pass_to_ring1(Ring1TokenFrame frame)
 	{
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		System.out.println(node_name+": send: trying to send frame");
+		System.out.println(this.node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -230,14 +234,14 @@ public class BridgeNode extends Thread
 		}
 		catch(IOException io)
 		{
-			System.err.println(node_name+": send: IO Error, DataOutputStream");
+			System.err.println(this.node_name+": send: IO Error, DataOutputStream");
 		}
-		System.out.println(node_name+": send: frame sent");
+		System.out.println(this.node_name+": send: frame sent");
 	}
 
-    void save_frame_to_output(String node_name, BridgeTokenFrame frame)
+    void save_frame_to_output(BridgeTokenFrame frame)
 	{
-		System.out.println(node_name+": saving frame to output");
+		System.out.println(this.node_name+": saving frame to output");
 		try
 		{
 			/* try to open buffer for the printing frames to output file */
@@ -251,9 +255,9 @@ public class BridgeNode extends Thread
 		}
 		catch (IOException io)
 		{
-			System.err.println("save frame to file: outfile, IO error, Writes");
+			System.err.println(this.node_name+": save frame to file: outfile, IO error, Writes");
 		}
-		System.out.println(node_name+": saved frame to output");
+		System.out.println(this.node_name+": saved frame to output");
 	}
 
 }
