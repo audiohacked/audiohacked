@@ -43,10 +43,10 @@ prepare: distclean
 	@$(TOUCH) input-file-{0..9}
 	@$(TOUCH) bridge-input-file
 
-build: clean prepare
+build: clean 
 	@$(JCC) $(SRCS)
 
-run: build
+run:
 	@$(JAVA) $(PROGRAM)
 
-test: distclean prepare run
+test: distclean prepare build run
