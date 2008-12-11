@@ -80,7 +80,7 @@ public class Ring0ClientNode extends Thread
 			System.err.println(node_name+": client node: IO error, client Socket.");
 		}
 
-		///*
+		/*
 		try
 		{
 			// generate frames if we need to during Debugging
@@ -217,16 +217,16 @@ public class Ring0ClientNode extends Thread
 					/* if we are the recipient, we process */
 					{
 						/* we determine if the frame is good or bad */
-						/*frame.set_frame_status(rand.nextInt(2));
+						frame.set_frame_status(rand.nextInt(2));
 						
 						/* we have corruption, we pass it? */
-						/*if (frame.frame_status().equals(0))
+						if (frame.frame_status().equals(0))
 							send_frame(node_name, frame);
 						else
 						{
 							/* if we find out the frame is good we save it */
 							save_frame_to_output(node_name, frame);
-						//}
+						}
 					}
 					else
 					{
@@ -235,7 +235,7 @@ public class Ring0ClientNode extends Thread
 						 * otherwise we, we pass it
 						 */
 						System.out.println(node_name+": We are not the recipent");
-						/*if (frame.src().equals(this.this_node_num))
+						if (frame.src().equals(this.this_node_num))
 						{
 							if (frame.frame_status().equals(1))
 								System.out.println(node_name+": listen: draining frame");
@@ -245,14 +245,12 @@ public class Ring0ClientNode extends Thread
 								 * orphaned frame; right now we ignore this
 								 * case
 								 */
-								/*
 								System.out.println(node_name+": listen: reTx, when we have Token");
 								if (this.flag)
 								{
 									send_frame(node_name, frame);
 								}
-								*/
-						/*	}
+							}
 						}
 						else /* if the source is not use we just pass it */
 							send_frame(node_name, frame);
@@ -442,7 +440,7 @@ public class Ring0ClientNode extends Thread
 			+dest.toString()+" ");
 
 		/* generate if we make a token for passing; or if its a data frame */
-		frame.set_access_control(1/*rand.nextInt(2)*/);
+		frame.set_access_control(rand.nextInt(2));
 
 		/* set the data frame size automatically */
 		frame.set_data_size();
