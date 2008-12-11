@@ -11,8 +11,8 @@ public class Ring0DataStore
 	
 	/* store the base name of the output file */
 	public static String outfile_name = new String("output-file-");
+
 	/* store the base name of the output file */
-	
 	public static String statusfile_name = new String("status-file-");
 	
 	/* store the maximum THT byte count of a frame */

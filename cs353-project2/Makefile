@@ -11,6 +11,7 @@ TOUCH = touch
 SRCS = tokenring.java \
 	BridgeNode.java \
 	BridgeTokenFrame.java \
+	NodeFramework.java \
 	Ring0ClientNode.java \
 	Ring0DataStore.java \
 	Ring0TokenFrame.java \
@@ -23,10 +24,10 @@ default: all
 
 all: run
 
-clean:
+class-clean:
 	@$(RM) *.class
 
-distclean: clean
+log-clean:
 	@$(RM) input-file-*
 	@$(RM) output-file-*
 	@$(RM) status-file-*
@@ -34,11 +35,15 @@ distclean: clean
 	@$(RM) log-file-*
 	@$(RM) build.log
 
+clean: class-clean log-clean
+	
+distclean: clean
+
 prepare: distclean
 	@$(TOUCH) input-file-{0..9}
 	@$(TOUCH) bridge-input-file
 
-build: clean
+build: clean prepare
 	@$(JCC) $(SRCS)
 
 run: build

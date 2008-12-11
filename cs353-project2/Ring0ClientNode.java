@@ -60,11 +60,11 @@ public class Ring0ClientNode extends Thread
 			System.err.println(node_name+": client node: infile_read, IO error, Buffered Reads;" + io);
 		}
 		
-		//this.status.println(this.node_name+": FILENAME: "+f_input);
+		//System.out.println(this.node_name+": FILENAME: "+f_input);
 		
 		try /* try to build the transmit socket for a token ring node */
 		{
-			this.status.println(this.node_name+": client node: creating client socket.");
+			System.out.println(this.node_name+": client node: creating client socket.");
 			this.send_socket = new Socket("localhost", p_temp);
 		}
 		catch(UnknownHostException host)
@@ -166,12 +166,12 @@ public class Ring0ClientNode extends Thread
 		 * to continue transmitting */
 		if (this.flag)
 		{
-			this.status.println(node_name+": We Still have the Token!");
+			System.out.println(node_name+": We Still have the Token!");
 			transmit_state(node_name);
 			return;
 		}
 
-		this.status.println(node_name+": Starting Listening State...");
+		System.out.println(node_name+": Starting Listening State...");
 		Socket conn = null;
 		String data = null;
 		Random rand = new Random();
@@ -192,7 +192,7 @@ public class Ring0ClientNode extends Thread
 			/* if for some reason we don't get data we move on
 			 * but if the data is good we process the data */
 			{
-				this.status.println(node_name+": Intercepted Packet...");
+				System.out.println(node_name+": Intercepted Packet...");
 				frame.from_existing(data);/* we create a Token Frame object
 											* from the incoming data frame */
 				conn.close(); /* since we have what we need, we can close the
@@ -205,7 +205,7 @@ public class Ring0ClientNode extends Thread
 					 * it means that the previous node is passing the
 					 * token to us. And we move into our transmit state
 					 */
-					this.status.println(node_name+": Got Token!");
+					System.out.println(node_name+": Got Token!");
 					this.flag = true;
 					transmit_state(node_name);
 				}
@@ -232,11 +232,11 @@ public class Ring0ClientNode extends Thread
 						 * if we're the sender we either drop or reTx later
 						 * otherwise we, we pass it
 						 */
-						this.status.println(node_name+": We are not the recipent");
+						System.out.println(node_name+": We are not the recipent");
 						/*if (frame.src().equals(this.this_node_num))
 						{
 							if (frame.frame_status().equals(1))
-								this.status.println(node_name+": listen: draining frame");
+								System.out.println(node_name+": listen: draining frame");
 							else 
 							{
 								/* if the frame status is 0, then we have an
@@ -244,7 +244,7 @@ public class Ring0ClientNode extends Thread
 								 * case
 								 */
 								/*
-								this.status.println(node_name+": listen: reTx, when we have Token");
+								System.out.println(node_name+": listen: reTx, when we have Token");
 								if (this.flag)
 								{
 									send_frame(node_name, frame);
@@ -274,7 +274,7 @@ public class Ring0ClientNode extends Thread
 		 * we switch to the listen state if need be
 		 */
 		if (!this.flag){
-			this.status.println(node_name+": We Don't have the Token!");
+			System.out.println(node_name+": We Don't have the Token!");
 			listen_state(node_name);
 			return;
 		}
@@ -282,13 +282,14 @@ public class Ring0ClientNode extends Thread
 		/* create Token Frame object */
 		Ring0TokenFrame frame = new Ring0TokenFrame(node_name, this.status);
 		Integer tht = new Integer(0);
-		this.status.println(node_name+": transmit");
+		String str = null;
+		System.out.println(node_name+": transmit");
 		try
 		{
-			if (this.infile_read.ready()) /* check if we can read from file */
+			if ((str = this.infile_read.readLine()) != null) /* check if we can read from file */
 			{
 				/* read next frame from the file */
-				frame.from_input(this.infile_read.readLine());
+				frame.from_input(str);
 				
 				/* calculate frame THT size */
 				tht = tht + frame.data_size();
@@ -329,7 +330,7 @@ public class Ring0ClientNode extends Thread
 			/* set our token flag and remember we no longer have it */
 			this.flag = false;
 		
-		this.status.println(node_name+": send: trying to send frame");
+		System.out.println(node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -340,7 +341,7 @@ public class Ring0ClientNode extends Thread
 		{
 			System.err.println(node_name+": send: IO Error, DataOutputStream");
 		}
-		this.status.println(node_name+": send: frame sent");
+		System.out.println(node_name+": send: frame sent");
 	}
 	
 	void pass_token(String node_name, Ring0TokenFrame frame)
@@ -360,7 +361,7 @@ public class Ring0ClientNode extends Thread
 	
 	void save_frame_to_output(String node_name, Ring0TokenFrame frame)
 	{
-		this.status.println(node_name+": saving frame to output");
+		System.out.println(node_name+": saving frame to output");
 		try
 		{
 			/* try to open buffer for the printing frames to output file */
@@ -376,7 +377,7 @@ public class Ring0ClientNode extends Thread
 		{
 			System.err.println("save frame to file: outfile, IO error, Writes");
 		}
-		this.status.println(node_name+": saved frame to output");
+		System.out.println(node_name+": saved frame to output");
 	}
 		
 	void initialize_token(String node_name) throws IOException
@@ -399,7 +400,7 @@ public class Ring0ClientNode extends Thread
 			/* check if we are the source/creator of the frame */
 			if (frame.src().equals(this.this_node_num))
 			{
-				this.status.println(node_name+": initialize: send frame token");
+				System.out.println(node_name+": initialize: send frame token");
 
 				/* we can send the frame, its safe */
 				send_frame(node_name, frame);	

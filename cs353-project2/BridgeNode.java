@@ -18,15 +18,9 @@ public class BridgeNode extends Thread
 	private String f_input; /* string to build the input-file-{num} name */
 	private String f_output; /* same as f_input but for output-file-{num} */
 	
-	/* since we need to be able to read
-	 * from a file during the transmit state
-	 * we declare an always open buffer
-	 * and close it when we are finished
-	 * at end of program or when we exit */
-	private BufferedReader infile_read; 
-
 	private PrintWriter status;
 	private String f_status;
+	private QueueFile file;
 	
 	/* this is the constructor used to make a Node in a tokenring */
 	BridgeNode(ServerSocket s_temp, int r0_temp, int r1_temp)
@@ -46,9 +40,9 @@ public class BridgeNode extends Thread
 									* ServerSocket object */
 		
 		/* here we build the filename strings for output and input files */
-		f_input = new String("bridge-input-file");
-		f_output = new String("bridge-output-file");
-		f_status = new String("bridge-status-file");
+		this.f_input = new String("bridge-input-file");
+		this.f_output = new String("bridge-output-file");
+		this.f_status = new String("bridge-status-file");
 
 		try
 		{
@@ -57,12 +51,12 @@ public class BridgeNode extends Thread
 		}
 		catch (IOException io) /* file io, so we catch exceptions */
 		{
-			System.err.println(node_name+": client node: infile_read, IO error, Buffered Reads;" + io);
+			System.err.println(node_name+": client node: status, IO error, PrintWriter;" + io);
 		}
 
 		try /* try to build the transmit socket for a token ring node */
 		{
-			this.status.println(this.node_name+": client node: creating client socket.");
+			System.out.println(this.node_name+": client node: creating client socket.");
 			this.ring0_socket = new Socket("localhost", r0_temp);
 			this.ring1_socket = new Socket("localhost", r1_temp);
 		}
@@ -77,20 +71,11 @@ public class BridgeNode extends Thread
 			System.err.println(node_name+": client node: IO error, client Socket.");
 		}
 
-		try
-		{
-			// open the bridge-input-file
-			this.infile_read = new BufferedReader(new FileReader(this.f_input));
-		}
-		catch (IOException io) // file io, so we catch exceptions
-		{
-			System.err.println(node_name+": client node: infile_read, IO error, BufferedReader;" + io);
-		}
-
 		/* if we are the initial holder of the token we just 
 		 * run our thread, otherwise we start our thread; this
 		 * isn't technically the right way, we could just start()
 		 * the thread */
+		this.file = new QueueFile();
 		start();
 	}
 	
@@ -118,17 +103,7 @@ public class BridgeNode extends Thread
 
 			if (data != null)
 			{
-				/*try
-				{
-					PrintWriter infile_write = new PrintWriter(new FileWriter(this.f_input, true));
-					infile_write.println(data); /* print frame to input file */
-				/*	infile_write.close(); /* close buffer */
-				/*}
-				catch (IOException io)
-				{
-					System.err.println(node_name+": listen state, PrintWriter error: "+io);
-				}
-				*/
+				this.file.Ins(data);
 				transmit_packet(this.node_name, data);
 			}
 			
@@ -140,36 +115,49 @@ public class BridgeNode extends Thread
 		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
 		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
 		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
+		String str = null;
 
-		this.status.println(node_name+": transmit");
-		try
+		System.out.println(node_name+": transmit");
+
+		if ((str = this.file.Del()) != null) /* check if we can read from file */
 		{
-			if (this.infile_read.ready()) /* check if we can read from file */
-			{
-				/* read next frame from the file */
-				//frame.from_input(this.infile_read.readLine());
-				transmit_packet(this.node_name, this.infile_read.readLine());
-			}
-			else
-			{
-				/* Release the Token back to the ring and go to listen state. */
-				//pass_token(node_name, frame);
-				//listen_state(node_name);
-			}
+			/* read next frame from the file */
+			//frame.from_input(this.infile_read.readLine());
+			transmit_packet(this.node_name, str);
 		}
-		catch (IOException io)
+		else
 		{
-			System.err.println(node_name+": transmit: infile_read, IO Error, Unknown");
+			/* Release the Token back to the ring and go to listen state. */
+			return_token(node_name, frame);
+			listen_state(node_name);
 		}
 	}
 
-	public void transmit_packet(String node, String data)
+	public void return_token(String node_name, BridgeTokenFrame frame)
+	{
+		Ring0TokenFrame r0frame = new Ring0TokenFrame(node_name, this.status);
+		Ring1TokenFrame r1frame = new Ring1TokenFrame(node_name, this.status);
+
+		System.out.println(node_name+": return token");
+		if(routing.is_ring0(frame.src()))
+		{
+			r0frame = frame.convert_to_ring0();
+			pass_to_ring0(this.node_name, r0frame);
+		}
+		else if (routing.is_ring1(frame.src()))
+		{
+			r1frame = frame.convert_to_ring1();
+			pass_to_ring1(this.node_name, r1frame);
+		}
+	}
+	
+	public void transmit_packet(String node_name, String data)
 	{
 		BridgeTokenFrame frame = new BridgeTokenFrame(this.node_name, this.status);
 		Ring0TokenFrame r0frame = new Ring0TokenFrame(this.node_name, this.status);
 		Ring1TokenFrame r1frame = new Ring1TokenFrame(this.node_name, this.status);
 
-		this.status.println(node_name+": transmit packet");
+		System.out.println(node_name+": transmit packet");
 		frame.from_input(data);
 		if(routing.is_ring0(frame.dest()))
 		{
@@ -214,7 +202,7 @@ public class BridgeNode extends Thread
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		this.status.println(node_name+": send: trying to send frame");
+		System.out.println(node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -225,7 +213,7 @@ public class BridgeNode extends Thread
 		{
 			System.err.println(node_name+": send: IO Error, DataOutputStream");
 		}
-		this.status.println(node_name+": send: frame sent");
+		System.out.println(node_name+": send: frame sent");
 	}
 	
     void pass_to_ring1(String node_name, Ring1TokenFrame frame)
@@ -233,7 +221,7 @@ public class BridgeNode extends Thread
 		/* check if we are passing the token to the next node */
 		if (frame.access_control().equals(0))
 		
-		this.status.println(node_name+": send: trying to send frame");
+		System.out.println(node_name+": send: trying to send frame");
 		try
 		{
 			/* try to open a Write Buffer for writing frames received */
@@ -244,12 +232,12 @@ public class BridgeNode extends Thread
 		{
 			System.err.println(node_name+": send: IO Error, DataOutputStream");
 		}
-		this.status.println(node_name+": send: frame sent");
+		System.out.println(node_name+": send: frame sent");
 	}
 
     void save_frame_to_output(String node_name, BridgeTokenFrame frame)
 	{
-		this.status.println(node_name+": saving frame to output");
+		System.out.println(node_name+": saving frame to output");
 		try
 		{
 			/* try to open buffer for the printing frames to output file */
@@ -265,7 +253,7 @@ public class BridgeNode extends Thread
 		{
 			System.err.println("save frame to file: outfile, IO error, Writes");
 		}
-		this.status.println(node_name+": saved frame to output");
+		System.out.println(node_name+": saved frame to output");
 	}
 
 }

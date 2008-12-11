@@ -47,8 +47,8 @@ public class Ring1TokenFrame
 	/* method for populating data from input string */
 	public void from_input(String input)
 	{
-		this.log.println(this.this_node_name+": Populating TokenFrame from input");
-		this.log.println(this.this_node_name+": FRAME: "+input);
+		System.out.println(this.this_node_name+": Populating TokenFrame from input");
+		System.out.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
@@ -69,8 +69,8 @@ public class Ring1TokenFrame
 	/* method for populating data from a received frame */
 	public void from_existing(String input)
 	{
-		this.log.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
-		this.log.println(this.this_node_name+": FRAME: "+input);
+		System.out.println(this.this_node_name+": Populating TokenFrame from incoming Frame");
+		System.out.println(this.this_node_name+": FRAME: "+input);
 		log_frame(this.this_node_name, input);
 		try {
 			String[] list = input.split(",");
