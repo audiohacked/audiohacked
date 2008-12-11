@@ -21,32 +21,37 @@ SRCS = tokenring.java \
 	RoutingTable.java
 
 default: all
-
 all: run
+clean: class-clean bridge-clean
+distclean: clean input-clean output-clean log-clean
+prepare: input-prepare bridge-prepare
+test: distclean prepare build run
 
 class-clean:
 	@$(RM) *.class
 
-log-clean:
+input-clean:
 	@$(RM) input-file-*
+
+output-clean:
 	@$(RM) output-file-*
+
+log-clean:
 	@$(RM) status-file-*
-	@$(RM) bridge-{input,output,status}-file
 	@$(RM) log-file-*
 	@$(RM) build.log
 
-clean: class-clean log-clean
-	
-distclean: clean
+bridge-clean:
+	@$(RM) bridge-{input,output,status}-file
 
-prepare: distclean
+input-prepare:
 	@$(TOUCH) input-file-{0..9}
+
+bridge-prepare:
 	@$(TOUCH) bridge-input-file
 
-build: clean 
+build: class-clean bridge-prepare
 	@$(JCC) $(SRCS)
 
-run:
+run: build
 	@$(JAVA) $(PROGRAM)
-
-test: distclean prepare build run
