@@ -1,0 +1,23 @@
+#ifndef INCLUDED_LAUNCHER_FRAME_H
+#define INCLUDED_LAUNCHER_FRAME_H
+
+enum
+{
+	BUTTON_PRIVATE = wxID_HIGHEST + 1,
+	BUTTON_BLIZZARD
+};
+
+class LauncherFrame : public wxFrame
+{
+public:
+	LauncherFrame(const wxChar *title);
+	~LauncherFrame();
+	void PrivateList(wxCommandEvent &event);
+	void BlizzardList(wxCommandEvent &event);
+	LauncherApp *myapp;
+	
+protected:
+	DECLARE_EVENT_TABLE()
+};
+
+#endif /* INCLUDED_LAUNCHER_FRAME_H */
