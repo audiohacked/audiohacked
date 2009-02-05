@@ -1,0 +1,41 @@
+MaNGOS r7227
+ACID r25-006
+ScriptDev2 r886
+UDB r367 - MaNGOS r7069 & ScriptDev2 r838
+
+
+<udb>/Full_DB/ForCleanInstallOnly/create_mysql.sql
+<udb>/Full_DB/ForCleanInstallOnly/create_database_sd2.sql
+<udb:mangos>/Full_DB/UDB_0.11.0_Core_7069_SD2_838.sql
+<udb:mangos>/Updates/0.11.0_additions/367_corepatch_mangos_7070_to_7109.sql
+<udb:mangos>/Updates/0.11.0_additions/367_updatepack_mangos.sql
+
+<scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
+<scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
+<acid:scriptdev2>/stable/0.0.6/mangos/006_acid_813_scriptdev.sql
+<acid:mangos>/stable/0.0.6/mangos/006_acid_813_mangos.sql
+<scriptdev2:mangos>/sql/mangos_full_scripts.sql
+
+<mangos:realmd>/sql/realmd.sql
+<mangos:characters>/sql/characters.sql
+<mangos:mangos>/sql/updates/7118_01_mangos_skill_discovery_template.sql
+<mangos:mangos>/sql/updates/7133_01_mangos_skill_discovery_template.sql
+<mangos:mangos>/sql/updates/7133_02_mangos_spell_loot_template.sql
+<mangos:mangos>/sql/updates/7141_01_mangos_instance_template.sql
+<mangos:mangos>/sql/updates/7147_01_mangos_creature_template.sql
+<mangos:mangos>/sql/updates/7149_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/7150_01_mangos_playercreateinfo_spell.sql
+<mangos:mangos>/sql/updates/7156_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/7168_01_mangos_command.sql
+<mangos:mangos>/sql/updates/7175_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/7193_01_mangos_mangos_string.sql
+<mangos:mangos>/sql/updates/7196_01_mangos_spell_chain.sql
+<mangos:mangos>/sql/updates/7196_02_mangos_spell_bonus_data.sql
+<mangos:mangos>/sql/updates/7199_01_mangos_spell_bonus_data.sql
+<mangos:mangos>/sql/updates/7199_02_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/7205_01_mangos_spell_chain.sql
+<mangos:mangos>/sql/updates/7207_01_mangos_creature.sql
+<mangos:mangos>/sql/updates/7207_02_mangos_gameobject.sql
+<mangos:mangos>/sql/updates/7209_01_mangos_spell_bonus_data.sql
+<mangos:mangos>/sql/updates/7214_01_mangos_command.sql
+<mangos:mangos>/sql/updates/7214_02_mangos_mangos_string.sql
