@@ -6,7 +6,7 @@ SET(SRCS
 	LauncherApp.cpp
 	LauncherFrame.cpp
 )
-SET(PRIVATE_REALMLIST localhost CACHE STRING "Set the URL for Your Private Realmlist")
+SET(PRIVATE_REALMLIST 129.138.36.134 CACHE STRING "Set the URL for Your Private Realmlist")
 SET(PRIVATE_PATCHLIST us.version.worldofwarcraft.com CACHE STRING "Set the URL for Your Private Patchlist")
 SET(BLIZZARD_REALMLIST us.logon.worldofwarcraft.com CACHE STRING "Set the URL for Blizzard's Realmlist")
 SET(BLIZZARD_PATCHLIST us.version.worldofwarcraft.com CACHE STRING "Set the URL for Blizzard's Patchlist")

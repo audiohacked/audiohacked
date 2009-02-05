@@ -9,7 +9,7 @@ public:
 	
 	wxString wow_path;
 private:
-	wxString Win32Registery_Find_WoW(void);
+	wxString Win32Registry_Find_WoW(void);
 };
  
 DECLARE_APP(LauncherApp)

@@ -4,7 +4,7 @@
 #	include "wx/wx.h"
 #endif
 
-#ifdef __WIN32
+#ifdef WIN32
 	#include <wx/msw/registry.h>
 #endif
 
@@ -26,15 +26,15 @@ bool LauncherApp::OnInit()
 
 void LauncherApp::Find_WoW_Path(void)
 {
-	#ifdef __WIN32
+	#ifdef WIN32
 		wow_path = Win32Registry_Find_WoW();
 	#else
 		wow_path = wxString::FromAscii("/Applications/World of Warcraft");
 	#endif
 }
 
-#ifdef __WIN32
-wxString LauncherApp::Win32Registery_Find_WoW(void)
+#ifdef WIN32
+wxString LauncherApp::Win32Registry_Find_WoW(void)
 {
 	wxString InstallKey = wxString::FromAscii("HKEY_LOCAL_MACHINE\\SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\");
 	wxRegKey *pRegKey = new wxRegKey(InstallKey);
@@ -46,7 +46,7 @@ wxString LauncherApp::Win32Registery_Find_WoW(void)
 	else
 	{
 		wxString ClientPath;
-		pRegKey->QueryValue("InstallPath", &ClientPath);
+		pRegKey->QueryValue("InstallPath", ClientPath);
 		return ClientPath;
 	}
 }
