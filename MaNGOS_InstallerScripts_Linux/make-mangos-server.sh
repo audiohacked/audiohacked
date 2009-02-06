@@ -53,6 +53,18 @@ cd objdir
 make || { echo "Make failed!"; exit 1; }
 #sudo make install || { echo "Make Install failed!"; exit 1; }
 
+## Grab needed SQL files for MaNGOS DataBase
+if [ -d "sd2-acid" ]; then
+	svn up sd2-acid
+else
+	svn co https://sd2-acid.svn.sourceforge.net/svnroot/sd2-acid
+fi
+if [ -d "unifieddb" ]; then
+	svn up unifieddb
+else
+	svn co https://unifieddb.svn.sourceforge.net/svnroot/unifieddb
+fi
+
 ## Clean up
 #make clean
 #cd ..
