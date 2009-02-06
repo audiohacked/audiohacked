@@ -52,6 +52,7 @@ cd objdir
 	|| { echo "configure failed!"; exit 1; }
 make || { echo "Make failed!"; exit 1; }
 #sudo make install || { echo "Make Install failed!"; exit 1; }
+cd ../..
 
 ## Grab needed SQL files for MaNGOS DataBase
 if [ -d "sd2-acid" ]; then
@@ -62,7 +63,7 @@ fi
 if [ -d "unifieddb" ]; then
 	svn up unifieddb
 else
-	svn co https://unifieddb.svn.sourceforge.net/svnroot/unifieddb
+	svn co https://unifieddb.svn.sourceforge.net/svnroot/unifieddb/trunk unifieddb
 fi
 
 ## Clean up
