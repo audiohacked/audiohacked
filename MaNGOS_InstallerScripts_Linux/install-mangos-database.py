@@ -40,18 +40,23 @@ def get_sql_entries(db_install_list):
 	return queries
 
 if __name__ == '__main__':
-	testing = 1;
+	testing = True
+	update = False
 	for cmd_arg in sys.argv[1:]:
 		if cmd_arg == "--test":
-			testing = 1
+			testing = True
 		elif cmd_arg == "--execute":
-			testing = 0
+			testing = False
 		elif cmd_arg.split('=')[0] == "--password":
 			password = " --password=" + cmd_arg.split('=')[1]
 		elif cmd_arg.split('=')[0] == "--user":
 			username = cmd_arg.split('=')[1]
-		else:
-			filename = cmd_arg
+		elif cmd_arg == "--update":
+			update = True;
+		elif cmd_arg.split('=')[0] == "--dbfile":
+			filename = cmd_arg.split('=')[1]
+		sys.argv.remove(cmd_arg)
+
 	db_install_list = open(filename, 'rU')
 	for query in get_sql_entries(db_install_list):
 		execute_sql_file(query[1], query[0], query[2], testing)
