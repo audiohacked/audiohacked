@@ -1,12 +1,9 @@
 #!/usr/bin/python
 import re, os, sys
 
-username = "root"
-password = " -p"
 match_dbline = re.compile('^<(?P<dbsrctree>\w+)(((:)(?P<dbname>\w+))|())>(?P<sqlfile>.+)', re.I | re.M | re.X);
-filename = "mangos.dbinst"
 
-def execute_sql_file(dbname, tree, file, noexec):
+def execute_sql_file(dbname, tree, file, args):
 	if tree == "mangos":
 		exec_tree = "mangos"
 	elif tree == "scriptdev2":
@@ -23,8 +20,8 @@ def execute_sql_file(dbname, tree, file, noexec):
 	else:
 		dbname = " "+dbname
 
-	execute_str = "mysql -u "+username+password+dbname+" < "+exec_tree+file
-	if noexec:
+	execute_str = "mysql -u "+args['username']+args['password']+dbname+" < "+exec_tree+file
+	if args['testing']:
 		print execute_str
 	else:
 		print "Executing: "+execute_str
@@ -39,25 +36,28 @@ def get_sql_entries(db_install_list):
 			queries.append( list(db_files.group('dbsrctree', 'dbname', 'sqlfile')) )
 	return queries
 
-if __name__ == '__main__':
-	testing = True
-	update = False
-	for cmd_arg in sys.argv[1:]:
-		if cmd_arg == "--test":
-			testing = True
-		elif cmd_arg == "--execute":
-			testing = False
-		elif cmd_arg.split('=')[0] == "--password":
-			password = " --password=" + cmd_arg.split('=')[1]
-		elif cmd_arg.split('=')[0] == "--user":
-			username = cmd_arg.split('=')[1]
-		elif cmd_arg == "--update":
-			update = True;
-		elif cmd_arg.split('=')[0] == "--dbfile":
-			filename = cmd_arg.split('=')[1]
-		sys.argv.remove(cmd_arg)
+def parse_cmd_args(cmd_args):
+	d = dict(filename="mangos.dbinst", testing=True, password=" -p", update=False, username="root")
+	cmd_args.remove(cmd_args[0])
+	for cmd in cmd_args[:]:
+		if cmd == "--test":
+			d['testing'] = True
+		elif cmd == "--execute":
+			d['testing'] = False
+		elif cmd.split('=')[0] == "--password":
+			d['password'] = " --password=" + cmd.split('=')[1]
+		elif cmd.split('=')[0] == "--user":
+			d['username'] = cmd.split('=')[1]
+		elif cmd == "--update":
+			d['update'] = True;
+		elif cmd.split('=')[0] == "--dbfile":
+			d['filename'] = cmd.split('=')[1]
+		cmd_args.remove(cmd)
+	return d
 
-	db_install_list = open(filename, 'rU')
+if __name__ == '__main__':
+	parsed_cmd_args = parse_cmd_args(sys.argv)
+	db_install_list = open(parsed_cmd_args['filename'], 'rU')
 	for query in get_sql_entries(db_install_list):
-		execute_sql_file(query[1], query[0], query[2], testing)
+		execute_sql_file(query[1], query[0], query[2], parsed_cmd_args)
 
