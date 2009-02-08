@@ -14,9 +14,9 @@ def execute_sql_file(dbname, tree, file, noexec):
 	elif tree == "acid":
 		exec_tree = "sd2-acid"
 	elif tree == "udb":
-		exec_tree = "unifieddb/trunk"
+		exec_tree = "unifieddb"
 	else:
-		exec_tree = ""
+		exec_tree = "."
 
 	if dbname == None:
 		dbname = ""
