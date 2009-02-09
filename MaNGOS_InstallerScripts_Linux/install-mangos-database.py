@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import re, os, sys
+import optparse
 
 match_dbline = re.compile('^<(?P<dbsrctree>\w+)(((:)(?P<dbname>\w+))|())>(?P<sqlfile>.+)', re.I | re.M | re.X);
 
@@ -20,8 +21,8 @@ def execute_sql_file(dbname, tree, file, args):
 	else:
 		dbname = " "+dbname
 
-	execute_str = "mysql -u "+args['username']+args['password']+dbname+" < "+exec_tree+file
-	if args['testing']:
+	execute_str = "mysql -u "+args.username+args.password+dbname+" < "+exec_tree+file
+	if args.testing:
 		print execute_str
 	else:
 		print "Executing: "+execute_str
@@ -36,28 +37,32 @@ def get_sql_entries(db_install_list):
 			queries.append( list(db_files.group('dbsrctree', 'dbname', 'sqlfile')) )
 	return queries
 
-def parse_cmd_args(cmd_args):
-	d = dict(filename="mangos.dbinst", testing=True, password=" -p", update=False, username="root")
-	cmd_args.remove(cmd_args[0])
-	for cmd in cmd_args[:]:
-		if cmd == "--test":
-			d['testing'] = True
-		elif cmd == "--execute":
-			d['testing'] = False
-		elif cmd.split('=')[0] == "--password":
-			d['password'] = " --password=" + cmd.split('=')[1]
-		elif cmd.split('=')[0] == "--user":
-			d['username'] = cmd.split('=')[1]
-		elif cmd == "--update":
-			d['update'] = True;
-		elif cmd.split('=')[0] == "--dbfile":
-			d['filename'] = cmd.split('=')[1]
-		cmd_args.remove(cmd)
-	return d
+def parse_password_callback(option, opt, value, parser):
+		parser.values.password = " --password="+value
+
+def parse_cmd_args():
+	parser = optparse.OptionParser(version="%prog 1.0")
+	
+	parser.add_option("-t", "--test",
+		action="store_true", dest="testing", default=True)
+	parser.add_option("-x", "--exec", "--execute", 
+		action="store_false", dest="testing", default=True)
+	parser.add_option("--update", 
+		action="store_true", dest="update")
+	parser.add_option("-p", "--pass", "--password", 
+		action="callback", type="string", callback=parse_password_callback, dest="password", default=" -p")
+	parser.add_option("-u", "--user", "--username",
+		action="store", dest="username", default="root")
+	parser.add_option("--db", "--dbfile", 
+		action="store", dest="filename", default="mangos.dbinst")
+
+	(options, args) = parser.parse_args()
+	return options
 
 if __name__ == '__main__':
-	parsed_cmd_args = parse_cmd_args(sys.argv)
-	db_install_list = open(parsed_cmd_args['filename'], 'rU')
+	my_args = parse_cmd_args()
+	print my_args
+	db_install_list = open(my_args.filename, 'rU')
 	for query in get_sql_entries(db_install_list):
-		execute_sql_file(query[1], query[0], query[2], parsed_cmd_args)
+		execute_sql_file(query[1], query[0], query[2], my_args)
 
