@@ -4,7 +4,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(SRCS
 	LauncherApp.cpp
+	LauncherApp.h
 	LauncherFrame.cpp
+	LauncherFrame.h
+	LauncherFilefn.cpp
+	LauncherFilefn.h
 )
 SET(PRIVATE_BUTTON_TEXT "Audiohacked"
 	CACHE STRING "Set the Text for Private Realm Button")

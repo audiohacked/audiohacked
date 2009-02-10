@@ -5,7 +5,8 @@ enum
 {
 	BUTTON_PRIVATE = wxID_HIGHEST + 1,
 	BUTTON_PRIVATE2,
-	BUTTON_BLIZZARD
+	BUTTON_BLIZZARD,
+	BUTTON_CACHE,
 };
 
 class LauncherFrame : public wxFrame
