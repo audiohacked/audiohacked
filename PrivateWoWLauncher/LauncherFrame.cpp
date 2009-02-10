@@ -13,6 +13,7 @@
 
 #include "LauncherApp.h"
 #include "LauncherFrame.h"
+#include "LauncherFilefn.h"
 #include "LauncherConfig.h"
 
 BEGIN_EVENT_TABLE(LauncherFrame, wxFrame)
@@ -27,17 +28,17 @@ LauncherFrame::LauncherFrame(
 	: wxFrame((wxFrame *) NULL, -1, title, wxDefaultPosition, wxDefaultSize)
 {
 	myapp = &wxGetApp();
-	wxButton *PrivateRealmList = new wxButton(this, BUTTON_PRIVATE, wxT("Use " PRIVATE_BUTTON_TEXT " Realmlist"));
-	wxButton *Private2RealmList = new wxButton(this, BUTTON_PRIVATE2, wxT("Use " PRIVATE2_BUTTON_TEXT " Realmlist"));
-	wxButton *BlizzardRealmList = new wxButton(this, BUTTON_BLIZZARD, wxT("Use Blizzard Realmlist"));
-	wxButton *ClearCache = new wxButton(this, BUTTON_CACHE, wxT("Clear WoW WDB Cache"));
+	wxButton *PrivateRealmListButton = new wxButton(this, BUTTON_PRIVATE, wxT("Use " PRIVATE_BUTTON_TEXT " Realmlist"));
+	wxButton *Private2RealmListButton = new wxButton(this, BUTTON_PRIVATE2, wxT("Use " PRIVATE2_BUTTON_TEXT " Realmlist"));
+	wxButton *BlizzardRealmListButton = new wxButton(this, BUTTON_BLIZZARD, wxT("Use Blizzard Realmlist"));
+	wxButton *ClearCacheButton = new wxButton(this, BUTTON_CACHE, wxT("Clear WoW WDB Cache"));
 
 	wxBoxSizer *hsizer = new wxBoxSizer(wxHORIZONTAL);
 	wxBoxSizer *vsizer = new wxBoxSizer(wxVERTICAL);
-	vsizer->Add(PrivateRealmList, 0, wxALL, 10);
-	vsizer->Add(Private2RealmList, 0, wxALL, 10);
-	vsizer->Add(BlizzardRealmList, 0, wxALL, 10);
-	vsizer->Add(ClearCache, 0, wxALL, 10);
+	vsizer->Add(PrivateRealmListButton, 0, wxALL, 10);
+	vsizer->Add(Private2RealmListButton, 0, wxALL, 10);
+	vsizer->Add(BlizzardRealmListButton, 0, wxALL, 10);
+	vsizer->Add(ClearCacheButton, 0, wxALL, 10);
 	hsizer->Add(vsizer, 0, wxALL, 10);
 	hsizer->AddStretchSpacer();
 	SetSizer(hsizer);
@@ -50,33 +51,24 @@ LauncherFrame::~LauncherFrame()
 
 void LauncherFrame::ClearCache(wxCommandEvent &event)
 {
-  wxString cachedir = "Cache/WDB/enUS";
-  if (wxDirExists(cachedir))
-  {
-	  wxMessageBox(wxT("Deleting WDB Cache"));
-	  wxRemoveFile(cachedir+"/*.*");
-	  if(wxRmdir(cachedir))
-	  {
-		wxMessageBox(wxT("Successfully Deleted WDB Cache"));
-	  }
-	  else
-	  {
-		wxMessageBox(wxT("Unable to delete WDB Cache"));
-	  }
-  }
-  else
-  {
-	  wxMessageBox(wxT("Unable to delte WDB Cache"));
-  }
-  wxMessageBox(wxT("Cache Directory: ")+cachedir);
+	wxString cachedir = wxString::FromAscii("Cache");
+	wxMessageBox(myapp->wow_path+cachedir);
+	wxArrayString paths;
+	LauncherDeleteCache traverser(paths);
+	wxDir cache(myapp->wow_path+cachedir);
+	while(cache.HasSubDirs())
+	{
+		cache.Traverse(traverser, wxEmptyString, wxDIR_FILES|wxDIR_DIRS);
+	}
 }
+
 
 void LauncherFrame::PrivateList(wxCommandEvent &event)
 {
 	//wxMessageBox(wxT("Using Private RealmList: ")+myapp->wow_path+wxT(" ")+wxT(PRIVATE_REALMLIST));
 	wxString filestring = myapp->wow_path+wxT("/Data/enUS/realmlist.wtf");
 	wxRemove(filestring);
-	/*
+	///*
 	wxTextFile *file = new wxTextFile(filestring);
 	file->Create();
 	file->AddLine(wxString::FromAscii("set realmlist ")+wxT(PRIVATE_REALMLIST));
@@ -85,7 +77,7 @@ void LauncherFrame::PrivateList(wxCommandEvent &event)
 	file->AddLine(wxString::FromAscii("set portal us"));
 	file->Write();
 	file->Close();
-	*/
+	//*/
 }
 
 void LauncherFrame::PrivateList2(wxCommandEvent &event)

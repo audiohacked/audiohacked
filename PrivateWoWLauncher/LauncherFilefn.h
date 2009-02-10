@@ -1,28 +1,17 @@
 #ifndef INCLUDED_LAUNCHER_FILE_FN_H
 #define INCLUDED_LAUNCHER_FILE_FN_H
 
-class LauncherDeleteCacheTraverser : public wxDirTraverser
+#include <wx/dir.h>
+
+class LauncherDeleteCache : public wxDirTraverser
 {
 public:
-	LauncherDeleteCacheTraverser(wxString& path) : m_path(path) {}
-	virtual wxDirTraverseResult OnFile(const wxString& filename)
-	{
-		wxRemoveFile(filename);
-		return wxDIR_CONTINUE;
-	}
+	LauncherDeleteCache::LauncherDeleteCache(wxArrayString& paths) : m_paths(paths) {}
+	virtual wxDirTraverseResult OnFile(const wxString& filename);
+	virtual wxDirTraverseResult OnDir(const wxString& dirname);
 
-	virtual wxDirTraversResult OnDir(const wxString& dirname)
-	{
-		wxRmdir(dirname);
-		return wxDIR_CONTINUE;
-	}
-};
-
-class LauncherFilefn
-{
-public:
-	void ClearCache(wxCommandEvent &event);
-
+private:
+	wxArrayString& m_paths;
 };
 
 #endif /* INCLUDED_LAUNCHER_FILE_FN_H */

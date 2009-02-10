@@ -17,6 +17,7 @@ public:
 	void PrivateList(wxCommandEvent &event);
 	void PrivateList2(wxCommandEvent &event);
 	void BlizzardList(wxCommandEvent &event);
+	void ClearCache(wxCommandEvent &event);
 	LauncherApp *myapp;
 	
 protected:

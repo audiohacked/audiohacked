@@ -29,7 +29,7 @@ void LauncherApp::Find_WoW_Path(void)
 	#ifdef WIN32
 		wow_path = Win32Registry_Find_WoW();
 	#else
-		wow_path = wxString::FromAscii("/Applications/World of Warcraft");
+		wow_path = wxString::FromAscii("/Applications/World of Warcraft/");
 	#endif
 }
 
