@@ -1,6 +1,6 @@
-MaNGOS r7252
-ACID r25-006
-ScriptDev2 r888
+MaNGOS r7263
+ACID r26
+ScriptDev2 r891
 UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 
 
@@ -14,14 +14,13 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
-<acid:scriptdev2>/stable/0.0.6/mangos/006_acid_813_scriptdev.sql
-<acid:mangos>/stable/0.0.6/mangos/006_acid_813_mangos.sql
+<acid:scriptdev2>/stable/0.0.7/mangos/007_acid_888_scriptdev.sql
+<acid:mangos>/stable/0.0.7/mangos/007_acid_888_mangos.sql
 <scriptdev2:mangos>/sql/mangos_full_scripts.sql
 
 <mangos:characters>/sql/characters.sql
-#<installer:characters>/characters_7070.sql
 #<udb:characters>/Updates/0.10.5_additions/366_updatepack_UDB_characters.sql
-#<udb:characters>/Updates/0.11.0_additions/367_corepatch_characters_7070_to_7109.sql
-#<udb:characters>/Updates/0.11.0_additions/368_corepatch_characters_7110_to_7252.sql
 
 <mangos:realmd>/sql/realmd.sql
+
+
