@@ -61,7 +61,7 @@ def parse_cmd_args():
 		dest="testing",
 		default=True)
 
-	parser.add_option("--update", 
+	parser.add_option("--up", "--update", 
 		action="store_true",
 		dest="update")
 	
@@ -80,7 +80,7 @@ def parse_cmd_args():
 	parser.add_option("--db", "--dbfile", 
 		action="store",
 		dest="filename",
-		default="mangos.dbinst")
+		default="fresh.dbinst")
 
 	(options, args) = parser.parse_args()
 	return options
