@@ -14,4 +14,12 @@ private:
 	wxArrayString& m_paths;
 };
 
+class LauncherFilefn
+{
+public:
+	LauncherFilefn(){}
+	~LauncherFilefn(){}
+	void DeleteCache(wxString path);
+};
+
 #endif /* INCLUDED_LAUNCHER_FILE_FN_H */

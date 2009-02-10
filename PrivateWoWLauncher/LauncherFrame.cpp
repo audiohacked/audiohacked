@@ -52,14 +52,9 @@ LauncherFrame::~LauncherFrame()
 void LauncherFrame::ClearCache(wxCommandEvent &event)
 {
 	wxString cachedir = wxString::FromAscii("Cache");
-	wxMessageBox(myapp->wow_path+cachedir);
-	wxArrayString paths;
-	LauncherDeleteCache traverser(paths);
-	wxDir cache(myapp->wow_path+cachedir);
-	while(cache.HasSubDirs())
-	{
-		cache.Traverse(traverser, wxEmptyString, wxDIR_FILES|wxDIR_DIRS);
-	}
+	//wxMessageBox(myapp->wow_path+cachedir);
+	LauncherFilefn *cache = new LauncherFilefn();
+	cache->DeleteCache(myapp->wow_path+cachedir);
 }
 
 
