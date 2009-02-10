@@ -13,7 +13,7 @@ SET(PRIVATE_REALMLIST 129.138.36.134
 SET(PRIVATE_PATCHLIST us.version.worldofwarcraft.com 
 	CACHE STRING "Set the URL for Your Private Patchlist")
 
-SET(PRIVATE2_BUTTON_TEXT "Laladin"
+SET(PRIVATE2_BUTTON_TEXT "Laladan"
 	CACHE STRING "Set the Text for Your Private2 Realm Button")
 SET(PRIVATE2_REALMLIST 129.138.36.111 
 	CACHE STRING "Set the URL for Your Private2 Realmlist")

@@ -25,13 +25,14 @@ LauncherFrame::LauncherFrame(
 	: wxFrame((wxFrame *) NULL, -1, title, wxDefaultPosition, wxDefaultSize)
 {
 	myapp = &wxGetApp();
-	wxButton *PrivateRealmList = new wxButton(this, BUTTON_PRIVATE, wxT("Use ")+wxT(PRIVATE_BUTTON_TEXT)+wxT(" Realmlist"));
-	wxButton *Private2RealmList = new wxButton(this, BUTTON_PRIVATE2, wxT("Use ")+wxT(PRIVATE2_BUTTON_TEXT)+wxT(" Realmlist"));
+	wxButton *PrivateRealmList = new wxButton(this, BUTTON_PRIVATE, wxT("Use " PRIVATE_BUTTON_TEXT " Realmlist"));
+	wxButton *Private2RealmList = new wxButton(this, BUTTON_PRIVATE2, wxT("Use " PRIVATE2_BUTTON_TEXT " Realmlist"));
 	wxButton *BlizzardRealmList = new wxButton(this, BUTTON_BLIZZARD, wxT("Use Blizzard Realmlist"));
 
 	wxBoxSizer *hsizer = new wxBoxSizer(wxHORIZONTAL);
 	wxBoxSizer *vsizer = new wxBoxSizer(wxVERTICAL);
 	vsizer->Add(PrivateRealmList, 0, wxALL, 10);
+	vsizer->Add(Private2RealmList, 0, wxALL, 10);
 	vsizer->Add(BlizzardRealmList, 0, wxALL, 10);
 	hsizer->Add(vsizer, 0, wxALL, 10);
 	hsizer->AddStretchSpacer();
