@@ -4,6 +4,7 @@
 enum
 {
 	BUTTON_PRIVATE = wxID_HIGHEST + 1,
+	BUTTON_PRIVATE2,
 	BUTTON_BLIZZARD
 };
 
@@ -13,6 +14,7 @@ public:
 	LauncherFrame(const wxChar *title);
 	~LauncherFrame();
 	void PrivateList(wxCommandEvent &event);
+	void PrivateList2(wxCommandEvent &event);
 	void BlizzardList(wxCommandEvent &event);
 	LauncherApp *myapp;
 	

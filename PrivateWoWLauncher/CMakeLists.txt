@@ -6,10 +6,24 @@ SET(SRCS
 	LauncherApp.cpp
 	LauncherFrame.cpp
 )
-SET(PRIVATE_REALMLIST 129.138.36.134 CACHE STRING "Set the URL for Your Private Realmlist")
-SET(PRIVATE_PATCHLIST us.version.worldofwarcraft.com CACHE STRING "Set the URL for Your Private Patchlist")
-SET(BLIZZARD_REALMLIST us.logon.worldofwarcraft.com CACHE STRING "Set the URL for Blizzard's Realmlist")
-SET(BLIZZARD_PATCHLIST us.version.worldofwarcraft.com CACHE STRING "Set the URL for Blizzard's Patchlist")
+SET(PRIVATE_BUTTON_TEXT "Audiohacked"
+	CACHE STRING "Set the Text for Private Realm Button")
+SET(PRIVATE_REALMLIST 129.138.36.134 
+	CACHE STRING "Set the URL for Your Private Realmlist")
+SET(PRIVATE_PATCHLIST us.version.worldofwarcraft.com 
+	CACHE STRING "Set the URL for Your Private Patchlist")
+
+SET(PRIVATE2_BUTTON_TEXT "Laladin"
+	CACHE STRING "Set the Text for Your Private2 Realm Button")
+SET(PRIVATE2_REALMLIST 129.138.36.111 
+	CACHE STRING "Set the URL for Your Private2 Realmlist")
+SET(PRIVATE2_PATCHLIST us.version.worldofwarcraft.com
+	CACHE STRING "Set the URL for Your Private2 Patchlist")
+
+SET(BLIZZARD_REALMLIST us.logon.worldofwarcraft.com
+	CACHE STRING "Set the URL for Blizzard's Realmlist")
+SET(BLIZZARD_PATCHLIST us.version.worldofwarcraft.com
+	CACHE STRING "Set the URL for Blizzard's Patchlist")
 
 CONFIGURE_FILE(
 	${CMAKE_SOURCE_DIR}/LauncherConfig.h.in
