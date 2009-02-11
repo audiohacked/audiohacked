@@ -16,12 +16,16 @@ IMPLEMENT_APP(LauncherApp)
 bool LauncherApp::OnInit()
 {
 	Find_WoW_Path();
-	LauncherFrame *frame = new LauncherFrame(wxT("RealmList Launcher"));
-	frame->CreateStatusBar();
-	frame->SetStatusText(_T("2009 (C) Sean Nelson <snelson@nmt.edu>"));
+	LauncherFrame *frame = new LauncherFrame(wxString::FromAscii("RealmList Launcher"), wxDefaultPosition, wxDefaultSize);
 	frame->Show(true);
 	SetTopWindow(frame);
 	return true;
+}
+
+int LauncherApp::OnExit()
+{
+	wxApp::CleanUp();
+	return 0;
 }
 
 void LauncherApp::Find_WoW_Path(void)

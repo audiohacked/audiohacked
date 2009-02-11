@@ -7,6 +7,10 @@ SET(SRCS
 	LauncherApp.h
 	LauncherFrame.cpp
 	LauncherFrame.h
+#	LauncherPanel.cpp
+#	LauncherPanel.h
+#	LauncherRealmlistPanel.cpp
+#	LauncherRealmlistPanel.h
 	LauncherFilefn.cpp
 	LauncherFilefn.h
 )
