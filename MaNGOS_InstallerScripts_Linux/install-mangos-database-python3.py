@@ -37,11 +37,11 @@ def execute_sql_file(dbquery, args):
         try:
             retcode = subprocess.call(execute_str, shell=True)
             if retcode < 0:
-                print >>sys.stderr, "Child was terminated by signal", -retcode
+                print ("Child was terminated by signal", -retcode, file=sys.stderr)
             #else:
-            #   print >>sys.stderr, "Child returned", retcode
+            #   print ("Child returned", retcode, file=sys.stderr)
         except OSError as e:
-            print >>sys.stderr, "Execution failed:", e
+            print ("Execution failed:", e, file=sys.stderr)
                                 
 
 def get_sql_entries(db_install_list):
