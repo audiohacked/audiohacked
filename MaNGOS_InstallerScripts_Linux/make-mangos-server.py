@@ -40,7 +40,7 @@ if __name__ == '__main__':
         subprocess.call("svn co https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2 src/bindings/ScriptDev2")
         subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path)
 
-    if os.name == "nt"
+    if os.name == "nt":
         print "Running On Windows NT"
     else:
         if os.path.exists("objdir"):
