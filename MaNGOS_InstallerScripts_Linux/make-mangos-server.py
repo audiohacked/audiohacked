@@ -25,12 +25,12 @@ if __name__ == '__main__':
     my_args = parse_cmd_args()
     print (my_args)
     if os.path.exists("mangos"):
-        os.path.chdir("mangos")
+        os.chdir("mangos")
         os.system("git pull -u")
     else:
         print "MaNGOS is not present; checking out MaNGOS"
         subprocess.call("git clone git://github.com/mangos/mangos.git")
-        os.path.chdir("mangos")
+        os.chdir("mangos")
 
     if os.path.exists("src/bindings/ScriptDev2"):
         subprocess.call("svn up src/bindings/ScriptDev2")
@@ -53,14 +53,14 @@ if __name__ == '__main__':
         subprocess.call("automake src/bindings/ScriptDev2/Makefile")
 
         subprocess.call("mkdir objdir")
-        os.path.chdir("objdir")
+        os.chdir("objdir")
         subprocess.call("../configure ",
             "--prefix=",my_args.mangos_destdir,
             "--sysconfdir=",my_args.mangos_destdir,"/etc ",
             "--enable-cli --enable-ra ",
             "--datadir=",my_args)
         subprocess.call("make")
-        os.path.chdir("../..")
+        os.chdir("../..")
         
         if os.path.exists("sd2-acid"):
         	subprocess.call("svn up sd2-acid")
