@@ -22,75 +22,79 @@ def parse_cmd_args():
     return options
 
 if __name__ == '__main__':
+    build_dir = os.getcwd()
     svn_client = pysvn.Client()
     my_args = parse_cmd_args()
+
     if os.path.exists("C:\\Program Files\\Git"):
-        proc_git = subprocess.Popen("C:\\Program Files\\Git\\bin\\wish.exe C:\\Program Files\\Git\\libexec\\git-core\\git-gui", shell=True)
+        proc_git = subprocess.call("C:\\Program Files\\Git\\bin\\wish.exe C:\\Program Files\\Git\\libexec\\git-core\\git-gui", shell=True)
 
     if os.path.exists("mangos"):
         print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
-        #os.system("git pull -u")
-        git_python.
+        subprocess.call("git pull -u", shell=True)
     else:
         print ("MaNGOS is not present; checking out MaNGOS")
-        #subprocess.call("git clone git://github.com/mangos/mangos.git")
+        subprocess.call("git clone git://github.com/mangos/mangos.git", shell=True)
         os.chdir("mangos")
 
     if os.path.exists("src/bindings/ScriptDev2"):
         print ("Updating ScriptDev2 sourcecode")
-        #subprocess.call("svn up src/bindings/ScriptDev2")
         svn_client.update('./src/bindings/ScriptDev2')
         
     else:
         print ("ScriptDev2 is not present; checking out ScriptDev2")
         os.mkdir("src/bindings/ScriptDev2")
-        #subprocess.call("svn co https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2 src/bindings/ScriptDev2")
         svn_client.checkout('https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2', 'src/bindings/ScriptDev2')
-        #subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path)
+        subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path, shell=True)
 
     if os.name == "nt":
-        prog_git = None
-
         if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
             print ("Building...")
             p = subprocess.Popen("C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\vcvarsall.bat x86", shell=True)
-            p.communicate("msbuild win/mangosdVC90.sln /p:Configuration=Release")
-            p.communicate("msbuild src/bindings/ScriptDev2/scriptVC90.sln /p:Configuration=Release")
-        if os.path.exists("bin\Win32_Release"):
+            p.communicate("msbuild win\\mangosdVC90.sln /p:Configuration=Release")
+            p.communicate("msbuild src\\bindings\\ScriptDev2\\scriptVC90.sln /p:Configuration=Release")
+        if os.path.exists("bin\\Win32_Release"):
             print ("Installing...")
             shutil.copytree("bin\\Win32_Release", "C:\\MaNGOS", ignore=shutil.ignore_patterns('*.map', '*.pdb', '*.exp'))
-            shutil.copyfile("src/mangosd/mangosd.conf.dist.in", "C:/MaNGOS/mangosd.conf.dist")
-            shutil.copyfile("src/mangosd/mangosd.conf.dist.in", "C:/MaNGOS/mangosd.conf")
-            shutil.copyfile("src/realmd/realmd.conf.dist.in", "C:/MaNGOS/realmd.conf.dist")
-            shutil.copyfile("src/realmd/realmd.conf.dist.in", "C:/MaNGOS/realmd.conf")
+            shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf.dist")
+            shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf")
+            shutil.copyfile("src\\realmd\\realmd.conf.dist.in", "C:\\MaNGOS\\realmd.conf.dist")
+            shutil.copyfile("src\\realmd\\realmd.conf.dist.in", "C:\\MaNGOS\\realmd.conf")
         
     else:
-        if os.path.exists("objdir"):
-            subprocess.call("rm -rf objdir")
-        subprocess.call("autoreconf --install --force")
-        subprocess.call("aclocal")
-        subprocess.call("autoheader")
-        subprocess.call("autoconf")
-        subprocess.call("automake --add-missing")
-        subprocess.call("automake src/bindings/ScriptDev2/Makefile")
 
-        subprocess.call("mkdir objdir")
-        os.chdir("objdir")
-        subprocess.call("../configure ",
-            "--prefix=",my_args.mangos_destdir,
-            "--sysconfdir=",my_args.mangos_destdir,"/etc ",
-            "--enable-cli --enable-ra ",
-            "--datadir=",my_args)
-        subprocess.call("make")
-        os.chdir("../..")
+        if os.path.exists("objdir"):
+            shutil.rmtree("objdir", ignore_errors=True)
         
+	subprocess.call("autoreconf --install --force", shell=True)
+	subprocess.call("aclocal", shell=True)
+	subprocess.call("autoheader", shell=True)
+	subprocess.call("autoconf", shell=True)
+	subprocess.call("automake --add-missing", shell=True)
+	subprocess.call("automake src/bindings/ScriptDev2/Makefile", shell=True)
+        os.mkdir("objdir")
+        os.chdir("objdir")
+
+	subprocess.call("../configure"+" --enable-cli --enable-ra"+
+		"--prefix="+my_args.mangos_destdir+" --sysconfdir="+my_args.mangos_destdir+"/etc"+
+		"--datadir="+my_args.mangos_destdir, shell=True)
+        
+	subprocess.call("make", shell=True)
+	os.chdir(build_dir)
+
         if os.path.exists("sd2-acid"):
-        	subprocess.call("svn up sd2-acid")
+            print ("Updating ACID sourcecode")
+            svn_client.update('./sd2-acid')
         else:
-        	subprocess.call("svn co https://sd2-acid.svn.sourceforge.net/svnroot/sd2-acid")
+            print ("ACID is not present; checking out ACID")
+            svn_client.checkout('https://sd2-acid.svn.sourceforge.net/svnroot/sd2-acid', './sd2-acid')
 
         if os.path.exists("unifieddb"):
-            subprocess.call("svn up unifieddb")
+            print ("Updating UDB sourcecode")
+            svn_client.update('./unifieddb')
         else:
-        	subprocess.call("svn co https://unifieddb.svn.sourceforge.net/svnroot/unifieddb/trunk unifieddb")
+            print ("UDB is not present; checking out UDB")
+            svn_client.update('https://unifieddb.svn.sourceforge.net/svnroot/unifieddb/trunk', './unifieddb')
+
+
