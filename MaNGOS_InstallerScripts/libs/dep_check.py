@@ -23,12 +23,14 @@ def win32():
         os.environ['path'] += ";C:\\Python26"
     else:
         print "---Python 2.5 or 2.6 not found"
+        sys.exit(1)
 
     if os.path.exists(git_install_dir):
         print "---Found Git"
         os.environ['path'] += ";"+git_install_dir+"\\bin;"+git_install_dir+"\\mingw\\bin"
     else:
         print "---Git Not Found"
+        sys.exit(1)
 
     if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
         print "---Found Visual Studio 9"
@@ -61,6 +63,7 @@ def win32():
         os.environ['libpath'] = libpath
     else:
         print "---Visual Studio 9 Not Found"
+        sys.exit(1)
 
 def which(program):
     def is_exe(fpath):

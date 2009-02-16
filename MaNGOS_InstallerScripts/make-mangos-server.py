@@ -29,7 +29,7 @@ if __name__ == '__main__':
     if os.name == "nt":
         dep_check.win32()
 
-    fetch_repos.pre_build_fetch()
+    fetch_repos.pre_build_fetch(opts)
     if os.name == "nt":
         windows_build.make()
         windows_build.install()

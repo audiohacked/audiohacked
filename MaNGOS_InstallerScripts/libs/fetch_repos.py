@@ -8,7 +8,7 @@ def ssl_server_trust_prompt( trust_dict ):
 svn_client = pysvn.Client()
 svn_client.callback_ssl_server_trust_prompt = ssl_server_trust_prompt
 
-def pre_build_fetch():
+def pre_build_fetch(opts):
     if os.path.exists("mangos"):
         print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
@@ -17,7 +17,7 @@ def pre_build_fetch():
         print ("MaNGOS is not present; checking out MaNGOS")
         git.Git('.').clone('git://github.com/mangos/mangos.git')
         os.chdir("mangos")
-
+    print "current dir: "+os.getcwd()
     if os.path.exists("src/bindings/ScriptDev2"):
         print ("Updating ScriptDev2 sourcecode")
         svn_client.update('./src/bindings/ScriptDev2')
@@ -25,10 +25,11 @@ def pre_build_fetch():
         print ("ScriptDev2 is not present; checking out ScriptDev2")
         os.mkdir("src/bindings/ScriptDev2")
         svn_client.checkout('https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2', 'src/bindings/ScriptDev2')
-        git.Git('.').apply('src/bindings/ScriptDev2/patches/'+my_args.sd2_patch)
+        if os.name != "nt": git.Git('.').apply('src/bindings/ScriptDev2/patches/'+opts.sd2_patch)
 
 
 def post_build_fetch():
+    print "current dir: "+os.getcwd()
     if os.path.exists("sd2-acid"):
         print ("Updating ACID sourcecode")
         svn_client.update('./sd2-acid')
