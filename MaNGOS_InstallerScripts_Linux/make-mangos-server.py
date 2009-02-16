@@ -34,7 +34,7 @@ if __name__ == '__main__':
         print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
         #subprocess.call("git pull -u", shell=True)
-	gitshelve.git('pull', '-u')
+        gitshelve.git('pull', '-u')
     else:
         print ("MaNGOS is not present; checking out MaNGOS")
         #subprocess.call("git clone git://github.com/mangos/mangos.git", shell=True)
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         os.mkdir("src/bindings/ScriptDev2")
         svn_client.checkout('https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2', 'src/bindings/ScriptDev2')
         #subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_patch, shell=True)
-	gitshelve.git('apply', 'src/bindings/ScriptDev2/patches/'+my_args.sd2_patch)
+        gitshelve.git('apply', 'src/bindings/ScriptDev2/patches/'+my_args.sd2_patch)
 
     if os.name == "nt":
         if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
@@ -71,21 +71,21 @@ if __name__ == '__main__':
         if os.path.exists("objdir"):
             shutil.rmtree("objdir", ignore_errors=True)
         
-	subprocess.call("autoreconf --install --force", shell=True)
-	subprocess.call("aclocal", shell=True)
-	subprocess.call("autoheader", shell=True)
-	subprocess.call("autoconf", shell=True)
-	subprocess.call("automake --add-missing", shell=True)
-	subprocess.call("automake src/bindings/ScriptDev2/Makefile", shell=True)
+        subprocess.call("autoreconf --install --force", shell=True)
+        subprocess.call("aclocal", shell=True)
+        subprocess.call("autoheader", shell=True)
+        subprocess.call("autoconf", shell=True)
+        subprocess.call("automake --add-missing", shell=True)
+        subprocess.call("automake src/bindings/ScriptDev2/Makefile", shell=True)
         os.mkdir("objdir")
         os.chdir("objdir")
 
-	subprocess.call("../configure"+" --enable-cli --enable-ra"+
-		"--prefix="+my_args.mangos_destdir+" --sysconfdir="+my_args.mangos_destdir+"/etc"+
-		"--datadir="+my_args.mangos_destdir, shell=True)
+        subprocess.call("../configure"+" --enable-cli --enable-ra"+
+            "--prefix="+my_args.mangos_destdir+" --sysconfdir="+my_args.mangos_destdir+"/etc"+
+            "--datadir="+my_args.mangos_destdir, shell=True)
         
-	subprocess.call("make", shell=True)
-	os.chdir(build_dir)
+        subprocess.call("make", shell=True)
+        os.chdir(build_dir)
 
         if os.path.exists("sd2-acid"):
             print ("Updating ACID sourcecode")
@@ -99,6 +99,6 @@ if __name__ == '__main__':
             svn_client.update('./unifieddb')
         else:
             print ("UDB is not present; checking out UDB")
-            svn_client.update('https://unifieddb.svn.sourceforge.net/svnroot/unifieddb/trunk', './unifieddb')
+            svn_client.checkout('https://unifieddb.svn.sourceforge.net/svnroot/unifieddb/trunk', './unifieddb')
 
 
