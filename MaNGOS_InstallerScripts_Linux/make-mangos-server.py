@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import  re, os, sys, subprocess, optparse, shutil
 import pysvn
+import gitshelve
 
 def check_for_dependencies():
     print "Checking for Dependencies"
@@ -32,10 +33,12 @@ if __name__ == '__main__':
     if os.path.exists("mangos"):
         print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
-        subprocess.call("git pull -u", shell=True)
+        #subprocess.call("git pull -u", shell=True)
+	gitshelve.git('pull', '-u')
     else:
         print ("MaNGOS is not present; checking out MaNGOS")
-        subprocess.call("git clone git://github.com/mangos/mangos.git", shell=True)
+        #subprocess.call("git clone git://github.com/mangos/mangos.git", shell=True)
+        gitshelve.git('clone', 'git://github.com/mangos/mangos.git')
         os.chdir("mangos")
 
     if os.path.exists("src/bindings/ScriptDev2"):
@@ -46,7 +49,8 @@ if __name__ == '__main__':
         print ("ScriptDev2 is not present; checking out ScriptDev2")
         os.mkdir("src/bindings/ScriptDev2")
         svn_client.checkout('https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2', 'src/bindings/ScriptDev2')
-        subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path, shell=True)
+        #subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_patch, shell=True)
+	gitshelve.git('apply', 'src/bindings/ScriptDev2/patches/'+my_args.sd2_patch)
 
     if os.name == "nt":
         if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
