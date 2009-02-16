@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import re, os, sys, subprocess
-import optparse
+import  re, os, sys, subprocess, optparse, shutil
+import pysvn
 
 def check_for_dependencies():
     print "Checking for Dependencies"
@@ -22,26 +22,49 @@ def parse_cmd_args():
     return options
 
 if __name__ == '__main__':
+    svn_client = pysvn.Client()
     my_args = parse_cmd_args()
-    print (my_args)
+    if os.path.exists("C:\\Program Files\\Git"):
+        proc_git = subprocess.Popen("C:\\Program Files\\Git\\bin\\wish.exe C:\\Program Files\\Git\\libexec\\git-core\\git-gui", shell=True)
+
     if os.path.exists("mangos"):
+        print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
-        os.system("git pull -u")
+        #os.system("git pull -u")
+        git_python.
     else:
-        print "MaNGOS is not present; checking out MaNGOS"
-        subprocess.call("git clone git://github.com/mangos/mangos.git")
+        print ("MaNGOS is not present; checking out MaNGOS")
+        #subprocess.call("git clone git://github.com/mangos/mangos.git")
         os.chdir("mangos")
 
     if os.path.exists("src/bindings/ScriptDev2"):
-        subprocess.call("svn up src/bindings/ScriptDev2")
+        print ("Updating ScriptDev2 sourcecode")
+        #subprocess.call("svn up src/bindings/ScriptDev2")
+        svn_client.update('./src/bindings/ScriptDev2')
+        
     else:
-        print "ScriptDev2 is not present; checking out Mangos"
-        subprocess.call("mkdir src/bindings/ScriptDev2")
-        subprocess.call("svn co https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2 src/bindings/ScriptDev2")
-        subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path)
+        print ("ScriptDev2 is not present; checking out ScriptDev2")
+        os.mkdir("src/bindings/ScriptDev2")
+        #subprocess.call("svn co https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2 src/bindings/ScriptDev2")
+        svn_client.checkout('https://scriptdev2.svn.sourceforge.net/svnroot/scriptdev2', 'src/bindings/ScriptDev2')
+        #subprocess.call("git apply src/bindings/ScriptDev2/patches/"+my_args.sd2_path)
 
     if os.name == "nt":
-        print "Running On Windows NT"
+        prog_git = None
+
+        if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
+            print ("Building...")
+            p = subprocess.Popen("C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\vcvarsall.bat x86", shell=True)
+            p.communicate("msbuild win/mangosdVC90.sln /p:Configuration=Release")
+            p.communicate("msbuild src/bindings/ScriptDev2/scriptVC90.sln /p:Configuration=Release")
+        if os.path.exists("bin\Win32_Release"):
+            print ("Installing...")
+            shutil.copytree("bin\\Win32_Release", "C:\\MaNGOS", ignore=shutil.ignore_patterns('*.map', '*.pdb', '*.exp'))
+            shutil.copyfile("src/mangosd/mangosd.conf.dist.in", "C:/MaNGOS/mangosd.conf.dist")
+            shutil.copyfile("src/mangosd/mangosd.conf.dist.in", "C:/MaNGOS/mangosd.conf")
+            shutil.copyfile("src/realmd/realmd.conf.dist.in", "C:/MaNGOS/realmd.conf.dist")
+            shutil.copyfile("src/realmd/realmd.conf.dist.in", "C:/MaNGOS/realmd.conf")
+        
     else:
         if os.path.exists("objdir"):
             subprocess.call("rm -rf objdir")
