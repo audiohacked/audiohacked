@@ -1,6 +1,6 @@
 import  os, subprocess, shutil
 
-def make(home, make_opts):
+def make(make_opts):
     if os.path.basename(os.getcwd()) != "mangos":
         os.chdir("mangos")
 
@@ -22,4 +22,3 @@ def make(home, make_opts):
         "--datadir="+make_opts.mangos_destdir], shell=True)
     
     subprocess.call("make", shell=True)
-    os.chdir(home)

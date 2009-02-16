@@ -34,6 +34,7 @@ if __name__ == '__main__':
         windows_build.make()
         windows_build.install()
     else:
-        linux_build.make(build_dir, opts)
+        linux_build.make(opts)
+    os.chdir(build_dir)
     fetch_repos.post_build_fetch()
 
