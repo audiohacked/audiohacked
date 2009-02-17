@@ -34,6 +34,11 @@ def install():
             shutil.rmtree("C:\\MaNGOS", ignore_errors=True)
         shutil.copytree("bin\\Win32_Release", "C:\\MaNGOS", ignore=shutil.ignore_patterns('*.map', '*.pdb', '*.exp'))
         shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf.dist")
-        shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf")
+        if !os.path.exists("C:\\MaNGOS\\mangosd.conf"):
+            shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf")
         shutil.copyfile("src\\realmd\\realmd.conf.dist.in", "C:\\MaNGOS\\realmd.conf.dist")
-        shutil.copyfile("src\\realmd\\realmd.conf.dist.in", "C:\\MaNGOS\\realmd.conf")
+        if !os.path.exists("C:\\MaNGOS\\realmd.conf"):
+            shutil.copyfile("src\\realmd\\realmd.conf.dist.in", "C:\\MaNGOS\\realmd.conf")
+        shutil.copyfile("src\\bindings\\ScriptDev2\\scriptdev2.conf.dist.in", "C:\\MaNGOS\\scriptdev2.conf.dist")
+        if !os.path.exists("C:\\MaNGOS\\scriptdev2.conf"):
+            shutil.copyfile("src\\bindings\\ScriptDev2\\scriptdev2.conf.dist.in", "C:\\MaNGOS\\scriptdev2.conf")
