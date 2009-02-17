@@ -1,4 +1,4 @@
-import os
+import os, sys
 
 vs_install_dir = "C:\\Program Files\\Microsoft Visual Studio 9.0"
 python25_install_dir = "C:\\Python25"
@@ -15,12 +15,11 @@ def win32():
         print "---PySVN Not Found, Please Install"
         sys.exit(1)
         
-    if os.path.exists(python25_install_dir):
-        print "---Found Python 2.5"
-        os.environ['path'] += ";C:\\Python25"
-    elif os.path.exists(python26_install_dir):
-        print "---Found Python 2.6"
-        os.environ['path'] += ";C:\\Python26"
+    for path in ["C:\\Python25", "C:\\Python26", "C:\\Program Files\\Python25", "C:\\Program Files\\Python26"]:
+        if os.path.exists(path):
+            print "---Found Python"
+            os.environ['path'] += ";"+path
+            break
     else:
         print "---Python 2.5 or 2.6 not found"
         sys.exit(1)

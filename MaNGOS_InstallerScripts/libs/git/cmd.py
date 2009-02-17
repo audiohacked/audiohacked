@@ -1,4 +1,4 @@
-﻿# cmd.py
+# cmd.py
 # Copyright (C) 2008, 2009 Michael Trier (mtrier@gmail.com) and contributors
 #
 # This module is part of GitPython and is released under
@@ -86,24 +86,25 @@ class Git(object):
         proc = subprocess.Popen(command,
                                 cwd=cwd,
                                 stdin=istream,
-                                stderr=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT,
+                                stdout=sys.stdout,
                                 **extra
                                 )
 
         # Wait for the process to return
         try:
-            stdout_value = proc.stdout.read()
-            stderr_value = proc.stderr.read()
+            stdout_value = 0 #proc.stdout.read()
+            stderr_value = 0 #proc.stderr.read()
             status = proc.wait()
         finally:
-            proc.stdout.close()
-            proc.stderr.close()
+            print "Closing time James!"
+            #proc.stdout.close()
+            #proc.stderr.close()
 
         # Strip off trailing whitespace by default
         if not with_raw_output:
-            stdout_value = stdout_value.rstrip()
-            stderr_value = stderr_value.rstrip()
+            stdout_value = stdout_value#.rstrip()
+            stderr_value = stderr_value#.rstrip()
 
         if with_exceptions and status != 0:
             raise GitCommandError(command, status, stderr_value)
