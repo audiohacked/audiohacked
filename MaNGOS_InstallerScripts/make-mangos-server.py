@@ -28,6 +28,8 @@ if __name__ == '__main__':
     opts = parse_cmd_args()
     if os.name == "nt":
         dep_check.win32()
+    else:
+        dep_check.linux()
 
     fetch_repos.pre_build_fetch(opts)
     if os.name == "nt":
