@@ -1,4 +1,4 @@
-import  os, sys, subprocess, shutil
+import  os, sys, subprocess, shutil, fnmatch
 import dep_check
 
 def make():
@@ -31,8 +31,20 @@ def install():
     if os.path.exists("bin\\Win32_Release"):
         print ("Installing...")
         if os.path.exists("C:\\MaNGOS"):
-            shutil.rmtree("C:\\MaNGOS", ignore_errors=True)
-        shutil.copytree("bin\\Win32_Release", "C:\\MaNGOS", ignore=shutil.ignore_patterns('*.map', '*.pdb', '*.exp'))
+            for name in os.listdir("bin\\Win32_Release"):
+                if fnmatch.fnmatch(name, '*.map'):
+                    pass
+                elif fnmatch.fnmatch(name, '*.pdb'):
+                    pass
+                elif fnmatch.fnmatch(name, '*.exp'):
+                    pass
+                else:
+                    srcname = os.path.join("bin\\Win32_Release", name)
+                    destname = os.path.join("C:\\MaNGOS", name)
+                    shutil.copy2(srcname, destname)
+        else:
+            shutil.copytree("bin\\Win32_Release", "C:\\MaNGOS", ignore=shutil.ignore_patterns('*.map', '*.pdb', '*.exp'))
+
         shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf.dist")
         if not os.path.exists("C:\\MaNGOS\\mangosd.conf"):
             shutil.copyfile("src\\mangosd\\mangosd.conf.dist.in", "C:\\MaNGOS\\mangosd.conf")
@@ -42,3 +54,6 @@ def install():
         shutil.copyfile("src\\bindings\\ScriptDev2\\scriptdev2.conf.dist.in", "C:\\MaNGOS\\scriptdev2.conf.dist")
         if not os.path.exists("C:\\MaNGOS\\scriptdev2.conf"):
             shutil.copyfile("src\\bindings\\ScriptDev2\\scriptdev2.conf.dist.in", "C:\\MaNGOS\\scriptdev2.conf")
+
+if __name__ == '__main__':
+    os.chdir("..\\mangos")
