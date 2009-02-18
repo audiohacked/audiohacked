@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, subprocess
 
 frameworkdir = "C:\\Windows\\Microsoft.NET\\Framework\\"
 git_install_dir = "C:\\Program Files\\Git"
@@ -39,10 +39,11 @@ def win32():
         import _mysql
         print "---Found PyMySQL"
     except ImportError:
+        print "---PyMySQL Not Found, Build Now!"
         os.chdir("libs/MySQLdb")
-        sys.exec("ez_setup.py -U setuptools")
+        subprocess.call("ez_setup.py -U setuptools", shell=True)
         os.chdir("..")
-        sys.exec("easy_install MySQLdb")
+        subprocess.call("easy_install MySQLdb", shell=True)
         os.chdir("..")
 
     try:
