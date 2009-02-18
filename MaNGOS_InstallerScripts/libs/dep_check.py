@@ -39,7 +39,7 @@ def win32():
         import _mysql
         print "---Found PyMySQL"
     except ImportError:
-        os.chdir("libs/MySQLdb
+        os.chdir("libs/MySQLdb")
         sys.exec("ez_setup.py -U setuptools")
         os.chdir("..")
         sys.exec("easy_install MySQLdb")
