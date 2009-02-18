@@ -13,7 +13,6 @@ def win32():
     python_path = windows_registry.find_python()
     vs_path = windows_registry.find_visualstudio2008()
     sdk_path = windows_registry.find_MSPlatformSDK() 
-
     try:
         import pysvn
         print "---Found PySVN"
@@ -31,10 +30,20 @@ def win32():
     try:    
         if os.path.exists(python_path):
                 print "---Found Python"
-                os.environ['path'] += ";"+python_path
+                os.environ['path'] += ";"+python_path+";"+python_path+"Scripts;"
     except TypeError:
         print "---Python 2.5 or 2.6 not found"
         sys.exit(1)
+
+    try:
+        import _mysql
+        print "---Found PyMySQL"
+    except ImportError:
+        os.chdir("libs/MySQLdb
+        sys.exec("ez_setup.py -U setuptools")
+        os.chdir("..")
+        sys.exec("easy_install MySQLdb")
+        os.chdir("..")
 
     try:
         if os.path.exists(vs_path):
