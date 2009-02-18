@@ -1,14 +1,18 @@
 import os, sys
-import windows_registry
 
-vs_install_dir = "C:\\Program Files\\Microsoft Visual Studio 9.0"
-python25_install_dir = "C:\\Python25"
-python26_install_dir = "C:\\Python26"
-frameworkdir = "C:\\Windows\\Microsoft.NET\\Framework"
+frameworkdir = "C:\\Windows\\Microsoft.NET\\Framework\\"
 git_install_dir = "C:\\Program Files\\Git"
 
 def win32():
+    if os.name == "nt":
+        import windows_registry
+    else:
+        print "You are trying to run the windows dep checker on a non-Windows system"
+        sys.exit(1)
     print "Checking for Dependencies"
+    python_path = windows_registry.find_python()
+    vs_path = windows_registry.find_visualstudio2008()
+    sdk_path = windows_registry.find_MSPlatformSDK() 
 
     try:
         import pysvn
@@ -16,14 +20,6 @@ def win32():
     except ImportError:
         print "---PySVN Not Found, Please Install"
         sys.exit(1)
-        
-##    if os.path.exists(windows_registry.find_python()):
-##            print "---Found Python"
-##            os.environ['path'] += ";"+path
-##            break
-##    else:
-##        print "---Python 2.5 or 2.6 not found"
-##        sys.exit(1)
 
     if os.path.exists(git_install_dir):
         print "---Found Git"
@@ -32,28 +28,34 @@ def win32():
         print "---Git Not Found"
         sys.exit(1)
 
-    vs_path = windows_registry.get_visualstudio2008()
-    if os.path.exists(vs_path):
-        print "---Found Visual Studio 9"
-        sdk_path = find_MSPlatformSDK() 
-        if sdk_path == None:
-            sdk_path = vs_path+"\\VC\\PlatformSDK"
+    try:    
+        if os.path.exists(python_path):
+                print "---Found Python"
+                os.environ['path'] += ";"+python_path
+    except TypeError:
+        print "---Python 2.5 or 2.6 not found"
+        sys.exit(1)
 
-        path = vs_path+"\\Common7\\IDE;"+vs_path+"\\VC\\BIN;"
-              +vs_path+"\\Common7\\Tools;"+frameworkdir+"\\v3.5;"
-              +frameworkdir+"\\v2.0.50727;"+vs_path+"\\VC\\VCPackages;"
-              +sdk_path+"\\bin;"
-        include = vs_install_dir+"\\VC\\INCLUDE;"+sdk_path+"\\include;"
-        lib = vs_install_dir+"\\VC\\LIB;"+sdk_path+"\\lib;"
-        libpath = frameworkdir+"\\v3.5;"+frameworkdir+"\\v2.0.50727;"
-                 +vs_install_dir+"\\VC\\LIB;"
+    try:
+        if os.path.exists(vs_path):
+            print "---Found Visual Studio 9"
+            if sdk_path == "":
+                sdk_path = vs_path+"VC\\PlatformSDK\\"
 
-        old_path = os.environ['path']
-        os.environ['path'] = path+old_path
-        os.environ['include'] = include
-        os.environ['lib'] = lib
-        os.environ['libpath'] = libpath
-    else:
+            path = vs_path+"Common7\\IDE;"+vs_path+"VC\\BIN;"
+            path += vs_path+"Common7\\Tools;"+frameworkdir+"v3.5;"
+            path += frameworkdir+"v2.0.50727;"+vs_path+"VC\\VCPackages;"
+            path += sdk_path+"bin;"
+            include = vs_path+"VC\\INCLUDE;"+sdk_path+"include;"
+            lib = vs_path+"VC\\LIB;"+sdk_path+"lib;"
+            libpath = frameworkdir+"v3.5;"+frameworkdir+"v2.0.50727;"
+            libpath += vs_path+"VC\\LIB;"
+            old_path = os.environ['path']
+            os.environ['path'] = path+old_path
+            os.environ['include'] = include
+            os.environ['lib'] = lib
+            os.environ['libpath'] = libpath
+    except TypeError:
         print "---Visual Studio 9 Not Found"
         sys.exit(1)
 
@@ -84,3 +86,6 @@ def linux():
         print "---Found Git"
     else:
         print "---Git Not Found" 
+
+if __name__ == '__main__':
+    win32()

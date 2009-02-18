@@ -12,15 +12,25 @@ pythonpath = "%s;%s\\Lib\\;%s\\DLLs\\" % (
 
 def find_python():
     with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, python_regpath) as key:
-        return _winreg.QueryValue(key, "InstallPath")
+        try:
+            return _winreg.QueryValue(key, "InstallPath")
+        except WindowsError:
+            return ""
+            
 
 def find_visualstudio2008():
     with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, vs2008_regpath) as key:
-        return _winreg.QueryValueEx(key, "9.0")[0]
+        try:
+            return _winreg.QueryValueEx(key, "9.0")[0]
+        except WindowsError:
+            return ""
 
 def find_MSPlatformSDK():
     with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, platformsdk_regpath) as key:
-        return _winreg.QueryValueEx(key, "CurrentInstallFolder")[0]
+        try:
+            return _winreg.QueryValueEx(key, "CurrentInstallFolder")[0]
+        except WindowsError:
+            return ""
     
 #def find_git():
 #    with _winreg.OpenKey(HKEY_LOCAL_MACHINE, "\\SOFTWARE\\") as key:
