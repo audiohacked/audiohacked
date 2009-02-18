@@ -1,8 +1,72 @@
 #!/usr/bin/python
 import re, os, sys, subprocess
 import optparse
+import _mysql
 
+if os.name == "nt":
+    os.environ['path'] += ";C:\\Program Files\\WinRAR\\"
+    
 match_dbline = re.compile('^<(?P<dbsrctree>\w+)(((:)(?P<dbname>\w+))|())(((:)(?P<rarfile>.+))|())>(?P<sqlfile>.+)', re.I | re.M | re.X);
+mangos_dbversion_str = {'characters':'character_db_version',
+                        'mangos':'db_version',
+                        'realmd':'realmd_db_version',
+                        'scriptdev2':'sd2_db_version'}
+    
+def delete_mangos_dbs(args, full_clean=False):
+    conn = _mysql.connect(host="localhost",
+                          port=3306,
+                          user=args.username,
+                          passwd=args.passwd)
+    try:
+        if full_clean: conn.query("DROP DATABASE characters;")
+        conn.query("DROP DATABASE mangos;")
+        if full_clean: conn.query("DROP DATABASE realmd;")
+        conn.query("DROP DATABASE scriptdev2;")
+    except _mysql.OperationalError:
+        pass
+    finally:
+        conn.close()
+ 
+def fresh_db_install(args):
+    print "Performing a Fresh Install"
+    delete_mangos_dbs(args, full_clean=True)
+    db_install_list = open(args.filename, 'rU')
+    for query in get_sql_entries(db_install_list):
+        extract_sql_files(query, args)
+        execute_sql_file(query, args)
+
+    
+def update_db_install(args):
+    print "Performing an Update Install"
+    delete_mangos_dbs(args)
+    
+def get_mangos_db_version(args, dbname="characters"):
+    conn = _mysql.connect(host="localhost",
+                          port=3306,
+                          user=args.username,
+                          passwd=args.passwd)
+    conn.query("SHOW COLUMNS FROM "+dbname+"."+mangos_dbversion_str[dbname])
+    result = conn.store_result()
+    print result.fetch_row()[0][0]
+
+def extract_sql_files(dbquery, args):
+    if dbquery['dbsrctree'] == "mangos":
+        exec_tree = "mangos"
+    elif dbquery['dbsrctree'] == "scriptdev2":
+        exec_tree = "mangos/src/bindings/ScriptDev2" 
+    elif dbquery['dbsrctree'] == "acid":
+        exec_tree = "sd2-acid"
+    elif dbquery['dbsrctree'] == "udb":
+        exec_tree = "unifieddb"
+    else:
+        exec_tree = "."
+
+    if dbquery['rarfile'] != None:
+        print "Extracting rar: "+os.path.dirname(exec_tree+dbquery['sqlfile'])+"/"+dbquery['rarfile']
+        home = os.getcwd()
+        os.chdir(os.path.dirname(exec_tree+dbquery['sqlfile']))
+        subprocess.call("unrar e -y \""+dbquery['rarfile']+"\"", shell=True)
+        os.chdir(home)
 
 def execute_sql_file(dbquery, args):
     if dbquery['dbsrctree'] == "mangos":
@@ -21,19 +85,12 @@ def execute_sql_file(dbquery, args):
     else:
         dbname = " "+dbquery['dbname']
 
-    execute_str = "mysql -u "+args.username+args.password+dbname+" < "+exec_tree+dbquery['sqlfile']
-    
-    if dbquery['rarfile'] != None:
-        #print "Extracting rar: "+os.path.dirname(exec_tree+dbquery['sqlfile'])+"/"+dbquery['rarfile']
-        home = os.getcwd()
-        os.chdir(os.path.dirname(exec_tree+dbquery['sqlfile']))
-        os.system("unrar e \""+dbquery['rarfile']+"\"")
-        os.chdir(home)
+    execute_str = "mysql -u "+args.username+args.cmd_passwd_str+dbname+" < "+exec_tree+dbquery['sqlfile']
     
     if args.testing:
-        print (execute_str)
+        print execute_str
     else:
-        print ("Executing: ",execute_str)
+        print "Executing: ",execute_str
         try:
             retcode = subprocess.call(execute_str, shell=True)
             if retcode < 0:
@@ -42,7 +99,7 @@ def execute_sql_file(dbquery, args):
             #   print >>sys.stderr, "Child returned", retcode
         except OSError as e:
             print >>sys.stderr, "Execution failed:", e
-                                
+    
 
 def get_sql_entries(db_install_list):
     queries = [] 
@@ -54,49 +111,60 @@ def get_sql_entries(db_install_list):
     return queries
 
 def parse_password_callback(option, opt, value, parser):
-        parser.values.password = " --password="+value
+        parser.values.cmd_passwd_str = " --password="+value
+        parser.values.passwd = value
 
+def parse_update_callback(option, opt, value, parser):
+        parser.values.update = True
+        if parser.values.filename == "fresh.dbinst":
+            parser.values.filename = "update.dbinst"
+            
 def parse_cmd_args():
     parser = optparse.OptionParser(version="%prog 1.0")
-    
-    parser.add_option("-t", "--test",
-        action="store_true",
-        dest="testing",
-        default=False)
 
-    parser.add_option("-x", "--exec", "--execute", 
-        action="store_false",
-        dest="testing",
-        default=False)
-
-    parser.add_option("--up", "--update", 
-        action="store_true",
-        dest="update")
+    parser.set_defaults(username="mangos", 
+                        passwd="mangos",
+                        filename="fresh.dbinst",
+                        update=False)
     
-    parser.add_option("-p", "--pass", "--password", 
-        action="callback",
-        type="string",
-        callback=parse_password_callback,
-        dest="password",
-        default=" --password=deathball")
+    parser.add_option("-t", "--test", "--dry-run",
+                      action="store_true",
+                      dest="testing",
+                      default=False)
+    
+    parser.add_option("-x", "--exec", "--execute",
+                      action="store_false",
+                      dest="testing",
+                      default=False)
+
+    parser.add_option("--up", "--update",
+                      action="callback",
+                      callback=parse_update_callback,                    
+                      dest="update",
+                      default=False)
+    
+    parser.add_option("-p", "--pass", "--password",
+                      action="callback",
+                      type="string",
+                      callback=parse_password_callback,
+                      dest="cmd_passwd_str",
+                      default=" -p")
     
     parser.add_option("-u", "--user", "--username",
-        action="store",
-        dest="username",
-        default="root")
+                      action="store",
+                      dest="username")
     
-    parser.add_option("--db", "--dbfile", 
-        action="store",
-        dest="filename",
-        default="fresh.dbinst")
+    parser.add_option("--db", "--dbfile",
+                      action="store",
+                      dest="filename")
 
     (options, args) = parser.parse_args()
     return options
 
 if __name__ == '__main__':
     my_args = parse_cmd_args()
-    print (my_args)
-    db_install_list = open(my_args.filename, 'rU')
-    for query in get_sql_entries(db_install_list):
-        execute_sql_file(query, my_args)
-
+    #print (my_args)
+    if my_args.update:
+        update_db_install(my_args)
+    else:
+        fresh_db_install(my_args)
