@@ -17,7 +17,7 @@ def pre_build_fetch(opts):
         print ("MaNGOS is not present; checking out MaNGOS")
         git.Git('.').clone('git://github.com/mangos/mangos.git')
         os.chdir("mangos")
-    print "current dir: "+os.getcwd()
+    #print "current dir: "+os.getcwd()
     if os.path.exists("src/bindings/ScriptDev2"):
         print ("Updating ScriptDev2 sourcecode")
         svn_client.update('./src/bindings/ScriptDev2')
@@ -29,7 +29,7 @@ def pre_build_fetch(opts):
 
 
 def post_build_fetch():
-    print "current dir: "+os.getcwd()
+    #print "current dir: "+os.getcwd()
     if os.path.exists("sd2-acid"):
         print ("Updating ACID sourcecode")
         svn_client.update('./sd2-acid')

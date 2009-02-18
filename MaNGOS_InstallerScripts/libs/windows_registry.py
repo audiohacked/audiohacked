@@ -16,11 +16,11 @@ def find_python():
 
 def find_visualstudio2008():
     with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, vs2008_regpath) as key:
-        return _winreg.QueryValue(key, "9.0")
+        return _winreg.QueryValueEx(key, "9.0")[0]
 
 def find_MSPlatformSDK():
     with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, platformsdk_regpath) as key:
-        return _winreg.QueryValue(key, "CurrentInstallFolder")
+        return _winreg.QueryValueEx(key, "CurrentInstallFolder")[0]
     
 #def find_git():
 #    with _winreg.OpenKey(HKEY_LOCAL_MACHINE, "\\SOFTWARE\\") as key:
@@ -28,5 +28,5 @@ def find_MSPlatformSDK():
     
 if __name__ == '__main__':
     print find_python()
-    #print find_visualstudio2008()
-    #print find_MSPlatformSDK()
+    print find_visualstudio2008()
+    print find_MSPlatformSDK()

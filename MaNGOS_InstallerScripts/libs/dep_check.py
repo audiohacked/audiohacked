@@ -1,8 +1,10 @@
 import os, sys
+import windows_registry
 
 vs_install_dir = "C:\\Program Files\\Microsoft Visual Studio 9.0"
 python25_install_dir = "C:\\Python25"
 python26_install_dir = "C:\\Python26"
+frameworkdir = "C:\\Windows\\Microsoft.NET\\Framework"
 git_install_dir = "C:\\Program Files\\Git"
 
 def win32():
@@ -15,50 +17,41 @@ def win32():
         print "---PySVN Not Found, Please Install"
         sys.exit(1)
         
-    for path in ["C:\\Python25", "C:\\Python26", "C:\\Program Files\\Python25", "C:\\Program Files\\Python26"]:
-        if os.path.exists(path):
-            print "---Found Python"
-            os.environ['path'] += ";"+path
-            break
-    else:
-        print "---Python 2.5 or 2.6 not found"
-        sys.exit(1)
+##    if os.path.exists(windows_registry.find_python()):
+##            print "---Found Python"
+##            os.environ['path'] += ";"+path
+##            break
+##    else:
+##        print "---Python 2.5 or 2.6 not found"
+##        sys.exit(1)
 
     if os.path.exists(git_install_dir):
         print "---Found Git"
-        os.environ['path'] += ";"+git_install_dir+"\\bin;"+git_install_dir+"\\mingw\\bin"
+        os.environ['path'] += ";"+git_install_dir+"\\bin;"
     else:
         print "---Git Not Found"
         sys.exit(1)
 
-    if os.path.exists("C:\\Program Files\\Microsoft Visual Studio 9.0"):
+    vs_path = windows_registry.get_visualstudio2008()
+    if os.path.exists(vs_path):
         print "---Found Visual Studio 9"
+        sdk_path = find_MSPlatformSDK() 
+        if sdk_path == None:
+            sdk_path = vs_path+"\\VC\\PlatformSDK"
+
+        path = vs_path+"\\Common7\\IDE;"+vs_path+"\\VC\\BIN;"
+              +vs_path+"\\Common7\\Tools;"+frameworkdir+"\\v3.5;"
+              +frameworkdir+"\\v2.0.50727;"+vs_path+"\\VC\\VCPackages;"
+              +sdk_path+"\\bin;"
+        include = vs_install_dir+"\\VC\\INCLUDE;"+sdk_path+"\\include;"
+        lib = vs_install_dir+"\\VC\\LIB;"+sdk_path+"\\lib;"
+        libpath = frameworkdir+"\\v3.5;"+frameworkdir+"\\v2.0.50727;"
+                 +vs_install_dir+"\\VC\\LIB;"
+
         old_path = os.environ['path']
-        
-        path = vs_install_dir+"\\Common7\\IDE;"
-        path += vs_install_dir+"\\VC\\BIN;"
-        path += vs_install_dir+"\\Common7\\Tools;"
-        path += "C:\\Windows\\Microsoft.NET\\Framework\\v3.5;"
-        path += "C:\\Windows\Microsoft.NET\\Framework\\v2.0.50727;"
-        path += vs_install_dir+"\\VC\\VCPackages;"
-
-        path += "C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\bin;"
-        path += vs_install_dir+"\\VC\\PlatformSDK;"
         os.environ['path'] = path+old_path
-
-        include = vs_install_dir+"\\VC\\INCLUDE;"
-        include += "C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\include;"
-        include += vs_install_dir+"\\VC\\PlatformSDK\\include;"
         os.environ['include'] = include
-
-        lib = vs_install_dir+"\\VC\\LIB;"
-        lib += "C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\lib;"
-        lib += vs_install_dir+"\\VC\\PlatformSDK\\lib;"
         os.environ['lib'] = lib
-
-        libpath = "C:\\Windows\\Microsoft.NET\\Framework\\v3.5;"
-        libpath += "C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727;"
-        libpath += vs_install_dir+"\\VC\\LIB;"
         os.environ['libpath'] = libpath
     else:
         print "---Visual Studio 9 Not Found"

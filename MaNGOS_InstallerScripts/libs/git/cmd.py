@@ -97,7 +97,7 @@ class Git(object):
             stderr_value = 0 #proc.stderr.read()
             status = proc.wait()
         finally:
-            print "Closing time James!"
+            pass
             #proc.stdout.close()
             #proc.stderr.close()
 

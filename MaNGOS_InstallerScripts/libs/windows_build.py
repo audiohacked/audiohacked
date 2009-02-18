@@ -4,7 +4,7 @@ import dep_check
 def make():
     if os.path.exists(dep_check.vs_install_dir):
         print ("Building...")
-        print "current dir: "+os.getcwd()
+        #print "current dir: "+os.getcwd()
 
         if os.path.basename(os.getcwd()) != "mangos":
             os.chdir("mangos")
