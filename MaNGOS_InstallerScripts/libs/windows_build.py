@@ -1,31 +1,28 @@
 import  os, sys, subprocess, shutil, fnmatch
-import dep_check
 
 def make():
-    if os.path.exists(dep_check.vs_install_dir):
-        print ("Building...")
-        #print "current dir: "+os.getcwd()
+    print ("Building...")
+    #print "current dir: "+os.getcwd()
 
-        if os.path.basename(os.getcwd()) != "mangos":
-            os.chdir("mangos")
-            
-        try:
-            mangos = subprocess.call("msbuild win\\mangosdVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
-            if mangos < 0:
-                print >>sys.stderr, "Child was terminated by signal", -mangos
-            elif mangos > 0:
-                print >>sys.stderr, "Child returned", mangos
-        except OSError, e:
-            print >>sys.stderr, "Execution failed:", e
-        try:
-            sd2 = subprocess.call("msbuild src\\bindings\\ScriptDev2\\scriptVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
-            if sd2 < 0:
-                print >>sys.stderr, "Child was terminated by signal", -sd2
-            elif sd2 > 0:
-                print >>sys.stderr, "Child returned", sd2
-        except OSError, e:
-            print >>sys.stderr, "Execution failed:", e
-            
+    if os.path.basename(os.getcwd()) != "mangos":
+        os.chdir("mangos")
+        
+    try:
+        mangos = subprocess.call("msbuild win\\mangosdVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
+        if mangos < 0:
+            print >>sys.stderr, "Child was terminated by signal", -mangos
+        elif mangos > 0:
+            print >>sys.stderr, "Child returned", mangos
+    except OSError, e:
+        print >>sys.stderr, "Execution failed:", e
+    try:
+        sd2 = subprocess.call("msbuild src\\bindings\\ScriptDev2\\scriptVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
+        if sd2 < 0:
+            print >>sys.stderr, "Child was terminated by signal", -sd2
+        elif sd2 > 0:
+            print >>sys.stderr, "Child returned", sd2
+    except OSError, e:
+        print >>sys.stderr, "Execution failed:", e
 
 def install():
     if os.path.exists("bin\\Win32_Release"):
