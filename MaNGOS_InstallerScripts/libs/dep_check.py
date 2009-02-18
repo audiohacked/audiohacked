@@ -40,11 +40,12 @@ def win32():
         print "---Found PyMySQL"
     except ImportError:
         print "---PyMySQL Not Found, Build Now!"
-        os.chdir("libs/MySQLdb")
-        subprocess.call("ez_setup.py -U setuptools", shell=True)
-        os.chdir("..")
-        subprocess.call("easy_install MySQLdb", shell=True)
-        os.chdir("..")
+        os.chdir("libs\\MySQLdb")
+        subprocess.call("ez_setup.py -U setuptools", shell=True, stdout=sys.stdout)
+        subprocess.call("easy_install .", shell=True, stdout=sys.stdout)
+        subprocess.call("easy_install .", shell=True, stdout=sys.stdout)
+        subprocess.call("easy_install .", shell=True, stdout=sys.stdout)
+        os.chdir("..\\..")
 
     try:
         if os.path.exists(vs_path):
