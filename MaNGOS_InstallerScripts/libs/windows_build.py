@@ -8,7 +8,7 @@ def make():
         os.chdir("mangos")
         
     try:
-        mangos = subprocess.call("msbuild win\\mangosdVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
+        mangos = subprocess.call("msbuild win\\mangosdVC90.sln /p:Configuration=Release", shell=True)
         if mangos < 0:
             print >>sys.stderr, "Child was terminated by signal", -mangos
         elif mangos > 0:
@@ -16,7 +16,7 @@ def make():
     except OSError, e:
         print >>sys.stderr, "Execution failed:", e
     try:
-        sd2 = subprocess.call("msbuild src\\bindings\\ScriptDev2\\scriptVC90.sln /p:Configuration=Release", shell=True, env=os.environ)
+        sd2 = subprocess.call("msbuild src\\bindings\\ScriptDev2\\scriptVC90.sln /p:Configuration=Release", shell=True)
         if sd2 < 0:
             print >>sys.stderr, "Child was terminated by signal", -sd2
         elif sd2 > 0:
