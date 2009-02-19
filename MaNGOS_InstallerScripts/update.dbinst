@@ -3,7 +3,7 @@ ACID r26
 ScriptDev2 r897
 UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 
-<udb>/Full_DB/ForCleanInstallOnly/create_mysql.sql
+<installer>/update_dbinst.sql
 <udb>/Full_DB/ForCleanInstallOnly/create_database_sd2.sql
 <udb:mangos:UDB_0.11.0_Core_7069_SD2_838_(3.0.3).rar>/Full_DB/UDB_0.11.0_Core_7069_SD2_838.sql
 <udb:mangos>/Updates/0.11.0_additions/367_corepatch_mangos_7070_to_7109.sql
@@ -14,7 +14,7 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 <mangos:mangos>/sql/updates/7290_01_mangos_command.sql
 <mangos:mangos>/sql/updates/7292_01_mangos_points_of_interest.sql
 <mangos:mangos>/sql/updates/7292_02_mangos_locales_points_of_interest.sql
-<mangos:mangos>/sql/updates/7299_01_mangos_pools.sql
+<mangos:mangos>/sql/updates/7303_01_mangos_pools.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
@@ -22,5 +22,5 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 <acid:mangos>/stable/0.0.7/mangos/007_acid_888_mangos.sql
 <scriptdev2:mangos>/sql/mangos_full_scripts.sql
 
-<mangos:characters>/sql/updates/7255_01_characters_characters.sql
-<mangos:characters>/sql/updates/7267_01_characters_auctionhouse.sql
+#<mangos:characters>/sql/updates/7255_01_characters_characters.sql
+#<mangos:characters>/sql/updates/7267_01_characters_auctionhouse.sql

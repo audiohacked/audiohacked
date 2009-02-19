@@ -17,15 +17,35 @@ def delete_mangos_dbs(args, full_clean=False):
                           port=3306,
                           user=args.username,
                           passwd=args.passwd)
+
     try:
-        if full_clean: conn.query("DROP DATABASE characters;")
-        conn.query("DROP DATABASE mangos;")
-        if full_clean: conn.query("DROP DATABASE realmd;")
-        conn.query("DROP DATABASE scriptdev2;")
-    except _mysql.OperationalError:
-        pass
+        try:
+            print "Dropping Database: mangos"
+            conn.query("DROP DATABASE mangos;")
+        except _mysql.OperationalError:
+            pass
+        
+        try:
+            print "Dropping Database: scriptdev2"
+            conn.query("DROP DATABASE scriptdev2;")
+        except _mysql.OperationalError:
+            pass
+        
+        if full_clean:
+            try:
+                print "Dropping Database: characters"
+                conn.query("DROP DATABASE characters;")
+            except _mysql.OperationalError:
+                pass
+        
+            try:
+                print "Dropping Database: realmd"
+                conn.query("DROP DATABASE realmd;")
+            except _mysql.OperationalError:
+                pass
     finally:
         conn.close()
+
  
 def fresh_db_install(args):
     print "Performing a Fresh Install"
@@ -35,19 +55,22 @@ def fresh_db_install(args):
         extract_sql_files(query, args)
         execute_sql_file(query, args)
 
-    
 def update_db_install(args):
     print "Performing an Update Install"
     delete_mangos_dbs(args)
+    db_install_list = open(args.filename, 'rU')
+    for query in get_sql_entries(db_install_list):
+        extract_sql_files(query, args)
+        execute_sql_file(query, args)
     
-def get_mangos_db_version(args, dbname="characters"):
-    conn = _mysql.connect(host="localhost",
-                          port=3306,
-                          user=args.username,
-                          passwd=args.passwd)
-    conn.query("SHOW COLUMNS FROM "+dbname+"."+mangos_dbversion_str[dbname])
-    result = conn.store_result()
-    print result.fetch_row()[0][0]
+##def get_mangos_db_version(args, dbname="characters"):
+##    conn = _mysql.connect(host="localhost",
+##                          port=3306,
+##                          user=args.username,
+##                          passwd=args.passwd)
+##    conn.query("SHOW COLUMNS FROM "+dbname+"."+mangos_dbversion_str[dbname])
+##    result = conn.store_result()
+##    print result.fetch_row()[0][0]
 
 def extract_sql_files(dbquery, args):
     if dbquery['dbsrctree'] == "mangos":
@@ -61,7 +84,7 @@ def extract_sql_files(dbquery, args):
     else:
         exec_tree = "."
 
-    if dbquery['rarfile'] != None:
+    if dbquery['rarfile'] != None and not args.testing:
         print "Extracting rar: "+os.path.dirname(exec_tree+dbquery['sqlfile'])+"/"+dbquery['rarfile']
         home = os.getcwd()
         os.chdir(os.path.dirname(exec_tree+dbquery['sqlfile']))
