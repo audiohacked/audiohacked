@@ -20,6 +20,26 @@ def parse_cmd_args():
         dest="sd2_patch",
         default="MaNGOS-2008-12-22-ScriptDev2.patch")
 
+    parser.add_option("--build", "--build-only",
+        action="store_true",
+	dest="build",
+	default=False)
+
+    parser.add_option("--install",
+        action="store_true",
+        dest="install",
+        default=False)
+
+    parser.add_option("--fetch",
+        action="store_true",
+	dest="fetch",
+	default=False)
+
+    parser.add_option("--rebuild",
+        action="store_true",
+	dest="rebuild",
+	default=False)
+
     (options, args) = parser.parse_args()
     return options
 
@@ -31,12 +51,12 @@ if __name__ == '__main__':
     else:
         dep_check.linux()
 
-    fetch_repos.pre_build_fetch(opts)
+    if opts.fetch: fetch_repos.pre_build_fetch(opts)
     if os.name == "nt":
-        windows_build.make()
-        windows_build.install()
+        if opts.build: windows_build.make()
+        if opts.install: windows_build.install()
     else:
-        linux_build.make(opts)
+        if opts.build: linux_build.make(opts)
     os.chdir(build_dir)
-    fetch_repos.post_build_fetch()
+    if opts.fetch: fetch_repos.post_build_fetch()
 

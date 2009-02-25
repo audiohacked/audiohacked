@@ -2,6 +2,9 @@
 import re, os, sys, subprocess
 import optparse
 import _mysql
+sys.path.insert( 0, os.path.abspath("libs"))
+
+import dep_check
 
 if os.name == "nt":
     os.environ['path'] += ";C:\\Program Files\\WinRAR\\"
@@ -120,7 +123,7 @@ def execute_sql_file(dbquery, args):
                 print >>sys.stderr, "Child was terminated by signal", -retcode
             #else:
             #   print >>sys.stderr, "Child returned", retcode
-        except OSError as e:
+        except OSError, e:
             print >>sys.stderr, "Execution failed:", e
     
 
@@ -187,6 +190,11 @@ def parse_cmd_args():
 if __name__ == '__main__':
     my_args = parse_cmd_args()
     #print (my_args)
+    if os.name == "nt":
+        dep_check.win32()
+    else:
+        dep_check.linux()
+
     if my_args.update:
         update_db_install(my_args)
     else:

@@ -1,4 +1,4 @@
-MaNGOS r7299
+MaNGOS r7336
 ACID r26
 ScriptDev2 r897
 UDB r368 - MaNGOS r7252 & ScriptDev2 r888
@@ -15,6 +15,9 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 <mangos:mangos>/sql/updates/7292_01_mangos_points_of_interest.sql
 <mangos:mangos>/sql/updates/7292_02_mangos_locales_points_of_interest.sql
 <mangos:mangos>/sql/updates/7303_01_mangos_pools.sql
+<mangos:mangos>/sql/updates/7312_01_mangos_mangos_string.sql
+<mangos:mangos>/sql/updates/7331_01_mangos_command.sql
+<mangos:mangos>/sql/updates/7332_01_mangos_command.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
