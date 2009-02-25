@@ -46,6 +46,7 @@ def parse_cmd_args():
 if __name__ == '__main__':
     build_dir = os.getcwd()
     opts = parse_cmd_args()
+
     if os.name == "nt":
         dep_check.win32()
     else:
