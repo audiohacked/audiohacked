@@ -22,4 +22,4 @@ def make(make_opts):
 	"--datadir="+make_opts.mangos_destdir]
     #print " ".join(config_cmd)
     subprocess.call(" ".join(config_cmd), shell=True)
-    subprocess.call("make", shell=True)
+    subprocess.call("make -j2", shell=True)

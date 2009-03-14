@@ -1,6 +1,6 @@
-MaNGOS r7336
+MaNGOS r7460
+ScriptDev2 r902
 ACID r26
-ScriptDev2 r897
 UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 
 <udb>/Full_DB/ForCleanInstallOnly/create_mysql.sql
@@ -18,6 +18,16 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 <mangos:mangos>/sql/updates/7312_01_mangos_mangos_string.sql
 <mangos:mangos>/sql/updates/7331_01_mangos_command.sql
 <mangos:mangos>/sql/updates/7332_01_mangos_command.sql
+<mangos:mangos>/sql/updates/7349_01_mangos_spell_area.sql
+<mangos:mangos>/sql/updates/7369_01_mangos_quest_template.sql
+<mangos:mangos>/sql/updates/7376_01_mangos_spell_area.sql
+<mangos:mangos>/sql/updates/7382_01_mangos_creature_template.sql
+<mangos:mangos>/sql/updates/7388_01_mangos_mangos_string.sql
+<mangos:mangos>/sql/updates/7390_01_mangos_areatrigger_teleport.sql
+<mangos:mangos>/sql/updates/7393_01_mangos_game_event.sql
+<mangos:mangos>/sql/updates/7399_01_mangos_mangos_string.sql
+<mangos:mangos>/sql/updates/7422_01_mangos_mangos_string.sql
+<mangos:mangos>/sql/updates/7439_01_mangos_mangos_string.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
