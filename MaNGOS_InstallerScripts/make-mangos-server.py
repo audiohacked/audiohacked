@@ -44,6 +44,11 @@ def parse_cmd_args():
 	dest="rebuild",
 	default=True)
 
+    parser.add_option("--debug",
+        action="store_true",
+	dest="debug",
+	default=False)
+
     (options, args) = parser.parse_args()
     return options
 
