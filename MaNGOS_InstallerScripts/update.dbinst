@@ -10,6 +10,10 @@ UDB r370 - MaNGOS r7517 & ScriptDev2 r928
 <udb:mangos>/Updates/0.11.0_additions/367_updatepack_mangos.sql
 <udb:mangos>/Updates/0.11.0_additions/368_corepatch_mangos_7110_to_7252.sql
 <udb:mangos>/Updates/0.11.0_additions/368_updatepack_mangos.sql
+<udb:mangos>/Updates/0.11.0_additions/369_corepatch_mangos_7253_to_7460.sql
+<udb:mangos>/Updates/0.11.0_additions/369_updatepack_mangos.sql
+<udb:mangos>/Updates/0.11.0_additions/370_corepatch_mangos_7461_to_7517.sql
+<udb:mangos>/Updates/0.11.0_additions/370_updatepack_mangos.sql
 
 #<mangos:mangos>/sql/updates/7290_01_mangos_command.sql
 
