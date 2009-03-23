@@ -1,9 +1,9 @@
-MaNGOS r7460
-ScriptDev2 r902
-ACID r26
-UDB r368 - MaNGOS r7252 & ScriptDev2 r888
+MaNGOS r7528
+ScriptDev2 r936
+ACID r27
+UDB r370 - MaNGOS r7517 & ScriptDev2 r928
 
-<installer>/update_dbinst.sql
+<udb>/Full_DB/ForCleanInstallOnly/create_mysql.sql
 <udb>/Full_DB/ForCleanInstallOnly/create_database_sd2.sql
 <udb:mangos:UDB_0.11.0_Core_7069_SD2_838_(3.0.3).rar>/Full_DB/UDB_0.11.0_Core_7069_SD2_838.sql
 <udb:mangos>/Updates/0.11.0_additions/367_corepatch_mangos_7070_to_7109.sql
@@ -11,34 +11,14 @@ UDB r368 - MaNGOS r7252 & ScriptDev2 r888
 <udb:mangos>/Updates/0.11.0_additions/368_corepatch_mangos_7110_to_7252.sql
 <udb:mangos>/Updates/0.11.0_additions/368_updatepack_mangos.sql
 
-<mangos:mangos>/sql/updates/7290_01_mangos_command.sql
-<mangos:mangos>/sql/updates/7292_01_mangos_points_of_interest.sql
-<mangos:mangos>/sql/updates/7292_02_mangos_locales_points_of_interest.sql
-<mangos:mangos>/sql/updates/7303_01_mangos_pools.sql
-<mangos:mangos>/sql/updates/7312_01_mangos_mangos_string.sql
-<mangos:mangos>/sql/updates/7331_01_mangos_command.sql
-<mangos:mangos>/sql/updates/7332_01_mangos_command.sql
-<mangos:mangos>/sql/updates/7349_01_mangos_spell_area.sql
-<mangos:mangos>/sql/updates/7369_01_mangos_quest_template.sql
-<mangos:mangos>/sql/updates/7376_01_mangos_spell_area.sql
-<mangos:mangos>/sql/updates/7382_01_mangos_creature_template.sql
-<mangos:mangos>/sql/updates/7388_01_mangos_mangos_string.sql
-<mangos:mangos>/sql/updates/7390_01_mangos_areatrigger_teleport.sql
-<mangos:mangos>/sql/updates/7393_01_mangos_game_event.sql
-<mangos:mangos>/sql/updates/7399_01_mangos_mangos_string.sql
-<mangos:mangos>/sql/updates/7422_01_mangos_mangos_string.sql
-<mangos:mangos>/sql/updates/7439_01_mangos_mangos_string.sql
+#<mangos:mangos>/sql/updates/7290_01_mangos_command.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
-<acid:scriptdev2>/stable/0.0.7/mangos/007_acid_888_scriptdev.sql
-<acid:mangos>/stable/0.0.7/mangos/007_acid_888_mangos.sql
+<scriptdev2:scriptdev2>/sql/scriptdev2_script_waypoint.sql
+<acid:scriptdev2>/stable/0.0.8/mangos/008_acid_905_scriptdev.sql
+<acid:mangos>/stable/0.0.8/mangos/008_acid_905_mangos.sql
 <scriptdev2:mangos>/sql/mangos_full_scripts.sql
 
-<mangos:characters>/sql/updates/7255_01_characters_characters.sql
-<mangos:characters>/sql/updates/7267_01_characters_auctionhouse.sql
-<mangos:characters>/sql/updates/7307_01_characters_arena_team_member.sql
-<mangos:characters>/sql/updates/7314_01_characters_guild_rank.sql
-<mangos:characters>/sql/updates/7324_01_characters_character_spell.sql
-<mangos:characters>/sql/updates/7324_02_characters_character_aura.sql
+#<mangos:characters>/sql/updates/7324_02_characters_character_aura.sql
 
