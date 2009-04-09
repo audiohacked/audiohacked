@@ -1,8 +1,12 @@
-SRCS = device.c
+SRCS = ps1_mc.c \
+	ps2_mc.c \
+	psx_usb.c \
+	usb_adaptor.c 
+
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -g
+CFLAGS = -g -I/opt/local/include
 TARGET = mcadaptor_test
-LDFLAGS = -lusb
+LDFLAGS = -lusb -L/opt/local/lib
 CC = gcc
 RM = rm
 RM_OPTS = -rf
@@ -13,7 +17,7 @@ default: all
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $(TARGET)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(TARGET)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
