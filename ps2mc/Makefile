@@ -1,6 +1,6 @@
-SRCS = ps1_mc.c \
+SRCS =	psx_usb.c \
+	ps1_mc.c \
 	ps2_mc.c \
-	psx_usb.c \
 	usb_adaptor.c 
 
 OBJS = $(SRCS:.c=.o)

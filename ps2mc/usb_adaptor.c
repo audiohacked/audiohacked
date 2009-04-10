@@ -55,11 +55,7 @@ int main(void)
 		start = mcrw_receive(udev);
 
 		/* send/receive data */
-		for (i=0; i<block*frame; i++)
-		{
-			mcrw_send(udev, CMD_MC1_READ);
-			data = mcrw_receive(udev);
-		}
+		mc1rw_read_frame(udev, 1);
 
 		/* when we're done close device */
 		mcrw_send(udev, CMD_CLOSE_DEV);

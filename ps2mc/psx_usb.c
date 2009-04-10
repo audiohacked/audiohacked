@@ -30,6 +30,7 @@ uint8_t mc2rw_response[] = {
 	0x5c, 0x5d, /* writeFrame end mark */
 };
 
+
 int print_bulk_buffer(struct usb_bulk_buf *buf, int returned_byte_count)
 {
 	unsigned int i=0;
