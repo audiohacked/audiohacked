@@ -4,9 +4,10 @@ SRCS =	psx_usb.c \
 	usb_adaptor.c 
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -g -I/opt/local/include
+CFLAGS = -D__MCRW_DEBUG__
+PROJ_CFLAGS = $(CFLAGS) -g -I/opt/local/include
 TARGET = mcadaptor_test
-LDFLAGS = -lusb -L/opt/local/lib
+PROJ_LDFLAGS = -lusb -L/opt/local/lib
 CC = gcc
 RM = rm
 RM_OPTS = -rf
@@ -17,10 +18,10 @@ default: all
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(TARGET)
+	$(CC) $(PROJ_CFLAGS) $(PROJ_LDFLAGS) $(OBJS) -o $(TARGET)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(PROJ_CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(RM_OPTS) $(TARGET) $(OBJS)

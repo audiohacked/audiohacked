@@ -1,7 +1,7 @@
 #ifndef __USB_ADAPTOR_H
 #define __USB_ADAPTOR_H
 
-#define MAX_BULK_BUF 256
+#define MAX_BULK_BUF 144
 
 enum
 {
@@ -25,8 +25,8 @@ enum
 };
 
 struct usb_bulk_buf {
-	uint8_t length;
-	char data[MAX_BULK_BUF];
+	unsigned char length;
+	unsigned char data[MAX_BULK_BUF];
 };
 
 #endif /* __USB_ADAPTOR_H */
