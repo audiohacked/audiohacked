@@ -1,7 +1,10 @@
 #ifndef __PSX_USB_H
 #define __PSX_USB_H
-//extern struct usb_bulk_buf mcrw_cmd[];
-//extern uint8_t mc2rw_response[];
+
+extern struct usb_bulk_buf mcrw_cmd[];
+#if 0
+extern uint8_t mc2rw_response[];
+#endif
 
 int print_bulk_buffer(struct usb_bulk_buf *buf, int returned_byte_count);
 int setup_mcrw(usb_dev_handle *udev);

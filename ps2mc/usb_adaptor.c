@@ -19,8 +19,6 @@ int main(void)
 	struct usb_bulk_buf start, data;
 	char string[256];
 	int ret, i;
-	//int block=16, frame=64;
-	int block=1, frame=4;
 
 	usb_init();
 	usb_find_busses();
@@ -55,11 +53,8 @@ int main(void)
 		start = mcrw_receive(udev);
 
 		/* send/receive data */
-		for (i=0; i<block*frame; i++)
-		{
-			mcrw_send(udev, CMD_MC1_READ);
-			data = mcrw_receive(udev);
-		}
+		mc1rw_read_frame(udev, 320);
+		mc1rw_read_block(udev, 5);
 
 		/* when we're done close device */
 		mcrw_send(udev, CMD_CLOSE_DEV);
