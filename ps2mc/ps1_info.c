@@ -63,6 +63,8 @@ int print_ps1_block_info(struct directory_frame data)
 	case 0xff:
 		printf("Unusable\n");
 		break;
+	default:
+		printf("Unknown\n");
 	}
 
 	switch(data.reserved[0])
@@ -72,11 +74,11 @@ int print_ps1_block_info(struct directory_frame data)
 		break;
 	}
 
-	printf("Use byte: %d %d %d\n", data.use[0], data.use[1], data.use[2]);
-	printf("Link Order: %d %d\n", data.link_order[0], data.link_order[1]);
-	printf("Country Code: %s\n", data.country_code);
-	printf("Product Code: %s\n", data.product_code);
-	printf("Identifier: %s\n", data.identifier);
+	printf("Use byte: %02x %02x %02x\n", data.use[0], data.use[1], data.use[2]);
+	printf("Link Order: %02x %02x\n", data.link_order[0], data.link_order[1]);
+	printf("Country Code: %s\n", &data.country_code);
+	printf("Product Code: %s\n", &data.product_code);
+	printf("Identifier: %s\n", &data.identifier);
 	printf("Block Info XOR Code: 0x%02x\n", data.xor_code);
 
 	return 0;
