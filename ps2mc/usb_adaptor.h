@@ -24,7 +24,8 @@ enum
 	CHK_EMK2,
 };
 
-struct usb_bulk_buf {
+struct usb_bulk_buf
+{
 	unsigned char length;
 	unsigned char data[MAX_BULK_BUF];
 };

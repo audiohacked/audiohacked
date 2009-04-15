@@ -18,86 +18,75 @@ unsigned int read_check_header[] = {
 char *mc1rw_read_frame(usb_dev_handle *udev, int frame)
 {
 	int i, xor=0, ret;
-	struct usb_bulk_buf temp;
-	unsigned char cmd_read_addr[2] = {(frame >> 8) & 0xff, frame & 0xff};
-	static unsigned char send_data[144], data_f[128];
+	static unsigned char data_f[128];
+	struct psx_usb_read_send_buf send_data = {
+		.usb_ctrl = {0xaa, 0x42, 0x8c, 0x00},
+		.psx_cmd_ctrl = {0x81, 0x52},
+		.receive_header_chk = {0x00, 0x00},
+		.read_addr = {(frame>>8)&0xff, frame&0xff},
+		.receive_cmd_ack = 0x00,
+		.receive_start_flag = 0x00,
+		.receive_read_addr = {0x00, 0x00},
+		.receive_xor = 0x00,
+		.receive_end_flag = 0x00,
+		};
+	struct psx_usb_read_receive_buf receive_data;
 
-	printf("Frame Address: %02x %02x\n", cmd_read_addr[0], cmd_read_addr[1]);
-	for (i=0; i<8; i++) /* send header */
-		send_data[i] = mcrw_cmd[CMD_MC1_READ].data[i];
+	printf("Frame Address: %02x %02x\n", (frame >> 8) & 0xff, frame & 0xff);
 
-	for (; i<10; i++) /* send address */
-		send_data[i] = cmd_read_addr[i];
-
-	for (; i<11; i++) /* receive command ack */
-		send_data[i] = 0x00;
-
-	for (; i<12; i++) /* receive start of data flag */
-		send_data[i] = 0x00;
-
-	for (; i<14; i++) /* receive read address */
-		send_data[i] = 0x00;
+	for (i=0; i<128; i++) /* receive data */
+		send_data.receive_read_data[i] = 0x00;
 	
-	for (; i<142; i++) /* receive data */
-		send_data[i] = 0x00;
-	
-	for (; i<143; i++) /* receive xor */
-		send_data[i] = 0x00;
 
-	for (; i<144; i++) /* receive end of data flag */
-		send_data[i] = 0x00;
-
-	ret = usb_bulk_write(udev, 0x02, send_data, sizeof(send_data), 1000);
-	ret = usb_bulk_read(udev, 0x81, temp.data, sizeof(temp.data), 1000);
-	
-	
-	for (i=0; i<128; i++)
-	{
-		data_f[i] = temp.data[14+i];
-	}
+	ret = usb_bulk_write(udev, 0x02, (char *)&send_data, sizeof(send_data), 1000);
+	ret = usb_bulk_read(udev, 0x81, (char *)&receive_data, sizeof(receive_data), 1000);
 
 #ifdef __MCRW_DEBUG__
 	printf("DEBUG: \n\t");
-	for (i=0; i<sizeof(temp.data); i++)
+	for (i=0; i<sizeof(receive_data.data); i++)
 	{
-		printf("%02x ", temp.data[i]);
+		printf("%02x ", receive_data.data[i]);
 	}
 	printf("\n");
 #endif
-	/*if ((temp.data[6] != 0x5a)&&(temp.data[7] != 0x5d))
+	/*
+	if ((receive_data.header_chk[0] != 0x5a)&&(receive_data.header_chk[1] != 0x5d))
 	{
 		printf("Error invalid USB header returned!\n");
 		return NULL;
-	}*/
-	if ((temp.data[10] != 0x5c)&&(temp.data[11] != 0x5d))
+	}
+	*/
+
+	if ((receive_data.cmd_ack != 0x5c)&&(receive_data.start_data_flag != 0x5d))
 	{
 		printf("Error invalid MC header returned!\n");
 		return NULL;
 	}
-	if ((temp.data[12] != cmd_read_addr[0])&&(temp.data[13] != cmd_read_addr[1]))
+
+	if ((receive_data.read_addr[0] != ((frame>>8)&0xff)) && (receive_data.read_addr[1] != (frame&0xff)))
 	{
 		printf("Error invalid address returned!\n");
 		return NULL;
 	}
 
-	xor ^= cmd_read_addr[0];
-	xor ^= cmd_read_addr[1];
+	xor ^= ((frame>>8)&0xff);
+	xor ^= (frame&0xff);
 	for(i=0; i<128; i++)
 	{
-		xor ^= data_f[i];
+		xor ^= receive_data.data[i];
 	}
 
-	if (xor != temp.data[142])
+	if (xor != receive_data.data_xor)
 	{
-		printf("Error invalid Checksum! Gen: %02x, Ret: %02x\n", xor, temp.data[143]);
+		printf("Error invalid Checksum! Gen: %02x, Ret: %02x\n", xor, receive_data.data_xor);
 		return NULL;
 	}
-	if (temp.data[143] != 0x47)
+	if (receive_data.end_data_flag != 0x47)
 	{
 		printf("Error invalid end flag returned!\n");
 		return NULL;
 	}
-
+	memcpy(data_f, receive_data.data, 128);
 	return data_f;
 }
 
