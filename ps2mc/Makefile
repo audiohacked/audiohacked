@@ -1,5 +1,6 @@
 SRCS =	psx_usb.c \
 	ps1_mc.c \
+	ps1_info.c \
 	ps2_mc.c \
 	usb_adaptor.c 
 

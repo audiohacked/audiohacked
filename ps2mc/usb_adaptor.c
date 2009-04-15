@@ -8,6 +8,7 @@
 #include "usb_adaptor.h"
 #include "psx_usb.h"
 #include "ps1_mc.h"
+#include "ps1_info.h"
 #include "ps2_mc.h"
 
 struct usb_bus *bus;
@@ -53,8 +54,11 @@ int main(void)
 		start = mcrw_receive(udev);
 
 		/* send/receive data */
-		mc1rw_read_frame(udev, 320);
-		mc1rw_read_block(udev, 5);
+		///*
+		struct directory_frame ps1 = read_ps1_mc_block_info(udev, 1);
+		print_ps1_block_info(ps1);
+		///*/
+		//read_ps1_mc_info(udev);
 
 		/* when we're done close device */
 		mcrw_send(udev, CMD_CLOSE_DEV);
