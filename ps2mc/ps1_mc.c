@@ -5,9 +5,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "usb_adaptor.h"
-#include "psx_usb.h"
-#include "ps1_mc.h"
+#include "psx.h"
+#include "ps1.h"
 
 unsigned int read_check_header[] = {
 	0x5a, 0x5d,
@@ -15,7 +14,7 @@ unsigned int read_check_header[] = {
 	0x47
 };
 
-char *mc1rw_read_frame(usb_dev_handle *udev, int frame)
+unsigned char *mc1rw_read_frame(usb_dev_handle *udev, int frame)
 {
 	int i, xor=0, ret;
 	static unsigned char data_f[128];
@@ -32,7 +31,9 @@ char *mc1rw_read_frame(usb_dev_handle *udev, int frame)
 		};
 	struct psx_usb_read_receive_buf receive_data;
 
+#ifdef __MCRW_DEBUG__
 	printf("Frame Address: %02x %02x\n", (frame >> 8) & 0xff, frame & 0xff);
+#endif
 
 	for (i=0; i<128; i++) /* receive data */
 		send_data.receive_read_data[i] = 0x00;
@@ -42,7 +43,7 @@ char *mc1rw_read_frame(usb_dev_handle *udev, int frame)
 	ret = usb_bulk_read(udev, 0x81, (char *)&receive_data, sizeof(receive_data), 1000);
 
 #ifdef __MCRW_DEBUG__
-	printf("DEBUG: \n\t");
+	printf("DEBUG: ");
 	for (i=0; i<sizeof(receive_data.data); i++)
 	{
 		printf("%02x ", receive_data.data[i]);
@@ -95,7 +96,7 @@ int mc1rw_write_frame(int frame, char* data_f)
 	return 0;
 }
 
-char *mc1rw_read_block(usb_dev_handle *udev, int block)
+unsigned char *mc1rw_read_block(usb_dev_handle *udev, int block)
 {	int i=0, j=0;
 	static unsigned char data_b[8192], *data_f;
 
