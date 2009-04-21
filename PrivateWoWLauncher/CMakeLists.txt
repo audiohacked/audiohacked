@@ -39,6 +39,8 @@ CONFIGURE_FILE(
 	ESCAPE_QUOTES
 )
 
+SET(wxWidgets_USE_DEBUG ON)
+SET(wxWidgets_USE_STATIC ON)
 FIND_PACKAGE(wxWidgets COMPONENTS base core net)
 
 IF(wxWidgets_FOUND)
