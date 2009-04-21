@@ -5,11 +5,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "usb_adaptor.h"
-#include "psx_usb.h"
-#include "ps1_mc.h"
-#include "ps1_info.h"
-#include "ps2_mc.h"
+#include "psx.h"
+#include "ps1.h"
+#include "ps2.h"
 
 struct usb_bus *bus;
 struct usb_device *dev;
@@ -17,7 +15,6 @@ struct usb_device *dev;
 int main(void)
 {
 	usb_dev_handle *udev = NULL;
-	struct usb_bulk_buf start, data;
 	char string[256];
 	int ret, i;
 
@@ -47,21 +44,23 @@ int main(void)
 
 	if (udev)
 	{
-		setup_mcrw(udev);
+		init_mcrw(udev);
 
 		/* open device for transfer */
-		mcrw_send(udev, CMD_OPEN_DEV);
-		start = mcrw_receive(udev);
+		open_mcrw(udev);
 
 		/* send/receive data */
 		///*
-		struct directory_frame ps1 = read_ps1_mc_block_info(udev, 1);
-		print_ps1_block_info(ps1);
+		for (i=0; i<15; i++)
+		{
+			struct directory_frame *ps1 = read_ps1_mc_block_info(udev, i+1);
+			print_ps1_block_info(*ps1, i+1);
+		}
 		///*/
 		//read_ps1_mc_info(udev);
 
 		/* when we're done close device */
-		mcrw_send(udev, CMD_CLOSE_DEV);
+		close_mcrw(udev);
 		
 		cleanup_mcrw(udev);
 		usb_close(udev);

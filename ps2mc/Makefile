@@ -5,7 +5,7 @@ SRCS =	psx_usb.c \
 	usb_adaptor.c 
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -D__MCRW_DEBUG__
+##CFLAGS = -D__MCRW_DEBUG__ -D__USE_MEMCPY__
 PROJ_CFLAGS = $(CFLAGS) -g -I/opt/local/include
 TARGET = mcadaptor_test
 PROJ_LDFLAGS = -lusb -L/opt/local/lib

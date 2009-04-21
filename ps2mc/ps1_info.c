@@ -3,32 +3,19 @@
 #include <string.h>
 #include <usb.h>
 
-#include "ps1_mc.h"
-#include "ps1_info.h"
+#include "ps1.h"
 
-struct header_frame read_ps1_mc_info(usb_dev_handle *udev)
+struct header_frame *read_ps1_mc_info(usb_dev_handle *udev)
 {
-	struct header_frame hinfo;
-	static unsigned char *info;
-	
-	info = mc1rw_read_frame(udev, 0);
-	memcpy(&hinfo, &info, 128);
-
-	return hinfo;
+	return (struct header_frame *)mc1rw_read_frame(udev, 0);
 }
 
-struct directory_frame read_ps1_mc_block_info(usb_dev_handle *udev, int block)
+struct directory_frame *read_ps1_mc_block_info(usb_dev_handle *udev, int block)
 {
-	struct directory_frame block_info;
-	static unsigned char *info;
-	
-	info = mc1rw_read_frame(udev, block);
-	memcpy(&block_info, &info, 128);
-
-	return block_info;
+	return (struct directory_frame *)mc1rw_read_frame(udev, block);
 }
 
-int print_ps1_block_info(struct directory_frame data)
+int print_ps1_block_info(struct directory_frame data, int info_block_num)
 {
 	/*
 	 * available blocks:
@@ -49,7 +36,8 @@ int print_ps1_block_info(struct directory_frame data)
 	 * 		53 - In use, this is the last in the link
 	 * 		FF - Unusable
 	 */
-	printf("Block Availiable: ");
+	printf("Block %d Info: \n", info_block_num);
+	printf("\tBlock Availiable: ");
 	switch(data.available_blocks)
 	{
 	case 0xa0:
@@ -67,19 +55,22 @@ int print_ps1_block_info(struct directory_frame data)
 		printf("Unknown\n");
 	}
 
-	switch(data.reserved[0])
+	/*
+	switch((unsigned)data.reserved[0])
 	{
 	case 0x00:
 	case 0xFF:
 		break;
 	}
+	*/
 
-	printf("Use byte: %02x %02x %02x\n", data.use[0], data.use[1], data.use[2]);
-	printf("Link Order: %02x %02x\n", data.link_order[0], data.link_order[1]);
-	printf("Country Code: %s\n", &data.country_code);
-	printf("Product Code: %s\n", &data.product_code);
-	printf("Identifier: %s\n", &data.identifier);
-	printf("Block Info XOR Code: 0x%02x\n", data.xor_code);
+	printf("\tUsed blocks: %d\n", (data.use/0x2000));
+	if (data.link_order == 0xFFFF) printf("\tLink Order: last\n");
+	else printf("\tLink Order: %d\n", data.link_order);
+	printf("\tCountry Code: %.2s\n", &data.country_code);
+	printf("\tProduct Code: %.10s\n", &data.product_code);
+	printf("\tIdentifier: %.8s\n", &data.identifier);
+	printf("\tBlock Info XOR Code: 0x%02x\n", data.xor_code);
 
 	return 0;
 }

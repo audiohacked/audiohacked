@@ -5,9 +5,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "usb_adaptor.h"
-#include "psx_usb.h"
-#include "ps2_mc.h"
+#include "psx.h"
+#include "ps2.h"
 
 int mc2rw_read(void)
 {
