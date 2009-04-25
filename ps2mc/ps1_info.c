@@ -5,17 +5,17 @@
 
 #include "ps1.h"
 
-struct header_frame *read_ps1_mc_info(usb_dev_handle *udev)
+struct header_page *read_ps1_mc_info(usb_dev_handle *udev)
 {
-	return (struct header_frame *)mc1rw_read_frame(udev, 0);
+	return (struct header_page *)mc1rw_read_page(udev, 0);
 }
 
-struct directory_frame *read_ps1_mc_block_info(usb_dev_handle *udev, int block)
+struct directory_page *read_ps1_mc_block_info(usb_dev_handle *udev, int block)
 {
-	return (struct directory_frame *)mc1rw_read_frame(udev, block);
+	return (struct directory_page *)mc1rw_read_page(udev, block);
 }
 
-int print_ps1_block_info(struct directory_frame data, int info_block_num)
+int print_ps1_block_info(struct directory_page data, int info_block_num)
 {
 	/*
 	 * available blocks:
