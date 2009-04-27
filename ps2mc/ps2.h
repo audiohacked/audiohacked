@@ -69,6 +69,8 @@ enum direntry_mode_flags
 };
 
 unsigned char *mc2rw_read_page(usb_dev_handle *udev, int page);
+int mc2rw_xor_addr(unsigned char *array, int index, int data);
+int mc2rw_xor_data(unsigned char *array, int index, unsigned char *data, int size);
 int mc2rw_write(void);
 int mc2rw_erase(void);
 

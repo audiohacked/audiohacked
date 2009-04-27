@@ -16,6 +16,40 @@
 #define PS2_FRAMESIZE 128
 //#endif
 
+int nullify_array(char *array)
+{
+	int i=0;
+	for (i=0; i<sizeof(array); i++)
+	{
+		array[i] = 0x00;
+	}
+	return 0;
+}
+
+int mc2rw_xor_addr(unsigned char *array, int index, int data)
+{
+	int xor, i, j;
+	for (xor=0, i=0, j=0; i<25, j<4; i=i+8,j++)
+	{
+		xor ^= (data>>i)&0xFF;
+		array[index+j] = (data>>i)&0xFF;
+	}
+	array[index+4] = xor;
+	return 0;
+}
+
+int mc2rw_xor_data(unsigned char *array, int index, unsigned char *data, int size)
+{
+	int xor, i, j;
+	for (xor=0, i=0; i<size; i++)
+	{
+		xor ^= data[i];
+		array[index+i] = data[i];
+	}
+	array[index+size] = xor;
+	return 0;
+}
+
 int mc2rw_card_auth(usb_dev_handle *udev)
 {
 	int i=0, ret=0;

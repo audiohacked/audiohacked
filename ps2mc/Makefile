@@ -8,8 +8,6 @@ PS1_SRC := ps1_mc.c \
 
 PS2_SRC := ps2_mc.c \
 	ps2_mc_read.c
-#	ps2_mc_write.c
-#	ps2_mc_erase.c
 
 SRCS = $(PSX_SRC) $(PS1_SRC) $(PS2_SRC) $(MAIN_SRC)
 
