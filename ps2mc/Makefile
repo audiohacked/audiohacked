@@ -1,10 +1,17 @@
-MAIN_SRC = usb_adaptor.c
-SRCS =	psx_usb.c \
-	psx_debug.c \
-	ps1_mc.c \
-	ps1_info.c \
-	ps2_mc.c \
-	$(MAIN_SRC)
+MAIN_SRC := usb_adaptor.c
+
+PSX_SRC := psx_usb.c \
+	psx_debug.c
+
+PS1_SRC := ps1_mc.c \
+	ps1_info.c
+
+PS2_SRC := ps2_mc.c \
+	ps2_mc_read.c
+#	ps2_mc_write.c
+#	ps2_mc_erase.c
+
+SRCS = $(PSX_SRC) $(PS1_SRC) $(PS2_SRC) $(MAIN_SRC)
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -D__MCRW_DEBUG__

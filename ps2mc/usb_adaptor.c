@@ -11,35 +11,52 @@
 int write_cmd(usb_dev_handle *udev, unsigned char *cmd, int read);
 
 /*
- * unsigned char mycmd[][] = {
-	{0x81
-	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x11,
+unsigned char cmd4[][] = {
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x11, 0x00, 0x00}, // RESET
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x12, 0x00, 0x00}, // RESET
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x22, 0x00, 0x00}, // SECTOR SET
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x23, 0x00, 0x00}, // SECTOR SET
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x81, 0x00, 0x00}, // 
+	{0xaa, 0x42, 0x04, 0x00, 0x81, 0x82, 0x00, 0x00}
+};
+
+unsigned char cmd5[][] = {
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x11, 0x00, 0x00},
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x12, 0x00, 0x00},
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x22, 0x00, 0x00},
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x23, 0x00, 0x00},
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x81, 0x00, 0x00},
+	{0xaa, 0x42, 0x05, 0x00, 0x81, 0x82, 0x00, 0x00}
+};
+
+unsigned char cmd13[][] = {
+	{0xaa, 0x42, 0x0d, 0x00, 0x81, 0x11, 0x00, 0x00},
+};
 */
 int main(void)
 {
 	usb_dev_handle *udev = NULL;
 	unsigned char *string;
-	unsigned char data_t[8192];
+	//unsigned char data_t[8192];
 	int ret, i;
 
 	udev = find_mcrw();
 
 	if (udev)
 	{
-		init_mcrw(udev);
-		/* open device for transfer */
-		open_mcrw(udev);
+		ret = init_mcrw(udev);
+		if(ret == 0)
+		{
+			/* open device for transfer */
+			open_mcrw(udev);
 
-		/* send/receive data */
-		//mc1rw_read_page(udev, 0);
-		for (i=0; i<8192; i++)
-			data_t[i] = 0x00;
-		mc1rw_write_block(udev, 14, data_t); 
-		//mc1rw_read_page(udev, 0);
+			/* send/receive data */
+			mc2rw_read_page(udev, 16352);
 		
-		/* when we're done close device */
-		close_mcrw(udev);
-		cleanup_mcrw(udev);
+			/* when we're done close device */
+			close_mcrw(udev);
+			cleanup_mcrw(udev);
+		}
 		usb_close(udev);
 	}
 	printf("DONE!\n");
@@ -51,6 +68,7 @@ int write_cmd(usb_dev_handle *udev, unsigned char *cmd, int read)
 	int ret=0, i=0;
 
 	unsigned char receive_data[1024];
+	unsigned char interrupt_data;
 	for (i=0; i<1024; i++)
 		receive_data[i] = 0x00;
 
@@ -58,9 +76,17 @@ int write_cmd(usb_dev_handle *udev, unsigned char *cmd, int read)
 	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 10000);
 	if (ret != sizeof(cmd))
 		printf("Error!\n");
-	
-	ret = usb_bulk_read(udev, 0x81, receive_data, sizeof(receive_data), 10000);
-	mcrw_debug(receive_data, ret);
+
+	//if (read)
+	{
+		ret = usb_bulk_read(udev, 0x81, receive_data, sizeof(receive_data), 10000);
+		mcrw_debug(receive_data, ret);
+	}
+	//else
+	{
+		ret = usb_interrupt_read(udev, 0x83, &interrupt_data, 1, 10000);
+		mcrw_debug(&interrupt_data, ret);
+	}
 	return 0;
 }
 

@@ -8,75 +8,102 @@
 #include "psx.h"
 #include "ps2.h"
 
-//unsigned char *mc2rw_
-
 //#ifndef PS2_PAGESIZE
 #define PS2_PAGESIZE 512
 //#endif
 
-unsigned char *mc2rw_read_page(usb_dev_handle *udev, int page)
+//#ifndef PS2_FRAMESIZE
+#define PS2_FRAMESIZE 128
+//#endif
+
+int mc2rw_card_auth(usb_dev_handle *udev)
 {
-	int i=0, p=0, ret=0;
-	static unsigned char data_p[PS2_PAGESIZE], temp_data[1024];
-	struct psx_usb_read_receive_buf receive_data;
-	unsigned char start_read_cmd[] = {0xaa, 0x42, 0x06, 0x00, 0x81, 0x23, 0x00, 0x00, (page>>8)&0xFF, page&0xFF};
-	unsigned char end_read_cmd[] = {0xaa, 0x42, 0x05, 0x00, 0x81, 0xf3, 0x51, 0x00, 0x00};
-
-	mcrw_addr_debug(page);
-	/* start read page */
-	printf("Starting Read Page\n");
-	ret = usb_bulk_write(udev, 0x02, start_read_cmd, sizeof(start_read_cmd), 1000);
-	if (ret != sizeof(start_read_cmd))
-		printf("Error!\n");
-	ret = usb_bulk_read(udev, 0x81, temp_data, sizeof(temp_data), 1000);
-	mcrw_debug(temp_data, ret);
-
-	printf("Reading Data\n");
-	/* read data */
-	for (p=0; p<(PS2_PAGESIZE/128); p++)
-	{
-		struct psx_usb_read_send_buf send_data = {
-			.usb_ctrl = {0xaa, 0x42, 0x8c, 0x00},
-			.psx_cmd_ctrl = {0x81, 0x43},
-			.receive_header_chk = {0x00, 0x00},
-			.read_addr = {0x00, i}, //{(page>>8)&0xFF, page&0xFF},
-			.receive_cmd_ack = 0x00,
-			.receive_start_flag = 0x00,
-			.receive_read_addr = {0x00, 0x00},
-			.receive_xor = 0x00,
-			.receive_end_flag = 0x00};
-
-		for(i=0; i<128; i++)
-			send_data.receive_read_data[i] = 0x00;
-
-		ret = usb_bulk_write(udev, 0x02, (char *)&send_data, sizeof(send_data), 1000);
-		if (ret != sizeof(send_data))
-			printf("Error!\n");
-		
-		ret = usb_bulk_read(udev, 0x81, temp_data, sizeof(temp_data), 1000);
-		mcrw_debug(temp_data, ret);
-		
-		//temp_data[ret+1] = '\0';
-		//strncat(data_p, temp_data, ret);
-	}
+	int i=0, ret=0;
+	unsigned char temp[256], *auth;
+	unsigned char auth6[] = {0xaa, 0x42, 0x0D, 0x00, 0x81, 0xF0, 0x06, 0x00, 0x00, 0x0E, 0xa3, 0xb3, 0xa0, 0x31, 0x19, 0x5b, 0x9c, 0x3f, 0x60, 0x00, 0x00};
+	unsigned char auth7[] = {0xaa, 0x42, 0x0D, 0x00, 0x81, 0xF0, 0x07, 0x00, 0x00, 0x0E, 0xa9, 0xc7, 0x01, 0xeb, 0x9b, 0x34, 0xda, 0x69, 0x98, 0x00, 0x00};
+	unsigned char auth11[] = {0xaa, 0x42, 0x0D, 0x00, 0x81, 0xF0, 0x0B, 0x0E, 0xc8, 0xe0, 0x72, 0xce, 0x96, 0x31, 0xdc, 0x21, 0xce, 0x00, 0x00};
 	
-	/* end read page */
-	printf("End Read Page\n");
-	ret = usb_bulk_write(udev, 0x02, end_read_cmd, sizeof(end_read_cmd), 1000);
-	if (ret != sizeof(end_read_cmd))
-		printf("Error! ret: %d, size: %d\n", ret, sizeof(end_read_cmd));
-	ret = usb_bulk_read(udev, 0x81, temp_data, sizeof(temp_data), 1000);
-	mcrw_debug(temp_data, ret);
+	for (i=0; i<21; i++)
+	{
+		unsigned char auth[] = {0xaa, 0x42, 0x05, 0x00, 0x81, 0xF0, i, 0x00, 0x00};
+		switch(i)
+		{
+		case 6:
+			ret = usb_bulk_write(udev, 0x02, auth6, sizeof(auth6), 1000);
+			ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+			break;
+		case 7:
+			ret = usb_bulk_write(udev, 0x02, auth7, sizeof(auth7), 1000);
+			ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+			break;
+		case 11:
+			ret = usb_bulk_write(udev, 0x02, auth11, sizeof(auth11), 1000);
+			ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+			break;
+		default:
+			ret = usb_bulk_write(udev, 0x02, auth, sizeof(auth), 1000);
+			ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+		}
 
-	return data_p;
-}
-
-int mc2rw_write(void)
-{
+	}
 	return 0;
 }
 
-int mc2rw_erase(void)
+int mc2rw_reset_auth(usb_dev_handle *udev)
 {
+	int i=0, ret=0;
+	unsigned char temp[256],
+		cmd[]={0xaa, 0x42, 0x05, 0x00, 0x81, 0xF3, 0x00, 0x00, 0x00};
+	
+	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+	unsigned char cmd_f7[] = {0xaa, 0x42, 0x05, 0x00, 0x81, 0xF7, 0x01, 0x00, 0x00};
+	ret = usb_bulk_write(udev, 0x02, cmd_f7, sizeof(cmd_f7), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+
 	return 0;
 }
+int mc2rw_get_terminator(usb_dev_handle *udev)
+{
+	int i=0, ret=0;
+	unsigned char temp[256],
+		cmd[]={0xaa, 0x42, 0x05, 0x00, 0x81, 0x28, 0x00, 0x00, 0x00};
+	
+	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+
+	return 0;
+}
+
+int mc2rw_set_terminator(usb_dev_handle *udev, unsigned char new)
+{
+	int i=0, ret=0;
+	unsigned char temp[256],
+		cmd[]={0xaa, 0x42, 0x05, 0x00, 0x81, 0x27, new, 0x00, 0x00};
+	
+	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+	
+	return 0;
+}
+
+int mc2rw_read_spec(usb_dev_handle *udev)
+{
+	int i=0, ret=0;
+	unsigned char temp[256],
+		cmd[148]={0xaa, 0x42, 0x05, 0x00, 0x81, 0x26, 0x5a, 0x00, 0x00};
+	
+	ret = usb_bulk_write(udev, 0x02, cmd, sizeof(cmd), 1000);
+	ret = usb_bulk_read(udev, 0x81, temp, sizeof(temp), 1000);
+	mcrw_debug(temp, ret);
+	return 0;
+}
+
