@@ -46,6 +46,7 @@ int init_mcrw(usb_dev_handle *udev)
 	if (ret)
 	{
 		perror("usb_claim_interface");
+		return -1;
 	}
 	
 	#if MY_HAVE_USB_CONFIG
@@ -53,6 +54,7 @@ int init_mcrw(usb_dev_handle *udev)
 	if (ret)
 	{
 		perror("usb_set_configuration");
+		return -1;
 	}
 	#endif
 
@@ -61,6 +63,7 @@ int init_mcrw(usb_dev_handle *udev)
 	if (ret)
 	{
 		perror("usb_set_altinterface");
+		return -1;
 	}
 	#endif
 
