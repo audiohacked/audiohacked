@@ -1,6 +1,18 @@
 #ifndef __PS2_MC_H
 #define __PS2_MC_H
 
+//#ifndef PS2_PAGESIZE
+#define PS2_PAGESIZE 512
+//#endif
+
+//#ifndef PS2_FRAMESIZE
+#define PS2_FRAMESIZE 128
+//#endif
+
+//#ifndef USB_FRAMESIZE
+#define USB_FRAMESIZE 148
+//#endif
+
 struct timeofday
 {
 	uint8_t sec;
