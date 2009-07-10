@@ -8,10 +8,6 @@
 #include "psx.h"
 #include "ps2.h"
 
-#define PS2_PAGESIZE 512
-#define PS2_FRAMESIZE 128
-#define USB_FRAMESIZE 148
-
 int mc2rw_write_set_sector(usb_dev_handle *udev, int page)
 {
 	int wret=0, rret=0;

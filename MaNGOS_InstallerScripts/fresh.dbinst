@@ -1,28 +1,34 @@
-MaNGOS r7528
-ScriptDev2 r936
-ACID r27
-UDB r370 - MaNGOS r7517 & ScriptDev2 r928
+MaNGOS r8140
+ScriptDev2 r1205
+ACID r31
+UDB r381 - MaNGOS r8029 & ScriptDev2 r1012
 
 <udb>/Full_DB/ForCleanInstallOnly/create_mysql.sql
 <udb>/Full_DB/ForCleanInstallOnly/create_database_sd2.sql
-<udb:mangos:UDB_0.11.0_Core_7069_SD2_838_(3.0.3).rar>/Full_DB/UDB_0.11.0_Core_7069_SD2_838.sql
-<udb:mangos>/Updates/0.11.0_additions/367_corepatch_mangos_7070_to_7109.sql
-<udb:mangos>/Updates/0.11.0_additions/367_updatepack_mangos.sql
-<udb:mangos>/Updates/0.11.0_additions/368_corepatch_mangos_7110_to_7252.sql
-<udb:mangos>/Updates/0.11.0_additions/368_updatepack_mangos.sql
-<udb:mangos>/Updates/0.11.0_additions/369_corepatch_mangos_7253_to_7460.sql
-<udb:mangos>/Updates/0.11.0_additions/369_updatepack_mangos.sql
-<udb:mangos>/Updates/0.11.0_additions/370_corepatch_mangos_7461_to_7517.sql
-<udb:mangos>/Updates/0.11.0_additions/370_updatepack_mangos.sql
+<udb:mangos:UDB_0.11.5_Core_7681_SD2_1012.rar>/Full_DB/UDB_0.11.5_Core_7681_SD2_1012.sql
+<udb:mangos>/Updates/0.11.5_additions/380_corepatch_mangos_7682_to_7894.sql
+<udb:mangos>/Updates/0.11.5_additions/380_updatepack_mangos.sql
+<udb:mangos>/Updates/0.11.5_additions/381_corepatch_mangos_7895_to_8029.sql
+<udb:mangos>/Updates/0.11.5_additions/381_updatepack_mangos.sql
 
 #<mangos:mangos>/sql/updates/7503_01_mangos_command.sql
+<mangos:mangos>/sql/updates/8030_03_mangos_npc_trainer.sql
+<mangos:mangos>/sql/updates/8050_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/8050_02_mangos_spell_bonus_data.sql
+<mangos:mangos>/sql/updates/8053_01_mangos_command.sql
+<mangos:mangos>/sql/updates/8060_01_mangos_spell_pet_auras.sql
+<mangos:mangos>/sql/updates/8064_01_mangos_spell_chain.sql
+<mangos:mangos>/sql/updates/8065_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/8071_01_mangos_command.sql
+<mangos:mangos>/sql/updates/8098_02_mangos_playercreateinfo_action.sql
+<mangos:mangos>/sql/updates/8112_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/8115_01_mangos_playercreateinfo_action.sql
+<mangos:mangos>/sql/updates/8140_01_mangos_spell_proc_event.sql
 
-<scriptdev2:scriptdev2>/sql/scriptdev2_structure.sql
-<scriptdev2:scriptdev2>/sql/scriptdev2_script_texts.sql
-<scriptdev2:scriptdev2>/sql/scriptdev2_script_waypoint.sql
-<acid:scriptdev2>/stable/0.0.8/mangos/008_acid_905_scriptdev.sql
-<acid:mangos>/stable/0.0.8/mangos/008_acid_905_mangos.sql
-<scriptdev2:mangos>/sql/mangos_full_scripts.sql
+<scriptdev2:scriptdev2>/sql/scriptdev2_create_structure_mysql.sql
+<scriptdev2:scriptdev2>/sql/scriptdev2_script_full.sql
+<acid:mangos>/wotlk/3.0.0/3.0.0_acid.sql
+<scriptdev2:mangos>/sql/mangos_scriptname_full.sql
 
 <mangos:characters>/sql/characters.sql
 <mangos:realmd>/sql/realmd.sql

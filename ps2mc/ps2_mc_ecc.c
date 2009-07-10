@@ -8,14 +8,6 @@
 #include "psx.h"
 #include "ps2.h"
 
-//#ifndef PS2_PAGESIZE
-#define PS2_PAGESIZE 512
-//#endif
-
-//#ifndef PS2_FRAMESIZE
-#define PS2_FRAMESIZE 128
-//#endif
-
 int mc2rw_ecc(usb_dev_handle *udev)
 {
 	int i=0, ret=0;
