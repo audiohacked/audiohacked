@@ -100,7 +100,7 @@ def execute_sql_file(dbquery, args):
     elif dbquery['dbsrctree'] == "scriptdev2":
         exec_tree = "mangos/src/bindings/ScriptDev2" 
     elif dbquery['dbsrctree'] == "acid":
-        exec_tree = "sd2-acid"
+        exec_tree = "sd2-acid/trunk"
     elif dbquery['dbsrctree'] == "udb":
         exec_tree = "unifieddb"
     else:
