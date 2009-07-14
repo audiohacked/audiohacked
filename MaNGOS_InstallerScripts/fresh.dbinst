@@ -11,7 +11,6 @@ UDB r381 - MaNGOS r8029 & ScriptDev2 r1012
 <udb:mangos>/Updates/0.11.5_additions/381_corepatch_mangos_7895_to_8029.sql
 <udb:mangos>/Updates/0.11.5_additions/381_updatepack_mangos.sql
 
-#<mangos:mangos>/sql/updates/7503_01_mangos_command.sql
 <mangos:mangos>/sql/updates/8030_03_mangos_npc_trainer.sql
 <mangos:mangos>/sql/updates/8050_01_mangos_spell_proc_event.sql
 <mangos:mangos>/sql/updates/8050_02_mangos_spell_bonus_data.sql
@@ -24,6 +23,7 @@ UDB r381 - MaNGOS r8029 & ScriptDev2 r1012
 <mangos:mangos>/sql/updates/8112_01_mangos_spell_proc_event.sql
 <mangos:mangos>/sql/updates/8115_01_mangos_playercreateinfo_action.sql
 <mangos:mangos>/sql/updates/8140_01_mangos_spell_proc_event.sql
+<mangos:mangos>/sql/updates/8158_01_mangos_playercreateinfo_action.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_create_structure_mysql.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_full.sql
