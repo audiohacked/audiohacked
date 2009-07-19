@@ -1,14 +1,17 @@
 import os
-import pysvn
 import git
 
 def ssl_server_trust_prompt( trust_dict ):
     return True, 0, True
 
-svn_client = pysvn.Client()
-svn_client.callback_ssl_server_trust_prompt = ssl_server_trust_prompt
+def setup_pysvn():
+	import pysvn
+	svn_client = pysvn.Client()
+	svn_client.callback_ssl_server_trust_prompt = ssl_server_trust_prompt
 
 def pre_build_fetch(opts):
+	import git
+	setup_pysvn()
     if os.path.exists("mangos"):
         print ("Updating MaNGOS sourcecode")
         os.chdir("mangos")
@@ -29,6 +32,8 @@ def pre_build_fetch(opts):
 
 
 def post_build_fetch():
+	import git
+	setup_pysvn()
     #print "current dir: "+os.getcwd()
     if os.path.exists("sd2-acid"):
         print ("Updating ACID sourcecode")
