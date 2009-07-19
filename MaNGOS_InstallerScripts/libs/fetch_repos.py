@@ -39,7 +39,7 @@ def post_build_fetch():
         svn_client.update('./sd2-acid')
     else:
         print ("ACID is not present; checking out ACID")
-        svn_client.checkout('https://sd2-acid.svn.sourceforge.net/svnroot/sd2-acid', './sd2-acid')
+        svn_client.checkout('https://sd2-acid.svn.sourceforge.net/svnroot/sd2-acid/trunk', './sd2-acid')
 
     if os.path.exists("unifieddb"):
         print ("Updating UDB sourcecode")
