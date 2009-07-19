@@ -1,5 +1,4 @@
 import os
-import git
 
 def ssl_server_trust_prompt( trust_dict ):
     return True, 0, True

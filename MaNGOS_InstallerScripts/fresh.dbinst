@@ -1,4 +1,4 @@
-MaNGOS r8140
+MaNGOS r8191
 ScriptDev2 r1205
 ACID r31
 UDB r381 - MaNGOS r8029 & ScriptDev2 r1012
@@ -24,6 +24,8 @@ UDB r381 - MaNGOS r8029 & ScriptDev2 r1012
 <mangos:mangos>/sql/updates/8115_01_mangos_playercreateinfo_action.sql
 <mangos:mangos>/sql/updates/8140_01_mangos_spell_proc_event.sql
 <mangos:mangos>/sql/updates/8158_01_mangos_playercreateinfo_action.sql
+<mangos:mangos>/sql/updates/8190_01_mangos_creature_template.sql
+<mangos:mangos>/sql/updates/8191_01_mangos_spell_affect.sql
 
 <scriptdev2:scriptdev2>/sql/scriptdev2_create_structure_mysql.sql
 <scriptdev2:scriptdev2>/sql/scriptdev2_script_full.sql
