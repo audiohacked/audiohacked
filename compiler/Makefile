@@ -6,7 +6,7 @@ BUILD_OPTS3      := --with-float=hard --with-mode=thumb
 binutils_VERSION := binutils-2.25.1
 binutils_URL     := ftp://ftp.gnu.org/gnu/binutils/$(binutils_VERSION).tar.gz
 binutils_OPTS    := 
-gcc_VERSION      := gcc-4.9.3
+gcc_VERSION      := gcc-4.8.5
 gcc_URL          := ftp://ftp.gnu.org/gnu/gcc/$(gcc_VERSION)/$(gcc_VERSION).tar.gz
 gcc_OPTS         := 
 gdb_VERSION      := gdb-7.7
