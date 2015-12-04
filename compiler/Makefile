@@ -46,7 +46,9 @@ bootstrap_gcc: download_gcc prepare_gcc
 		--disable-nls
 	cd build/$(gcc_VERSION) && \
 	make all-gcc && \
-	make install-strip
+	make all-target-libgcc && \
+	make install-gcc && \
+	make install-target-libgcc
 
 build_gcc: bootstrap_gcc
 	cd build/$(gcc_VERSION) && \
