@@ -1,0 +1,13 @@
+#!/bin/bash
+FDISK=sgdisk
+DRIVE=/dev/sda
+
+${FDISK} --zap-all ${DRIVE}
+${FDISK} --new=1:2048:+200M  --typecode=1:EF00 ${DRIVE}
+${FDISK} --new=2:0:+2M       --typecode=2:EF02 ${DRIVE}
+${FDISK} --new=3:+129M:+200M --typecode=3:8300 --change-name=3:"Linux Boot" ${DRIVE}
+${FDISK} --new=4:+129M:+20G  --typecode=4:8300 --change-name=4:"Linux Root" ${DRIVE}
+${FDISK} --new=5:+129M:+12G  --typecode=5:8300 --change-name=5:"Linux Var"  ${DRIVE}
+${FDISK} --new=6:+129M:+22G  --typecode=6:8300 --change-name=6:"Linux Home" ${DRIVE}
+${FDISK} --new=7:+129M:+4G   --typecode=7:8200 --change-name=7:"Linux Swap" ${DRIVE}
+${FDISK} --new=8:+129M:+4G   --typecode=8:8300 --change-name=8:"Linux Data" ${DRIVE}

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+mkfs.vfat -F32 /dev/sda1 # efi
+mkfs -t ext4 /dev/sda3 # boot
+mkfs -t ext4 /dev/sda4 # root
+mkfs -t ext4 /dev/sda5 # var
+mkfs -t ext4 /dev/sda6 # home
+mkswap /dev/sda7 && swapon
+
+mount /dev/sda4 /mnt
+mkdir -p /mnt/{boot,var,home,boot/efi}
+mount /dev/sda5 /mnt/var
+mount /dev/sda6 /mnt/home
+mount /dev/sda3 /mnt/boot
+mkdir -p /mnt/boot/efi
+mount /dev/sda1 /mnt/boot/efi
+
+pacstrap /mnt base grub vim openssh tmux base-devel git
+genfstab -p /mnt >> /mnt/etc/fstab
+arch-chroot /mnt chroot.txt
