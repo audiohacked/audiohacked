@@ -2,7 +2,7 @@ echo computer_name > /etc/hostname
 ln -s /usr/share/zoneinfo/Americas/Denver /etc/localtime
 # sed en_US.
 locale-gen
-echo LANG=en_US > /etc/locale.conf
+echo LANG=en_US.UTF-8 > /etc/locale.conf
 mkinitcpio -p linux
 passwd
 grub-install --recheck --target=i386-pc /dev/sda
